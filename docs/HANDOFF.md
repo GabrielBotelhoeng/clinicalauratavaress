@@ -15,9 +15,10 @@ _Última atualização: 2026-10-05, ~22h20 (BRT)_
 - Ferramentas na máquina: agent-browser 0.27 + Chrome for Testing; ffmpeg 9; Vercel CLI logado (conta `gabrielbotelhoeng`, time "Gabriel Botelho's projects").
 - Pasta excluída do repo do Desktop (Nutri_Fit) via `.git/info/exclude`.
 
+- Plano de mídia pronto → `docs/superpowers/plans/2026-10-05-landing-midia.md` (12 tarefas; créditos previstos 191, teto somado 376 ≤ 450; custos confirmados: Recraft 2k = 8/imagem, Seedance rascunho 6 s = 18, Seedance 1080p 6 s = 72, Kling std 6 s = 9, upscale ≈ 2).
+
 ### Em andamento
 - Plano do site → `docs/superpowers/plans/2026-10-05-landing-site.md` (subagente escrevendo, salvando em partes).
-- Plano de mídia → `docs/superpowers/plans/2026-10-05-landing-midia.md` (subagente escrevendo, salvando em partes).
 
 ### Intercorrências
 - 2026-10-05 ~22h: os dois subagentes de plano caíram por limite de uso da API antes de salvar qualquer arquivo; foram retomados com o contexto que tinham. A partir daí, todo trabalho é salvo em arquivo durante a execução.
