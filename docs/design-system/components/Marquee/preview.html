@@ -1,0 +1,14 @@
+<!-- @dsCard group="Movimento" height=110 width=1200 -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../bundle.css"><meta charset="utf-8"><title>Marquee</title>
+<style>html,body{margin:0;background:var(--surface)} body{padding:24px}</style></head>
+<body class="lt">
+<div class="lt-marquee" style="margin:0 -24px"><div class="lt-marquee__track" id="t"></div></div>
+<script>var items=['+25 mil atendimentos','<i>Harmonização facial</i>','9 anos de experiência','<i>AMWC Coreia 2026</i>','Melhor Atendimento · Santa Permuta 2026','<i>K-Beauty na clínica</i>'];
+var h=items.map(function(x){return '<span class="lt-marquee__item">'+x+'<span class="lt-marquee__star">✦</span></span>'}).join('');
+document.getElementById('t').innerHTML=h+h+h+h;</script>
+</body>
+</html>

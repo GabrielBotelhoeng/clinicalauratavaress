@@ -1,0 +1,98 @@
+/* Clínica Laura Tavares — tokens.css (gerado de tokens.json) */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap');
+
+:root, [data-theme="dia"] {
+  --brand-porcelana: #FBF6F2;
+  --brand-blush: #F1DCD6;
+  --brand-rose: #E4B9B0;
+  --brand-rosewood: #8C4A55;
+  --brand-champagne: #B8925A;
+  --brand-espresso: #33241F;
+  --brand-rouge: #A8243A;
+  --surface: #FBF6F2;
+  --surface-raised: #FFFFFF;
+  --surface-blush: #F3E3DE;
+  --surface-rose: #EBCBC3;
+  --surface-inverse: #33241F;
+  --ink: #33241F;
+  --ink-muted: #76615B;
+  --ink-inverse: #FBF6F2;
+  --accent: #8C4A55;
+  --accent-hover: #743A45;
+  --on-accent: #FFFFFF;
+  --gold: #B8925A;
+  --gold-ink: #7A5B33;
+  --highlight: #A8243A;
+  --hairline: #E6D6CF;
+  --whatsapp: #25D366;
+  --on-whatsapp: #0B2E17;
+  --focus: var(--accent);
+  --shadow-soft: 0 10px 30px rgba(51,36,31,0.07);
+  --shadow-lift: 0 24px 60px rgba(140,74,85,0.16);
+}
+[data-theme="noite"] {
+  --brand-porcelana: #FBF6F2;
+  --brand-blush: #F1DCD6;
+  --brand-rose: #E4B9B0;
+  --brand-rosewood: #8C4A55;
+  --brand-champagne: #B8925A;
+  --brand-espresso: #33241F;
+  --brand-rouge: #A8243A;
+  --surface: #1C1513;
+  --surface-raised: #251C19;
+  --surface-blush: #2C201D;
+  --surface-rose: #3A2A26;
+  --surface-inverse: #F3E3DE;
+  --ink: #F5EBE4;
+  --ink-muted: #C4B0A7;
+  --ink-inverse: #33241F;
+  --accent: #E2AEB2;
+  --accent-hover: #EFC6C8;
+  --on-accent: #1C1513;
+  --gold: #D4B27A;
+  --gold-ink: #DCC08E;
+  --highlight: #EC6F80;
+  --hairline: #3B2E29;
+  --whatsapp: #25D366;
+  --on-whatsapp: #0B2E17;
+  --focus: var(--accent);
+  --shadow-soft: 0 10px 30px rgba(0,0,0,0.35);
+  --shadow-lift: 0 24px 60px rgba(0,0,0,0.5);
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 144px;
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 28px;
+  --radius-arch: 400px;
+  --radius-pill: 999px;
+  --ease-lux: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-silk: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 240ms;
+  --dur-base: 600ms;
+  --dur-slow: 1200ms;
+  --font-serif: "Cormorant Garamond", "Cormorant", Georgia, serif;
+  --font-sans: "Jost", "Futura", system-ui, sans-serif;
+  --font-script: "Pinyon Script", "Snell Roundhand", cursive;
+}
+.display-xl { font-family: var(--font-serif); font-size: 76px; line-height: 0.98; font-weight: 500; letter-spacing: -0.015em; }
+.display-lg { font-family: var(--font-serif); font-size: 56px; line-height: 1.02; font-weight: 500; letter-spacing: -0.01em; }
+.heading-1 { font-family: var(--font-serif); font-size: 42px; line-height: 1.1; font-weight: 500; }
+.heading-2 { font-family: var(--font-serif); font-size: 28px; line-height: 1.2; font-weight: 600; }
+.quote { font-family: var(--font-serif); font-size: 30px; line-height: 1.3; font-weight: 400; font-style: italic; }
+.numeral { font-family: var(--font-serif); font-size: 64px; line-height: 1; font-weight: 500; }
+.eyebrow { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.22em; }
+.body-lg { font-family: var(--font-sans); font-size: 19px; line-height: 30px; font-weight: 300; }
+.body { font-family: var(--font-sans); font-size: 16px; line-height: 26px; font-weight: 400; }
+.caption { font-family: var(--font-sans); font-size: 13px; line-height: 20px; font-weight: 400; }
+.button { font-family: var(--font-sans); font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.14em; }
+.signature { font-family: var(--font-script); font-size: 44px; line-height: 1.1; font-weight: 400; }
