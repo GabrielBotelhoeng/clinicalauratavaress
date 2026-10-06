@@ -2,11 +2,11 @@
 
 > Arquivo de progresso. É atualizado a cada passo concluído e commitado/enviado ao GitHub, para que nada se perca se uma sessão ou um subagente cair (pedido do usuário em 2026-10-05).
 
-_Última atualização: 2026-10-05, ~22h20 (BRT)_
+_Última atualização: 2026-10-06, ~09h10 (BRT)_
 
 ## Estado atual
 
-- **Fase:** planejamento (brainstorming concluído e aprovado).
+- **Fase:** planejamento (brainstorming concluído e aprovado) → fechando os planos para começar a execução.
 - **Branch ativa:** `docs/design-e-plano`.
 
 ### Feito
@@ -17,16 +17,21 @@ _Última atualização: 2026-10-05, ~22h20 (BRT)_
 
 - Plano de mídia pronto → `docs/superpowers/plans/2026-10-05-landing-midia.md` (12 tarefas; créditos previstos 191, teto somado 376 ≤ 450; custos confirmados: Recraft 2k = 8/imagem, Seedance rascunho 6 s = 18, Seedance 1080p 6 s = 72, Kling std 6 s = 9, upscale ≈ 2).
 
+- Plano de mídia: trailers dos commits dos subagentes sem o link da sessão (só `Co-Authored-By`); o orquestrador acrescenta o link no squash e no PR.
+- Chrome para o Instagram escolhido pelo usuário em 2026-10-06: **Browser 2** (`b0c12369-1a01-4a7d-a268-c1599005027b`) — há dois Chrome conectados; selecione com `select_browser` antes de usar.
+
 ### Em andamento
-- Plano do site → `docs/superpowers/plans/2026-10-05-landing-site.md` (subagente escrevendo, salvando em partes).
+- Plano do site → `docs/superpowers/plans/2026-10-05-landing-site.md` (ainda fora do git): Etapas 1–5 (Tasks 1–30) escritas; um subagente novo escreve as Etapas 6–7 (Tasks 31–40) e a auto-revisão, anexando task por task.
+- Revisão do plano de mídia por um subagente (corrige erros claros direto no plano).
 
 ### Intercorrências
 - 2026-10-05 ~22h: os dois subagentes de plano caíram por limite de uso da API antes de salvar qualquer arquivo; foram retomados com o contexto que tinham. A partir daí, todo trabalho é salvo em arquivo durante a execução.
+- 2026-10-05 ~23h: o subagente do plano do site caiu de novo por limite de uso, depois de anexar a Task 30. Retomado em 2026-10-06 com um subagente novo só para as Tasks 31–40.
 - O classificador de segurança bloqueia enviar o link `Claude-Session` a subagentes: o orquestrador adiciona essa linha só nos commits de squash e nos PRs que ele mesmo cria.
 
 ## Próximos passos (em ordem)
 1. Receber os dois planos, revisar e aprovar (o usuário delegou a aprovação).
-2. Commitar os planos, push de `docs/design-e-plano`, PR e merge squash na `main`.
+2. Commitar os planos, push de `docs/design-e-plano`, PR e merge squash na `main`. Para não segurar a frente de mídia, o PR desta branch leva a spec e o plano de mídia; o plano do site entra num PR curto em seguida (`docs/plano-site`).
 3. Criar o worktree `.worktrees/midia` (branch `feat/midia`) e iniciar a frente de mídia em paralelo.
 4. Executar o plano do site com `superpowers:subagent-driven-development`, etapa por etapa (branch → PR → merge squash após validar).
 5. Integração da mídia, QA (agent-browser, axe-core, Lighthouse), deploy na Vercel e entrega.
