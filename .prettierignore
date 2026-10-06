@@ -17,3 +17,6 @@ src/content/imprensa.json
 # "dist" acima (build do Astro) também casaria com tests/dist/ (fixtures do Vitest) —
 # re-inclui a pasta de testes para o Prettier continuar formatando esses specs.
 !tests/dist/
+
+# workspace local do orquestrador (ledgers, briefs) — fora das ferramentas
+.superpowers

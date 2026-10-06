@@ -15,6 +15,8 @@ export default defineConfig([
     '.vercel/',
     '.claude/',
     '.e2e-tmp/',
+    // workspace local do orquestrador (ledgers, briefs) — fora das ferramentas
+    '.superpowers/**',
   ]),
   js.configs.recommended,
   tseslint.configs.recommended,

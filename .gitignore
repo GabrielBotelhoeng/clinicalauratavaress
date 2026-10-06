@@ -27,3 +27,6 @@ docs/qa/lighthouse/
 # "dist/" acima (build do Astro) também casaria com tests/dist/ (fixtures do Vitest) —
 # re-inclui a pasta de testes para não perder os specs versionados.
 !tests/dist/
+
+# workspace local do orquestrador (ledgers, briefs) — fora das ferramentas
+.superpowers/
