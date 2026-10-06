@@ -20,9 +20,16 @@ _Última atualização: 2026-10-06, ~09h10 (BRT)_
 - Plano de mídia: trailers dos commits dos subagentes sem o link da sessão (só `Co-Authored-By`); o orquestrador acrescenta o link no squash e no PR.
 - Chrome para o Instagram escolhido pelo usuário em 2026-10-06: **Browser 2** (`b0c12369-1a01-4a7d-a268-c1599005027b`) — há dois Chrome conectados; selecione com `select_browser` antes de usar.
 
-### Em andamento
-- Plano do site → `docs/superpowers/plans/2026-10-05-landing-site.md` (ainda fora do git): Etapas 1–5 (Tasks 1–30) escritas; um subagente novo escreve as Etapas 6–7 (Tasks 31–40) e a auto-revisão, anexando task por task.
-- Revisão do plano de mídia por um subagente (corrige erros claros direto no plano).
+### Em andamento (2026-10-06, tarde — retomado após o limite de uso)
+- Plano do site → `docs/superpowers/plans/2026-10-05-landing-site.md` (ainda fora do git): Etapas 1–5 (Tasks 1–30) escritas; um subagente (Sonnet) escreve as Tasks 31–40 e a auto-revisão, anexando task por task. **Ao retomar:** `grep -n "^### Task" docs/superpowers/plans/2026-10-05-landing-site.md | tail` mostra até onde chegou; complete o que faltar (e a seção `## Auto-revisão`).
+- Plano de mídia: **aprovado** (revisão com correções + decisões abaixo aplicadas) e commitado nesta branch; PR #1 (`docs/design-e-plano` → `main`): https://github.com/GabrielBotelhoeng/clinicalauratavaress/pull/1 — merge squash em seguida. Depois do merge, alinhar a `main` local com `origin/main` (o commit local `2e91ade`, da skill find-skills, entra pelo PR — push direto na `main` é bloqueado).
+- Ledger da execução do site: `.superpowers/sdd/2026-10-05-landing-site/progress.md` (fora do git), com as decisões abaixo.
+- Economia de uso (pedido do usuário em 2026-10-06): subagentes em Sonnet (Haiku nas tarefas mecânicas), Opus só na revisão final da branch; poucos agentes em paralelo. O usuário pediu para instalar o OmniRoute; expliquei que é um gateway que troca o Claude por outros modelos (não uma skill) e ele escolheu **não instalar**.
+
+### Decisões do orquestrador (2026-10-06)
+- Foto viva (Kling, recepção) = fundo do CTA final (`public/media/cta-final.*`); a galeria fica com 4 fotos estáticas 4:5 e parallax.
+- Fotos `clinica/*` chegam da mídia já em 4:5 (mín. 1280×1600), com rostos e letreiro inteiros.
+- Push e PR da frente de mídia (Task 12, Steps 7–9) ficam com o orquestrador.
 
 ### Intercorrências
 - 2026-10-05 ~22h: os dois subagentes de plano caíram por limite de uso da API antes de salvar qualquer arquivo; foram retomados com o contexto que tinham. A partir daí, todo trabalho é salvo em arquivo durante a execução.
