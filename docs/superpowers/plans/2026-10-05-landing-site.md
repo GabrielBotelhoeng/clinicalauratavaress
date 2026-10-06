@@ -10919,7 +10919,7 @@ ${sections}
 - [ ] **Step 3: Rodar e ver passar**
 
 Run: `npm test -- scripts/lib/checklist.test.mjs`
-Expected: PASS — `Tests  9 passed`.
+Expected: PASS — `Tests  8 passed`.
 
 - [ ] **Step 4: Criar `scripts/checklist.mjs` e registrar o script npm**
 
@@ -11258,7 +11258,7 @@ export function toE2eMarkdown(checks, { date }) {
 - [ ] **Step 3: Rodar e ver passar**
 
 Run: `npm test -- scripts/lib/browser-logs.test.mjs`
-Expected: PASS — `Tests  9 passed`.
+Expected: PASS — `Tests  10 passed`.
 
 - [ ] **Step 4: Criar `scripts/e2e-check-logs.mjs`**
 
@@ -11809,7 +11809,7 @@ Expected: a última linha imprime `2` (uma linha "aprovado" do Lighthouse, outra
 - [ ] **Step 5: Gate da tarefa e commit**
 
 Run: `npm run format && npm run lint`
-Expected: tudo verde (`docs/` fica fora do ESLint — Global Ignores da Task 2 — mas o Prettier ainda formata o Markdown).
+Expected: tudo verde (`docs/` fica fora do ESLint — Global Ignores da Task 2 — e do Prettier — `.prettierignore` da Task 2 —, então os relatórios de `docs/qa/` são commitados como gerados).
 
 ```bash
 git add docs/qa/README.md docs/qa/lighthouse.md docs/qa/e2e.md
