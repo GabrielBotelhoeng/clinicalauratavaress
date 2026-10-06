@@ -34,7 +34,7 @@
 - Logo: wordmark tipográfico do design system até chegar o vetor. Assinatura em Pinyon Script (sem a assinatura real).
 - Headline principal do texto; alternativas A/B fora.
 - Matérias da seção "Na mídia" com link quando a URL for encontrada; sem link caso contrário.
-- Higgsfield: **teto de 450 créditos** (metade do saldo de 900), com gasto anotado por geração.
+- Higgsfield: **meta de 450 créditos** (metade do saldo de 900), com gasto anotado por geração. Pode ser ultrapassada com justificativa (decisão 19).
 
 ## 4. Pendências da clínica (viram `docs/CHECKLIST-CLINICA.md`, não bloqueiam a entrega)
 
@@ -123,6 +123,7 @@
 | 16 | Skills `superpowers:*` para plano e execução | Versões homônimas do antigravity | Originais, encadeadas entre si e carregadas na sessão |
 | 17 | Antes/depois apenas recortados | Upscale/retoque para padronizar | Mexer adulteraria o resultado |
 | 18 | Rascunho 480p antes de vídeo 1080p | Gerar direto em 1080p | Economia de créditos |
+| 19 | Os 450 créditos viram meta, não teto rígido: pode ultrapassar se a qualidade exigir, com justificativa no manifesto | Teto rígido de 450 (decisão 7) | Autorização do usuário em 2026-10-05 (~22h45); a economia continua sendo regra |
 
 ## 7. Riscos e mitigação
 

@@ -4,7 +4,7 @@
 
 **Goal:** Entregar na branch `feat/midia` todos os arquivos de mídia do contrato com a frente de código (fotos reais tratadas, antes/depois só recortados, imagens e vídeos gerados sem pessoas, depoimentos reais e links de imprensa), com origem e créditos documentados e um verificador automático que só passa com o contrato cumprido.
 
-**Architecture:** A mídia bruta e as ferramentas ficam em `C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/` (ignorado pelo git, fora do worktree). Scripts Node + sharp + ffmpeg em `media-src/.tools/` recortam, exportam, comparam e verificam; `verify-contract.mjs` lê o worktree `.worktrees/midia` e só sai com código 0 quando cada item do contrato está entregue e válido, ou dispensado com motivo em `docs/media-pendencias.md`. A coleta usa o Chrome do usuário (só leitura); upscale e gerações usam o MCP do Higgsfield com teto de 450 créditos, cada chamada paga registrada em `docs/media-manifest.md`.
+**Architecture:** A mídia bruta e as ferramentas ficam em `C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/` (ignorado pelo git, fora do worktree). Scripts Node + sharp + ffmpeg em `media-src/.tools/` recortam, exportam, comparam e verificam; `verify-contract.mjs` lê o worktree `.worktrees/midia` e só sai com código 0 quando cada item do contrato está entregue e válido, ou dispensado com motivo em `docs/media-pendencias.md`. A coleta usa o Chrome do usuário (só leitura); upscale e gerações usam o MCP do Higgsfield com meta de 450 créditos (pode ser ultrapassada com justificativa — autorização do usuário em 2026-10-05), cada chamada paga registrada em `docs/media-manifest.md`.
 
 **Tech Stack:** Node 22.15 (ESM, `node:test`) + sharp 0.35.5; ffmpeg/ffprobe 9.0.1 (libx264, libvpx-vp9); Claude in Chrome (`mcp__claude-in-chrome__*`); MCP do Higgsfield (`balance`, `transactions`, `media_import_url`, `media_upload`, `media_confirm`, `upscale_image`, `generate_image`, `generate_image_batch`, `generate_video`, `jobs_wait`, `job_display`); WebSearch/WebFetch; git 2.47 + gh 2.97 (Git Bash, Windows 11).
 
@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Teto de **450 créditos** do Higgsfield para toda esta frente. Antes de cada chamada paga: `"get_cost": true`; só envie se `Gasto total + custo ≤ 450` e o subteto da categoria (tabela "Orçamento de créditos") não estourar.
+- Meta de **450 créditos** do Higgsfield para toda esta frente — **não é teto rígido** (autorização do usuário em 2026-10-05, ~22h45): se for preciso passar da meta ou do subteto de uma categoria (tabela "Orçamento de créditos") para manter a qualidade da entrega, pode, desde que o item seja necessário, a ordem de prioridade seja respeitada, o custo caiba no saldo disponível e a justificativa seja registrada em "Avisos" das pendências (`- CRÉDITOS: acima da meta — <item>: <motivo>`). Continue economizando: o usuário usa os créditos em outros projetos. Antes de cada chamada paga: `"get_cost": true`.
 - Registre **cada chamada paga** como uma linha da tabela de créditos de `docs/media-manifest.md`, com `mcp__higgsfield__balance` antes e depois; mantenha `- Gasto total:` igual à soma da coluna Créditos.
 - Prioridade se o crédito apertar: upscale das fotos da Dra. > vídeo do Método > imagens de apoio > foto viva da recepção > reserva. As Tasks 8 → 11 seguem essa ordem.
 - Seedance 2.5: sempre rascunho 480p (`"draft": true`) aprovado antes do final 1080p (`"draft_job_id"`). Kling 3.0 não tem rascunho 480p (só `mode` `std`/`pro`/`4k`): o teste é o próprio `std` de 6 s (9 créditos).
@@ -169,7 +169,7 @@ Esperado: `200 image/jpeg` (se vier `image/webp`, renomeie o arquivo para `.webp
 **P3 — Chamada paga no Higgsfield.**
 1. Leia `- Gasto total:` do manifesto (G) e quanto a categoria já gastou (subteto na tabela "Orçamento de créditos").
 2. `mcp__higgsfield__balance` com `{}` → saldo antes (A).
-3. Faça a chamada da tarefa com `"get_cost": true` dentro de `params` → custo C. Exceção: `generate_image_batch` não aceita `get_cost`; nesse caso C = custo pré-checado com `generate_image` × número de itens do lote. Se G + C > 450 ou a categoria passar do subteto, não envie: escreva `- CRÉDITOS: <item> não gerado por limite do teto` em "Avisos" das pendências e siga o caminho sem geração que a tarefa indica.
+3. Faça a chamada da tarefa com `"get_cost": true` dentro de `params` → custo C. Exceção: `generate_image_batch` não aceita `get_cost`; nesse caso C = custo pré-checado com `generate_image` × número de itens do lote. Se G + C > 450 ou a categoria passar do subteto: envie só se o item for necessário para a qualidade da entrega (seguindo a ordem de prioridade) e se C ≤ saldo A, registrando `- CRÉDITOS: acima da meta — <item>: <motivo>` em "Avisos" das pendências; se o item não for necessário, não envie, escreva `- CRÉDITOS: <item> não gerado para economizar créditos` em "Avisos" e siga o caminho sem geração que a tarefa indica.
 4. Repita a chamada sem `get_cost` → `job_id` (um por requisição). Em timeout de transporte, não reenvie: consulte `mcp__higgsfield__transactions` com `{ "size": 5 }` e `jobs_wait` antes de decidir.
 5. `mcp__higgsfield__jobs_wait` com `{ "jobs": [{ "index": 0, "job_id": "<job_id>" }], "timeout_seconds": 15 }` (um item por job, até 12) até `all_terminal: true`, respeitando `poll_after_seconds`. Se recusar o id, use `mcp__higgsfield__job_display` com `{ "id": "<job_id>" }` para obter a URL do resultado.
 6. `mcp__higgsfield__balance` → saldo depois (D). Acrescente **uma** linha por chamada na tabela de créditos (um lote = uma linha com todos os `job_id`), por exemplo `| 1 | 2026-10-06 10:00 | upscale_image | bytedance 2k | dra/hero | <job_id> | 2 | 900.25 | 898.25 | |`, e atualize `- Gasto total:` com a nova soma. Se A − D ≠ C, explique na coluna Obs.
@@ -913,7 +913,7 @@ test('vídeo: opcional ausente é OPCIONAL; obrigatório ausente é FALTANDO ou 
   assert.equal((await checarGrupo('metodo', raiz, contexto(md)))[0].status, 'DISPENSADO');
 });
 
-test('manifesto: gasto acima de 450 e arquivo não citado falham', async () => {
+test('manifesto: gasto acima de 450 vira aviso e arquivo não citado falha', async () => {
   const raiz = novaRaiz();
   await jpeg(raiz, 'src/assets/media/dra/hero.jpg', 1280, 1600);
   fs.mkdirSync(path.join(raiz, 'docs'), { recursive: true });
@@ -926,8 +926,11 @@ test('manifesto: gasto acima de 450 e arquivo não citado falham', async () => {
     '| 1 | 2026-10-06 10:00 | generate_video | seedance_2_5 | metodo | x | 460 | 900 | 440 | |',
     '',
   ].join('\n'));
-  const falha = (await checarGrupo('manifesto', raiz)).find((l) => l.status === 'FALHA');
-  assert.match(falha.detalhe, /teto de 450/);
+  const linhas = await checarGrupo('manifesto', raiz);
+  const aviso = linhas.find((l) => l.status === 'AVISO' && /meta de 450/.test(l.detalhe));
+  assert.ok(aviso, 'gasto acima de 450 deve gerar AVISO, não FALHA');
+  const falha = linhas.find((l) => l.status === 'FALHA');
+  assert.doesNotMatch(falha.detalhe, /450/);
   assert.match(falha.detalhe, /src\/assets\/media\/dra\/hero\.jpg não está no manifesto/);
 });
 
@@ -1285,7 +1288,7 @@ export async function checarGrupo(nome, raiz, { pendencias = '', dispensas = new
           add('AVISO', g.arquivo, `linha ${r.linha}: saldo antes − depois ≠ créditos; explique na coluna Obs.`);
         }
       }
-      if (c.total > 450) erros.push(`gasto total ${c.total} > teto de 450`);
+      if (c.total > 450) add('AVISO', g.arquivo, `gasto total ${c.total} acima da meta de 450; confira as justificativas em Avisos`);
       if (!(Math.abs(c.total - c.gastoDeclarado) <= 0.01)) erros.push(`"- Gasto total:" declarado ${c.gastoDeclarado} ≠ soma da tabela ${c.total}`);
       const citados = caminhosCitados(md);
       for (const rel of arquivosEntregues(raiz)) if (!citados.has(rel)) erros.push(`${rel} não está no manifesto`);

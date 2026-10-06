@@ -34,7 +34,7 @@ _Última atualização: 2026-10-05, ~22h20 (BRT)_
 ## Decisões-chave (detalhes no log da spec)
 - Astro + GSAP + Lenis; Vercel com o login do usuário; PR por etapa com merge squash após lint, typecheck, testes, build e revisão.
 - Fotos e antes/depois do Instagram (Chrome do usuário, só leitura); upscale no Higgsfield sem alterar rostos; antes/depois só recortados; depoimentos reais do Google e do Instagram; nunca gerar a Dra., pacientes ou equipe por IA.
-- Teto de 450 créditos no Higgsfield (saldo inicial 900,25).
+- Higgsfield: meta de 450 créditos (saldo inicial 900,25). Desde 2026-10-05 ~22h45 o usuário autorizou passar da meta se a qualidade exigir — com justificativa no manifesto e economizando sempre (decisão 19 da spec; plano de mídia já ajustado, verificador trata gasto > 450 como aviso).
 - WhatsApp 5561981007522; registro profissional da Dra. pendente (vai para o checklist da clínica).
 
 ## Como retomar
