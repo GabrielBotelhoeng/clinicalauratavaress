@@ -19,3 +19,11 @@ media-src/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# artefatos locais de QA (relatórios brutos e capturas temporárias)
+.e2e-tmp/
+docs/qa/lighthouse/
+
+# "dist/" acima (build do Astro) também casaria com tests/dist/ (fixtures do Vitest) —
+# re-inclui a pasta de testes para não perder os specs versionados.
+!tests/dist/
