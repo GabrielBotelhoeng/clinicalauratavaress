@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Meta de **450 créditos** do Higgsfield para toda esta frente — **não é teto rígido** (autorização do usuário em 2026-10-05, ~22h45): se for preciso passar da meta ou do subteto de uma categoria (tabela "Orçamento de créditos") para manter a qualidade da entrega, pode, desde que o item seja necessário, a ordem de prioridade seja respeitada, o custo caiba no saldo disponível e a justificativa seja registrada em "Avisos" das pendências (`- CRÉDITOS: acima da meta — <item>: <motivo>`). Continue economizando: o usuário usa os créditos em outros projetos. Antes de cada chamada paga: `"get_cost": true`.
+- Meta de **450 créditos** do Higgsfield para toda esta frente — **não é teto rígido** (autorização do usuário em 2026-10-05, ~22h45): se for preciso passar da meta ou do subteto de uma categoria (tabela "Orçamento de créditos") para manter a qualidade da entrega, pode, desde que o item seja necessário, a ordem de prioridade seja respeitada, o custo caiba no saldo disponível e a justificativa seja registrada em "Avisos" das pendências (`- CRÉDITOS: acima da meta — <item>: <motivo>`; o verificador falha se o gasto passar de 450 sem essa linha) e resumida na coluna Obs. da linha de crédito do manifesto (decisão 19). Continue economizando: o usuário usa os créditos em outros projetos. Antes de cada chamada paga: `"get_cost": true`.
 - Registre **cada chamada paga** como uma linha da tabela de créditos de `docs/media-manifest.md`, com `mcp__higgsfield__balance` antes e depois; mantenha `- Gasto total:` igual à soma da coluna Créditos.
 - Prioridade se o crédito apertar: upscale das fotos da Dra. > vídeo do Método > imagens de apoio > foto viva da recepção > reserva. As Tasks 8 → 11 seguem essa ordem.
 - Seedance 2.5: sempre rascunho 480p (`"draft": true`) aprovado antes do final 1080p (`"draft_job_id"`). Kling 3.0 não tem rascunho 480p (só `mode` `std`/`pro`/`4k`): o teste é o próprio `std` de 6 s (9 créditos).
@@ -20,20 +20,20 @@
 - Antes/depois: só recorte e redução de tamanho (nunca ampliar), sem upscale, filtro, retoque ou IA. Para eles use apenas `crop-pair.mjs` e `export-photo.mjs` **sem** `--allow-enlarge`.
 - Nenhuma imagem gerada pode ser apresentada como a clínica real: prompts não pedem interiores de clínica e o manifesto marca toda imagem gerada como "ilustrativa".
 - Upscale só é aceito se o rosto continuar idêntico: métrica de `compare-regions.mjs` aprovada **e** checagem visual do lado a lado, ambas registradas no manifesto. Senão, use o original redimensionado (`--allow-enlarge`).
-- Depoimentos só reais: `textoOriginal` literal; `texto` com até 30 palavras formado só por cortes do original (sem palavra nova, sem trocar a ordem, sem emoji, sem quebra de linha); `autor` = primeiro nome + inicial (`Mariana S.`).
+- Depoimentos só reais: `textoOriginal` literal; `texto` com até 30 palavras (contadas como o `countWords` do código: todo pedaço separado por espaço) formado só por cortes do original (sem palavra nova, sem trocar a ordem, sem emoji, sem quebra de linha, sem espaço sobrando); `autor` = primeiro nome + inicial (`Mariana S.`).
 - Escreva só em `src/assets/media/**`, `public/media/**`, `src/content/depoimentos.json`, `src/content/imprensa.json`, `docs/media-manifest.md`, `docs/media-pendencias.md` (no worktree) e em `media-src/` (fora do git). Nunca edite `package.json` do repositório nem qualquer outro arquivo.
 - Fotos finais: JPEG sRGB, qualidade 88 (faixa aceita 85–90), sem EXIF.
 - Vídeos: `.mp4` H.264 com `+faststart` e `.webm` VP9, 16:9, 5–8 s, sem áudio, ≤ 2.000.000 bytes cada; poster JPEG 1280×720 ≤ 250.000 bytes.
 - Chrome do usuário só leitura: nunca curtir, comentar, seguir, salvar, compartilhar, responder story nem mandar mensagem; nunca `double_click` em foto do Instagram (curte o post); no visualizador de stories use só `screenshot`, `zoom` e as teclas `ArrowRight`/`Escape`.
 - Higgsfield: após timeout de transporte, não reenvie antes de conferir `mcp__higgsfield__transactions` e `jobs_wait`; siga `recovery_tool`/`adjustments` quando vierem na resposta; omita `use_unlim` e, se vier `unlim_choice`, pare e pergunte ao orquestrador; não passe `folder_id` (preferência `auto_create_project: false`, conferida na Task 1).
-- Commits convencionais em português, só com os caminhos da tarefa (`git add <caminhos>`), terminando com as duas linhas de trailer `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` e `Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr` (use `git commit -m "<título>" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"`).
-- Corpo do PR termina com `🤖 Generated with [Claude Code](https://claude.com/claude-code)`, uma linha em branco e `https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr`. **Não fazer merge**: o orquestrador revisa e faz o merge.
+- Commits convencionais em português, só com os caminhos da tarefa (`git add <caminhos>`), terminando com a linha de trailer `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` (use `git commit -m "<título>" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"`). O link da sessão (`Claude-Session`) é acrescentado só pelo orquestrador, no commit de squash e no PR.
+- Corpo do PR termina com `🤖 Generated with [Claude Code](https://claude.com/claude-code)` (o orquestrador acrescenta o link da sessão). **Não fazer merge**: o orquestrador revisa e faz o merge.
 - Git Bash: use caminhos absolutos em todo comando (o diretório atual é reiniciado entre chamadas).
 
 ## Review Focus
 
 1. URL do CDN do Instagram expirada (parâmetro `oe=`) que baixa uma página de erro com extensão `.jpg` → `check-coleta.mjs` deve acusar "não é imagem" sem travar. Teste: Task 2, `test/coleta.test.mjs`, caso "página de erro salva como .jpg".
-2. Depoimento com emoji ou quebra de linha no `texto` (o card quebra e foge da voz da marca) → o validador recusa. Teste: Task 2, `test/regras.test.mjs`, caso "depoimento com emoji ou quebra de linha".
+2. Depoimento com emoji, quebra de linha ou espaço sobrando no `texto` (o card quebra, foge da voz da marca ou reprova o teste de dist do código, que compara o texto normalizado), ou com `…` solto que estoura 30 no `countWords` do código → o validador recusa. Testes: Task 2, `test/regras.test.mjs`, casos "depoimento com emoji, quebra de linha ou espaço sobrando" e "conta palavras como o countWords do código".
 3. Carrossel com buraco na numeração ou arquivo sobrando na pasta (`resultado-07.jpg` sem o `06`, `resultado-7.jpg`) → o import da frente de código quebra; o verificador acusa. Teste: Task 2, `test/contrato.test.mjs`, casos "buraco na numeração" e "arquivo fora do padrão".
 4. JSON gravado com BOM (ex.: PowerShell `Set-Content`) → `JSON.parse` e o import quebram; o verificador acusa "JSON inválido". Teste: Task 2, `test/contrato.test.mjs`, caso "BOM no início".
 5. Nome de arquivo com maiúscula, acento ou espaço em `apoio/` → o build na Vercel (Linux, diferencia maiúsculas) não acha o arquivo; o verificador acusa. Teste: Task 2, `test/contrato.test.mjs`, caso "nome com maiúscula ou acento".
@@ -46,20 +46,20 @@
 |---|---|
 | `src/assets/media/dra/hero.jpg` | Dra. Laura, meio corpo, 4:5, mínimo 1280×1600 |
 | `src/assets/media/dra/sobre.jpg` | retrato da Dra. (vestido vermelho se existir), 4:5, mínimo 1200×1500 |
-| `src/assets/media/clinica/recepcao.jpg`, `sala.jpg`, `equipe.jpg`, `detalhes.jpg` | lado maior ≥ 1600 px |
+| `src/assets/media/clinica/recepcao.jpg`, `sala.jpg`, `equipe.jpg`, `detalhes.jpg` | 4:5, mínimo 1280×1600; recorte mantém os rostos da equipe e o letreiro da clínica inteiros no quadro |
 | `src/assets/media/resultados/{olhar,mandibula,labios,bigode}-{antes,depois}.jpg` | 4:5, mesmo tamanho dentro de cada par, só recortados |
 | `src/assets/media/carrossel/resultado-01.jpg` … `resultado-NN.jpg` | 3:4, N entre 6 e 12, numeração contínua com 2 dígitos |
 | `src/assets/media/tratamentos/{harmonizacao,rejuvenescimento,kbeauty,corporal}.jpg` | 4:5 |
 | `src/assets/media/apoio/*.jpg` | texturas/fundos gerados, nome kebab-case |
 | `public/media/metodo.mp4`, `metodo.webm`, `metodo-poster.jpg` | 16:9, 5–8 s, sem áudio, ≤ 2 MB cada vídeo |
 | `public/media/cta-final.mp4`, `cta-final.webm`, `cta-final-poster.jpg` | idem (opcional) |
-| `src/content/depoimentos.json` | array de objetos com `texto` (≤ 30 palavras), `textoOriginal`, `autor` (primeiro nome + inicial), `tratamento` (texto ou `null`), `fonte` (`"google"` ou `"instagram"`), `url` (texto ou `null`), `estrelas` (1–5 ou `null`) |
-| `src/content/imprensa.json` | array de `{ "veiculo", "titulo", "url" (texto ou null) }` com os 4 itens de "Na mídia", na ordem do texto |
+| `src/content/depoimentos.json` | array de objetos com `texto` (≤ 30 palavras contadas como o `countWords` do código — todo pedaço separado por espaço, inclusive `…` solto —, sem espaço duplo nem nas pontas), `textoOriginal`, `autor` (primeiro nome + inicial), `tratamento` (texto ou `null`), `fonte` (`"google"` ou `"instagram"`), `url` (https válida ou `null`), `estrelas` (1–5 ou `null`) |
+| `src/content/imprensa.json` | array de `{ "veiculo", "titulo", "url" }` (`url` http(s) válida ou `null`, nunca `""`) com os 4 itens de "Na mídia", na ordem do texto; `veiculo` e `titulo` idênticos a `site.press.items` do código (o título 1 leva as aspas do copy) |
 | `docs/media-manifest.md`, `docs/media-pendencias.md` | origem/créditos de cada arquivo; o que faltou e precisa da clínica |
 
 Fotos de `src/assets/media/**`: JPEG sRGB, qualidade 85–90, sem EXIF de localização (este plano remove todo o EXIF). Guarda-corpos internos do verificador, além do contrato: resultados ≥ 400 px de largura, carrossel ≥ 600 px, tratamentos ≥ 1000 px, apoio com lado maior ≥ 1600 px e de 1 a 12 arquivos.
 
-**Dispensa documentada:** se a fonte de uma foto não existir (ex.: nenhuma foto da sala sem paciente), o item pode ficar de fora com uma linha em `docs/media-pendencias.md` no formato `` - `<caminho>` — AUSENTE: <motivo com 10+ caracteres> ``. Chaves aceitas: o caminho de cada foto, `src/assets/media/carrossel/` (carrossel inteiro) e `public/media/metodo.*`. Os dois JSON nunca são dispensáveis. A frente de código cai para placeholder no que faltar.
+**Dispensa documentada:** se a fonte de uma foto não existir (ex.: nenhuma foto da sala sem paciente), o item pode ficar de fora com uma linha em `docs/media-pendencias.md` no formato `` - `<caminho>` — AUSENTE: <motivo com 10+ caracteres> ``. Chaves aceitas: o caminho de cada foto, `src/assets/media/carrossel/` (carrossel inteiro), `src/assets/media/apoio/` (só se todas as imagens de apoio forem reprovadas) e `public/media/metodo.*`. Os dois JSON nunca são dispensáveis. A frente de código cai para placeholder no que faltar.
 
 ## Mapa de arquivos
 
@@ -169,7 +169,7 @@ Esperado: `200 image/jpeg` (se vier `image/webp`, renomeie o arquivo para `.webp
 **P3 — Chamada paga no Higgsfield.**
 1. Leia `- Gasto total:` do manifesto (G) e quanto a categoria já gastou (subteto na tabela "Orçamento de créditos").
 2. `mcp__higgsfield__balance` com `{}` → saldo antes (A).
-3. Faça a chamada da tarefa com `"get_cost": true` dentro de `params` → custo C. Exceção: `generate_image_batch` não aceita `get_cost`; nesse caso C = custo pré-checado com `generate_image` × número de itens do lote. Se G + C > 450 ou a categoria passar do subteto: envie só se o item for necessário para a qualidade da entrega (seguindo a ordem de prioridade) e se C ≤ saldo A, registrando `- CRÉDITOS: acima da meta — <item>: <motivo>` em "Avisos" das pendências; se o item não for necessário, não envie, escreva `- CRÉDITOS: <item> não gerado para economizar créditos` em "Avisos" e siga o caminho sem geração que a tarefa indica.
+3. Faça a chamada da tarefa com `"get_cost": true` dentro de `params` → custo C. Exceção: `generate_image_batch` não aceita `get_cost`; nesse caso C = custo pré-checado com `generate_image` × número de itens do lote. Se G + C > 450 ou a categoria passar do subteto: envie só se o item for necessário para a qualidade da entrega (seguindo a ordem de prioridade) e se C ≤ saldo A, registrando `- CRÉDITOS: acima da meta — <item>: <motivo>` em "Avisos" das pendências e `acima da meta: <motivo>` na coluna Obs. da linha de crédito (item 6); se o item não for necessário, não envie, escreva `- CRÉDITOS: <item> não gerado para economizar créditos` em "Avisos" e siga o caminho sem geração que a tarefa indica. Se a pré-checagem recusar um parâmetro do modelo ou o `role` de `medias` (variam por modelo), carregue `mcp__higgsfield__models_explore` com ToolSearch, consulte o modelo e corrija só esse campo, sem trocar modelo, duração nem resolução.
 4. Repita a chamada sem `get_cost` → `job_id` (um por requisição). Em timeout de transporte, não reenvie: consulte `mcp__higgsfield__transactions` com `{ "size": 5 }` e `jobs_wait` antes de decidir.
 5. `mcp__higgsfield__jobs_wait` com `{ "jobs": [{ "index": 0, "job_id": "<job_id>" }], "timeout_seconds": 15 }` (um item por job, até 12) até `all_terminal: true`, respeitando `poll_after_seconds`. Se recusar o id, use `mcp__higgsfield__job_display` com `{ "id": "<job_id>" }` para obter a URL do resultado.
 6. `mcp__higgsfield__balance` → saldo depois (D). Acrescente **uma** linha por chamada na tabela de créditos (um lote = uma linha com todos os `job_id`), por exemplo `| 1 | 2026-10-06 10:00 | upscale_image | bytedance 2k | dra/hero | <job_id> | 2 | 900.25 | 898.25 | |`, e atualize `- Gasto total:` com a nova soma. Se A − D ≠ C, explique na coluna Obs.
@@ -212,11 +212,11 @@ Abra os 3 quadros com Read. Aprovado só se: nenhuma pessoa, mão, rosto, silhue
 ```bash
 REPO="C:/Users/botel/OneDrive/Desktop/clinicalauratavares"
 git -C "$REPO" fetch origin
-for BASE in main origin/main; do echo "== $BASE"; git -C "$REPO" show "$BASE:.gitignore" | grep -xE 'media-src/|\.worktrees/'; done
+for BASE in main origin/main; do echo "== $BASE"; MSYS_NO_PATHCONV=1 git -C "$REPO" show "$BASE:.gitignore" | grep -xE 'media-src/|\.worktrees/'; done
 git -C "$REPO" worktree list
 ```
 
-Esperado: pelo menos uma base imprime as duas linhas `media-src/` e `.worktrees/`. Use `main` se ela passar; senão, `origin/main`. Se nenhuma passar, pare e avise o orquestrador (não edite `.gitignore`: o arquivo é da frente de código). Se `worktree list` já mostrar `.worktrees/midia`, é retomada: pule o Step 2.
+`MSYS_NO_PATHCONV=1` é obrigatório: sem ele o Git Bash converte `origin/main:.gitignore` em `origin\main;.gitignore` e o `git show` falha (conferido em 2026-10-06). Esperado: pelo menos uma base imprime as duas linhas `media-src/` e `.worktrees/`. Use `main` se ela passar; senão, `origin/main`. Se nenhuma passar, pare e avise o orquestrador (não edite `.gitignore`: o arquivo é da frente de código). Se `worktree list` já mostrar `.worktrees/midia`, é retomada: pule o Step 2.
 
 - [ ] **Step 2: Criar o worktree**
 
@@ -328,7 +328,7 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 
 ## Créditos do Higgsfield
 
-- Teto: 450
+- Meta: 450 (não é teto rígido — decisão 19 da spec; acima dela, só com justificativa)
 - Saldo inicial: (preenchido na Task 1, Step 7)
 - Gasto total: 0
 - Saldo final: (preenchido na Task 12)
@@ -362,7 +362,7 @@ O que faltou na coleta e o que a clínica precisa enviar ou autorizar. O orquest
 
 ## Arquivos dispensados
 
-Uma linha por item, no formato lido pelo verificador: hífen, espaço, o caminho do contrato entre crases, espaço, travessão, espaço, `AUSENTE:`, espaço e o motivo (10+ caracteres). Chaves aceitas: o caminho de cada foto, `src/assets/media/carrossel/` e `public/media/metodo.*`.
+Uma linha por item, no formato lido pelo verificador: hífen, espaço, o caminho do contrato entre crases, espaço, travessão, espaço, `AUSENTE:`, espaço e o motivo (10+ caracteres). Chaves aceitas: o caminho de cada foto, `src/assets/media/carrossel/`, `src/assets/media/apoio/` e `public/media/metodo.*`.
 
 ## Avisos
 
@@ -384,22 +384,22 @@ Esperado: `credits` ≥ 450 (em 2026-10-05: 900.25) e `auto_create_project: fals
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 grep -c "| Créditos | Saldo antes | Saldo depois |" "$WT/docs/media-manifest.md"
-grep -E "^- (Teto|Saldo inicial|Gasto total):" "$WT/docs/media-manifest.md"
+grep -E "^- (Meta|Saldo inicial|Gasto total):" "$WT/docs/media-manifest.md"
 grep -cE "^## (Arquivos dispensados|Avisos|Dados encontrados para o checklist da clínica|Pedidos à clínica)$" "$WT/docs/media-pendencias.md"
 ```
 
-Esperado: `1`; três linhas (`- Teto: 450`, `- Saldo inicial: <número> (<data hora>)`, `- Gasto total: 0`); `4`.
+Esperado: `1`; três linhas (`- Meta: 450 (…)`, `- Saldo inicial: <número> (<data hora>)`, `- Gasto total: 0`); `4`.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 git -C "$WT" add docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "docs(midia): manifesto e pendências da frente de mídia" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "docs(midia): manifesto e pendências da frente de mídia" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 git -C "$WT" log -1 --format=%B
 ```
 
-Esperado: 1 commit com 2 arquivos; a mensagem termina com as duas linhas de trailer.
+Esperado: 1 commit com 2 arquivos; a mensagem termina com a linha de trailer `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` (só ela).
 
 ---
 
@@ -458,8 +458,10 @@ test('faststart: moov antes de mdat', () => {
   assert.equal(temFaststart(Buffer.concat([caixa('ftyp', 8), caixa('mdat', 32)])), false);
 });
 
-test('conta palavras sem contar reticências e emojis', () => {
-  assert.equal(contarPalavras('Amei o resultado … ficou natural 😍'), 5);
+test('conta palavras como o countWords do código ("…" solto também conta)', () => {
+  assert.equal(contarPalavras('Fiquei mais descansada e ninguém percebeu.'), 6);
+  assert.equal(contarPalavras('Amei o resultado … ficou natural.'), 6);
+  assert.equal(contarPalavras('   '), 0);
 });
 
 const ORIGINAL = 'Fui super bem atendida, a Dra. Laura é muito cuidadosa e o resultado ficou natural.';
@@ -494,11 +496,13 @@ test('depoimento com mais de 30 palavras falha', () => {
   assert.ok(validarDepoimentos([{ ...VALIDO, texto: longo, textoOriginal: longo }]).some((e) => e.includes('31 palavras')));
 });
 
-test('depoimento com emoji ou quebra de linha no texto falha', () => {
+test('depoimento com emoji, quebra de linha ou espaço sobrando no texto falha', () => {
   const comEmoji = { ...VALIDO, textoOriginal: `${ORIGINAL} 😍`, texto: 'O resultado ficou natural 😍' };
   assert.ok(validarDepoimentos([comEmoji]).some((e) => e.includes('emoji')));
   const comQuebra = { ...VALIDO, texto: 'A Dra. Laura é muito cuidadosa.\nO resultado ficou natural.' };
   assert.ok(validarDepoimentos([comQuebra]).some((e) => e.includes('quebra de linha')));
+  const comEspaco = { ...VALIDO, texto: 'A Dra. Laura é  muito cuidadosa.' };
+  assert.ok(validarDepoimentos([comEspaco]).some((e) => e.includes('espaço sobrando')));
 });
 
 test('estrelas coerentes com a fonte', () => {
@@ -506,9 +510,10 @@ test('estrelas coerentes com a fonte', () => {
   assert.ok(validarDepoimentos([{ ...VALIDO, fonte: 'instagram' }]).some((e) => e.includes('não tem estrelas')));
 });
 
-test('chave extra e autor fora do formato falham', () => {
+test('chave extra, autor fora do formato e url inválida falham', () => {
   assert.ok(validarDepoimentos([{ ...VALIDO, idade: 47 }]).some((e) => e.includes('chaves')));
   assert.ok(validarDepoimentos([{ ...VALIDO, autor: 'Mariana Souza' }]).some((e) => e.includes('autor')));
+  assert.ok(validarDepoimentos([{ ...VALIDO, url: 'https://' }]).some((e) => e.includes('url')));
 });
 
 test('depoimento repetido falha', () => {
@@ -669,11 +674,13 @@ export function temFaststart(buf) {
 }
 
 // ---------- Texto dos depoimentos ----------
-const TEM_LETRA_OU_NUMERO = /[\p{L}\p{N}]/u;
 const EMOJI = /\p{Extended_Pictographic}/u;
 
+// Igual ao countWords da frente de código (src/lib/text.ts), que barra o build acima de 30:
+// todo pedaço separado por espaço conta, inclusive "…" ou "—" soltos.
 export function contarPalavras(texto) {
-  return texto.trim().split(/\s+/).filter((t) => TEM_LETRA_OU_NUMERO.test(t)).length;
+  const t = texto.replace(/\s+/gu, ' ').trim();
+  return t === '' ? 0 : t.split(' ').length;
 }
 
 export function normalizarPalavras(texto) {
@@ -699,8 +706,10 @@ export function ehRecorteDoOriginal(curto, original) {
 export const AUTOR_VALIDO = /^\p{Lu}\p{Ll}+(?:-\p{Lu}\p{Ll}+)? \p{Lu}\.$/u;
 
 // ---------- Conteúdo: depoimentos e imprensa ----------
+// Idênticos a site.press.items do código (cópia literal do copy, inclusive as aspas do item 1):
+// com o imprensa.json presente, o PressStrip mostra este `titulo` no lugar do texto do copy.
 export const IMPRENSA_ESPERADA = [
-  { veiculo: 'Revista Orla BSB', titulo: 'Laura Tavares celebra 8 anos e consolida clínica de estética no Sudoeste' },
+  { veiculo: 'Revista Orla BSB', titulo: '"Laura Tavares celebra 8 anos e consolida clínica de estética no Sudoeste"' },
   { veiculo: 'Diário de Brasília', titulo: 'Prêmio de Melhor Atendimento no Santa Permuta 2026' },
   { veiculo: 'W3 Notícias', titulo: 'Korean Beauty Day traz a Brasília as tendências da beleza coreana' },
   { veiculo: 'Diário de Brasília', titulo: 'Coautora do livro "Sua Voz Vale Ouro"' },
@@ -727,6 +736,7 @@ export function validarDepoimentos(lista) {
       const n = contarPalavras(d.texto);
       if (n > 30) erros.push(`${p}: texto com ${n} palavras (máx. 30)`);
       if (/[\r\n]/.test(d.texto)) erros.push(`${p}: texto com quebra de linha`);
+      else if (d.texto !== d.texto.replace(/\s+/gu, ' ').trim()) erros.push(`${p}: texto com espaço sobrando (duplo, nas pontas, tab ou NBSP) — o teste de dist do código compara o texto normalizado`);
       if (EMOJI.test(d.texto)) erros.push(`${p}: texto com emoji`);
     }
     if (textoOk && originalOk && !ehRecorteDoOriginal(d.texto, d.textoOriginal)) {
@@ -735,7 +745,7 @@ export function validarDepoimentos(lista) {
     if (typeof d.autor !== 'string' || !AUTOR_VALIDO.test(d.autor)) erros.push(`${p}: autor "${d.autor}" fora do formato "Primeiro I."`);
     if (!(d.tratamento === null || (typeof d.tratamento === 'string' && d.tratamento.trim() !== ''))) erros.push(`${p}: tratamento deve ser texto ou null`);
     if (d.fonte !== 'google' && d.fonte !== 'instagram') erros.push(`${p}: fonte "${d.fonte}" inválida`);
-    if (!(d.url === null || (typeof d.url === 'string' && d.url.startsWith('https://')))) erros.push(`${p}: url deve começar com https:// ou ser null`);
+    if (!(d.url === null || (typeof d.url === 'string' && d.url.startsWith('https://') && URL.canParse(d.url)))) erros.push(`${p}: url deve ser https:// válida (new URL) ou null`);
     if (!(d.estrelas === null || (Number.isInteger(d.estrelas) && d.estrelas >= 1 && d.estrelas <= 5))) erros.push(`${p}: estrelas deve ser inteiro de 1 a 5 ou null`);
     if (d.fonte === 'google' && d.estrelas === null) erros.push(`${p}: avaliação do Google sem estrelas`);
     if (d.fonte === 'instagram' && d.estrelas !== null) erros.push(`${p}: depoimento do Instagram não tem estrelas (use null)`);
@@ -760,7 +770,7 @@ export function validarImprensa(lista) {
     if (chaves !== 'titulo,url,veiculo') erros.push(`${p}: chaves ${chaves} (esperado titulo,url,veiculo)`);
     if (item.veiculo !== esperado.veiculo) erros.push(`${p}: veiculo "${item.veiculo}" (esperado "${esperado.veiculo}")`);
     if (item.titulo !== esperado.titulo) erros.push(`${p}: titulo "${item.titulo}" (esperado "${esperado.titulo}")`);
-    if (!(item.url === null || (typeof item.url === 'string' && /^https?:\/\/\S+$/.test(item.url)))) erros.push(`${p}: url deve ser http(s) ou null`);
+    if (!(item.url === null || (typeof item.url === 'string' && /^https?:\/\/\S+$/.test(item.url) && URL.canParse(item.url)))) erros.push(`${p}: url deve ser http(s) válida (new URL) ou null`);
   });
   return erros;
 }
@@ -856,6 +866,17 @@ test('dra: ausente é FALTANDO; com dispensa vira DISPENSADO', async () => {
   assert.deepEqual(status(await checarGrupo('dra', raiz, contexto(md))), ['FALTANDO', 'DISPENSADO']);
 });
 
+test('clinica: fotos em 4:5 com 1280×1600 passam; uma foto 16:9 falha', async () => {
+  const raiz = novaRaiz();
+  await jpeg(raiz, 'src/assets/media/clinica/recepcao.jpg', 1280, 1600);
+  await jpeg(raiz, 'src/assets/media/clinica/sala.jpg', 1920, 1080);
+  await jpeg(raiz, 'src/assets/media/clinica/equipe.jpg', 1280, 1600);
+  await jpeg(raiz, 'src/assets/media/clinica/detalhes.jpg', 1280, 1600);
+  const linhas = await checarGrupo('clinica', raiz);
+  assert.deepEqual(status(linhas), ['OK', 'FALHA', 'OK', 'OK']);
+  assert.match(linhas[1].detalhe, /proporção 1920x1080/);
+});
+
 test('resultados: par com tamanhos diferentes falha', async () => {
   const raiz = novaRaiz();
   await jpeg(raiz, 'src/assets/media/resultados/labios-antes.jpg', 540, 675);
@@ -913,7 +934,7 @@ test('vídeo: opcional ausente é OPCIONAL; obrigatório ausente é FALTANDO ou 
   assert.equal((await checarGrupo('metodo', raiz, contexto(md)))[0].status, 'DISPENSADO');
 });
 
-test('manifesto: gasto acima de 450 vira aviso e arquivo não citado falha', async () => {
+test('manifesto: acima de 450 com justificativa vira aviso, sem justificativa falha; arquivo não citado falha', async () => {
   const raiz = novaRaiz();
   await jpeg(raiz, 'src/assets/media/dra/hero.jpg', 1280, 1600);
   fs.mkdirSync(path.join(raiz, 'docs'), { recursive: true });
@@ -926,12 +947,15 @@ test('manifesto: gasto acima de 450 vira aviso e arquivo não citado falha', asy
     '| 1 | 2026-10-06 10:00 | generate_video | seedance_2_5 | metodo | x | 460 | 900 | 440 | |',
     '',
   ].join('\n'));
-  const linhas = await checarGrupo('manifesto', raiz);
+  const justificada = contexto('- CRÉDITOS: acima da meta — metodo: três rascunhos reprovados exigiram um quarto\n');
+  const linhas = await checarGrupo('manifesto', raiz, justificada);
   const aviso = linhas.find((l) => l.status === 'AVISO' && /meta de 450/.test(l.detalhe));
-  assert.ok(aviso, 'gasto acima de 450 deve gerar AVISO, não FALHA');
+  assert.ok(aviso, 'gasto acima de 450 com justificativa deve gerar AVISO, não FALHA');
   const falha = linhas.find((l) => l.status === 'FALHA');
   assert.doesNotMatch(falha.detalhe, /450/);
   assert.match(falha.detalhe, /src\/assets\/media\/dra\/hero\.jpg não está no manifesto/);
+  const semJustificativa = (await checarGrupo('manifesto', raiz)).find((l) => l.status === 'FALHA');
+  assert.match(semJustificativa.detalhe, /acima da meta de 450 sem/);
 });
 
 test('extras: arquivo fora do contrato falha; lixo do sistema é ignorado', async () => {
@@ -1052,7 +1076,7 @@ export const GRUPOS = {
       { arquivo: 'src/assets/media/dra/sobre.jpg', proporcao: [4, 5], minLargura: 1200, minAltura: 1500 },
     ],
   },
-  clinica: { tipo: 'fotos', itens: fotos('src/assets/media/clinica', ['recepcao', 'sala', 'equipe', 'detalhes'], { minLadoMaior: 1600 }) },
+  clinica: { tipo: 'fotos', itens: fotos('src/assets/media/clinica', ['recepcao', 'sala', 'equipe', 'detalhes'], { proporcao: [4, 5], minLargura: 1280, minAltura: 1600 }) },
   resultados: {
     tipo: 'pares',
     pares: ['olhar', 'mandibula', 'labios', 'bigode'].map((q) => ({
@@ -1288,7 +1312,10 @@ export async function checarGrupo(nome, raiz, { pendencias = '', dispensas = new
           add('AVISO', g.arquivo, `linha ${r.linha}: saldo antes − depois ≠ créditos; explique na coluna Obs.`);
         }
       }
-      if (c.total > 450) add('AVISO', g.arquivo, `gasto total ${c.total} acima da meta de 450; confira as justificativas em Avisos`);
+      if (c.total > 450) {
+        if (/^- CRÉDITOS: acima da meta [—-] .{10,}$/mu.test(pendencias)) add('AVISO', g.arquivo, `gasto total ${c.total} acima da meta de 450; justificativas em Avisos das pendências`);
+        else erros.push(`gasto total ${c.total} acima da meta de 450 sem "- CRÉDITOS: acima da meta — <item>: <motivo>" em docs/media-pendencias.md (decisão 19)`);
+      }
       if (!(Math.abs(c.total - c.gastoDeclarado) <= 0.01)) erros.push(`"- Gasto total:" declarado ${c.gastoDeclarado} ≠ soma da tabela ${c.total}`);
       const citados = caminhosCitados(md);
       for (const rel of arquivosEntregues(raiz)) if (!citados.has(rel)) erros.push(`${rel} não está no manifesto`);
@@ -1519,9 +1546,13 @@ test('recorte central 4:5 vira JPEG q88 sRGB sem EXIF', async () => {
   assert.equal(estimarQualidadeJpeg(buf), 88);
 });
 
-test('não amplia sem permissão', async () => {
+test('não amplia sem permissão (nem 1 px no arredondamento da proporção)', async () => {
   await assert.rejects(exportarFoto({ entrada: quadrada, saida: 'out/b.jpg', proporcao: [4, 5], minimo: { width: 1280, height: 1600 }, raiz }), /abaixo do mínimo/);
   await assert.rejects(exportarFoto({ entrada: quadrada, saida: 'out/b2.jpg', minLado: 1600, raiz }), /abaixo do mínimo/);
+  const retrato = path.join(raiz, 'retrato.jpg');
+  await sharp({ create: { width: 1080, height: 1350, channels: 3, background: '#E4B9B0' } }).jpeg({ quality: 95 }).toFile(retrato);
+  const r = await exportarFoto({ entrada: retrato, saida: 'out/b3.jpg', proporcao: [3, 4], raiz });
+  assert.deepEqual([r.largura, r.altura], [1012, 1349]);
 });
 
 test('amplia até o mínimo só com permissão explícita', async () => {
@@ -1659,7 +1690,15 @@ function tamanhoFinal(caixa, { proporcao, minimo, minLado, tamanho, maxLado, per
     fw = Math.max(minimo.width, Math.round(fw * k));
     fh = Math.max(minimo.height, Math.round(fh * k));
   }
-  if (proporcao) fh = Math.round((fw * proporcao[1]) / proporcao[0]);
+  if (proporcao) {
+    fh = Math.round((fw * proporcao[1]) / proporcao[0]);
+    // O arredondamento pode pedir 1 px a mais que a caixa (1080x1350 em 3:4 → caixa 1013x1350, altura 1351):
+    // sem permissão, estreita até caber, para nunca ampliar.
+    while (!permitirAmpliar && fh > caixa.height) {
+      fw -= 1;
+      fh = Math.round((fw * proporcao[1]) / proporcao[0]);
+    }
+  }
   return { width: fw, height: fh };
 }
 
@@ -2211,7 +2250,7 @@ Esperado: `OK` em `dra` (≥ 2) e nas quatro categorias da clínica, a linha `IN
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 git -C "$WT" add docs/media-pendencias.md
-git -C "$WT" commit -m "docs(midia): dados da coleta no Instagram para o checklist" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "docs(midia): dados da coleta no Instagram para o checklist" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 Esperado: 1 commit com `docs/media-pendencias.md`.
@@ -2295,7 +2334,7 @@ Em `docs/media-manifest.md`, seção "Arquivos entregues", uma linha por arquivo
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 node "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools/verify-contract.mjs" --only resultados,carrossel,manifesto,extras
 git -C "$WT" add src/assets/media/resultados src/assets/media/carrossel docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "feat(midia): antes e depois das quatro queixas e carrossel de resultados" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "feat(midia): antes e depois das quatro queixas e carrossel de resultados" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 Esperado: verificador com `RESULTADO: OK` antes do commit (o grupo `manifesto` confirma que todo arquivo entregue está citado); 1 commit.
@@ -2355,7 +2394,7 @@ Nos dois perfis (`navigate` até `https://www.instagram.com/dra.lauratavares/` e
 
 Escolha de 3 a 8 depoimentos (meta: 6): Google com 5 estrelas e 12+ palavras, ou Instagram com nome visível; prefira os que falam de naturalidade, segurança, escuta e atendimento, e varie os tratamentos. Para cada um:
 - `textoOriginal`: o texto literal, inteiro.
-- `texto`: até 30 palavras, só apagando trechos do original (pode trocar a pontuação na emenda e usar `…` onde cortou); sem emoji e sem quebra de linha.
+- `texto`: até 30 palavras, só apagando trechos do original (pode trocar a pontuação na emenda e usar `…` colado à palavra onde cortou, ex.: `cuidadosa… o`; solto entre espaços ele conta como palavra no `countWords` do código); sem emoji, sem quebra de linha, sem espaço duplo nem nas pontas e sem aspas em volta (o card do código já põe “ ”).
 - `autor`: primeiro nome + espaço + inicial do sobrenome + ponto (`Mariana S.`); se não houver sobrenome visível, não use o depoimento.
 - `tratamento`: o procedimento citado no texto (ex.: `"Preenchimento labial"`), ou `null` se o texto não cita nenhum.
 - `fonte`: `"google"` ou `"instagram"`.
@@ -2379,7 +2418,7 @@ No manifesto, seção "Depoimentos (fontes)", uma linha por item: `- <autor> —
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 git -C "$WT" add src/content/depoimentos.json docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "feat(midia): depoimentos reais do Google e do Instagram" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "feat(midia): depoimentos reais do Google e do Instagram" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 Esperado: 1 commit.
@@ -2428,7 +2467,7 @@ Grave com a ferramenta Write `C:/Users/botel/OneDrive/Desktop/clinicalauratavare
 [
   {
     "veiculo": "Revista Orla BSB",
-    "titulo": "Laura Tavares celebra 8 anos e consolida clínica de estética no Sudoeste",
+    "titulo": "\"Laura Tavares celebra 8 anos e consolida clínica de estética no Sudoeste\"",
     "url": null
   },
   {
@@ -2464,7 +2503,7 @@ No manifesto, seção "Imprensa (evidências)", uma linha por item: `- <veículo
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 git -C "$WT" add src/content/imprensa.json docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "feat(midia): links das matérias de imprensa" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "feat(midia): links das matérias de imprensa" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 Esperado: 1 commit.
@@ -2488,12 +2527,12 @@ Tabela por foto:
 |---|---|---|---|
 | `src/assets/media/dra/hero.jpg` | `dra` com só a Dra., meio corpo, olhando para a câmera, sorriso aberto, blazer off-white ou nude de preferência, recepção desfocada ao fundo, rosto nítido | `--ratio 4:5 --min 1280x1600` | rosto da Dra. (testa ao queixo, orelha a orelha) |
 | `src/assets/media/dra/sobre.jpg` | `dra` em retrato, vestido vermelho se existir (senão fundo neutro claro), foto diferente da do hero | `--ratio 4:5 --min 1200x1500` | rosto da Dra. |
-| `src/assets/media/clinica/recepcao.jpg` | `recepcao` com o letreiro inteiro (de preferência a sem pessoas) | `--min-long 1600` | letreiro dourado |
-| `src/assets/media/clinica/sala.jpg` | `sala` | `--min-long 1600` | região com mais detalhe fino (bancada, equipamento) |
-| `src/assets/media/clinica/equipe.jpg` | `equipe` | `--min-long 1600` | uma caixa por rosto |
-| `src/assets/media/clinica/detalhes.jpg` | `detalhes` | `--min-long 1600` | rótulos e textos visíveis |
+| `src/assets/media/clinica/recepcao.jpg` | `recepcao` com o letreiro inteiro (de preferência a sem pessoas) | `--ratio 4:5 --min 1280x1600` | letreiro dourado inteiro no recorte 4:5 |
+| `src/assets/media/clinica/sala.jpg` | `sala` | `--ratio 4:5 --min 1280x1600` | região com mais detalhe fino (bancada, equipamento) |
+| `src/assets/media/clinica/equipe.jpg` | `equipe` | `--ratio 4:5 --min 1280x1600` | uma caixa por rosto, todos dentro do recorte 4:5 |
+| `src/assets/media/clinica/detalhes.jpg` | `detalhes` | `--ratio 4:5 --min 1280x1600` | rótulos e textos visíveis |
 
-Se o original já atende ao mínimo da linha, não faça upscale: exporte direto com as flags da linha.
+Se o original já atende ao mínimo da linha, não faça upscale: exporte direto com as flags da linha. Para a clínica, se a composição (rostos da equipe, letreiro) não couber no recorte 4:5 de uma foto, escolha outra candidata da categoria em `coleta.json`; se nenhuma couber, registre a perda em `docs/media-pendencias.md`, seção `## Avisos` (`- CLÍNICA: <arquivo> — <motivo>`).
 
 - [ ] **Step 1: Carregar as ferramentas do Higgsfield**
 
@@ -2501,9 +2540,9 @@ ToolSearch `select:mcp__higgsfield__balance,mcp__higgsfield__transactions,mcp__h
 
 - [ ] **Step 2: Levar a foto ao Higgsfield (para cada linha da tabela)**
 
-Caso A — a foto já está na proporção final (Dra. em 4:5) ou é da clínica: `mcp__higgsfield__media_import_url` com `{ "url": "<cdn da coleta>", "type": "image" }` → `media_id`. A "imagem enviada" é o arquivo `arquivo` da coleta. Se der erro de URL expirada/403, abra o post com P1 e JS-3, pegue a URL nova, atualize `cdn` na coleta e tente uma vez; se falhar de novo, gere um PNG de trabalho sem recorte com `node "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools/export-photo.mjs" --root "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src" --png --in "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/<arquivo da coleta>" --out work/<destino>.png` e envie com P4; a "imagem enviada" passa a ser esse PNG.
+Caso A — a foto já está perto da proporção final, com o letreiro ou os rostos centralizados (4:5): `mcp__higgsfield__media_import_url` com `{ "url": "<cdn da coleta>", "type": "image" }` → `media_id`. A "imagem enviada" é o arquivo `arquivo` da coleta. Se der erro de URL expirada/403, abra o post com P1 e JS-3, pegue a URL nova, atualize `cdn` na coleta e tente uma vez; se falhar de novo, gere um PNG de trabalho sem recorte com `node "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools/export-photo.mjs" --root "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src" --png --in "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/<arquivo da coleta>" --out work/<destino>.png` e envie com P4; a "imagem enviada" passa a ser esse PNG.
 
-Caso B — a foto da Dra. precisa de recorte para 4:5 (ex.: original 1080×1920): recorte em PNG e envie.
+Caso B — a foto da Dra. ou da clínica precisa de recorte para 4:5 (ex.: original 1080×1920, ou letreiro/rostos fora do centro): use `grid.mjs` na foto de origem para achar a caixa que mantém o letreiro ou os rostos inteiros, recorte em PNG e envie.
 
 ```bash
 T="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools"
@@ -2583,7 +2622,7 @@ Esperado: `OK` (ou `DISPENSADO` com motivo) nas 6 fotos, manifesto OK com o gast
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 git -C "$WT" add src/assets/media/dra src/assets/media/clinica docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "feat(midia): fotos reais da Dra. e da clínica" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "feat(midia): fotos reais da Dra. e da clínica" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 Esperado: 1 commit.
@@ -2626,7 +2665,7 @@ curl -sSL -o "$V/metodo-rascunho-1.mp4" -w "%{http_code} %{content_type}\n" "<ur
 
 - [ ] **Step 3: Revisar o rascunho**
 
-Aplique P5 com `<arquivo>` = `metodo-rascunho-1`. Esperado no `ffprobe`: duração ~6 s e altura 480; nos quadros, os critérios de P5. Reprovado: ajuste o prompt (registre a mudança no manifesto) e gere outro rascunho (`metodo-rascunho-2`, depois `-3`), no máximo 3 no total. Três reprovados: dispense nas pendências com `` - `public/media/metodo.*` — AUSENTE: <motivo> `` e pule para o Step 7.
+Aplique P5 com `<arquivo>` = `metodo-rascunho-1`. Esperado no `ffprobe`: duração ~6 s e altura 480; nos quadros, os critérios de P5. Reprovado: ajuste o prompt (registre a mudança no manifesto) e gere outro rascunho (`metodo-rascunho-2`, depois `-3`), no máximo 3 no total. Três reprovados: dispense nas pendências com `` - `public/media/metodo.*` — AUSENTE: <motivo> `` e pule para o Step 6.
 
 - [ ] **Step 4: Finalizar em 1080p**
 
@@ -2646,22 +2685,22 @@ node "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools/encod
 
 Esperado: JSON com `mp4.bytes` e `webm.bytes` ≤ 2000000 e `poster.bytes` ≤ 250000. Abra `public/media/metodo-poster.jpg` do worktree com Read.
 
-- [ ] **Step 6: Verificar**
+- [ ] **Step 6: Manifesto e verificação**
+
+No manifesto: em "Gerações", `### metodo` com modelo, parâmetros, prompt final, `job_id` do rascunho e do final (ou dos rascunhos reprovados, se houve dispensa); em "Arquivos entregues", uma linha para cada um dos 3 arquivos, com o caminho completo entre crases (`` `public/media/metodo.mp4` ``, `` `public/media/metodo.webm` ``, `` `public/media/metodo-poster.jpg` ``), "Gerado por IA? sim" e "Pode representar a clínica real? não (ilustrativo)". Só depois verifique (o grupo `manifesto` falha se algum arquivo entregue não estiver citado):
 
 ```bash
 node "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools/verify-contract.mjs" --only metodo,manifesto,extras; echo "saida=$?"
 ```
 
-Esperado: `OK` em `metodo.mp4` (h264, faststart), `metodo.webm` (vp9) e no poster; `RESULTADO: OK`; `saida=0`.
+Esperado: `OK` em `metodo.mp4` (h264, faststart), `metodo.webm` (vp9) e no poster (ou `DISPENSADO public/media/metodo.*`), manifesto `OK`; `RESULTADO: OK`; `saida=0`.
 
-- [ ] **Step 7: Manifesto e commit**
-
-No manifesto: em "Gerações", `### metodo` com modelo, parâmetros, prompt final, `job_id` do rascunho e do final; em "Arquivos entregues", as 3 linhas `public/media/metodo.*` com "Gerado por IA? sim" e "Pode representar a clínica real? não (ilustrativo)".
+- [ ] **Step 7: Commit**
 
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 git -C "$WT" add public/media docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "feat(midia): vídeo de ambiente do Método" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "feat(midia): vídeo de ambiente do Método" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 Esperado: 1 commit.
@@ -2746,7 +2785,7 @@ Se o Step 3 mudou o sufixo S, use o sufixo novo em todos os prompts acima. No `j
 
 - [ ] **Step 5: Revisar e regenerar**
 
-Revise como no Step 3. Regenere individualmente as reprovadas aplicando P3 com `mcp__higgsfield__generate_image` (mesmos `params` do item, com o prompt ajustado e `"count": 1`), no máximo 5 regenerações na tarefa, cada uma com sua linha de crédito. Imagem de apoio ainda reprovada: descarte (o apoio aceita de 1 a 12 arquivos). Tratamento ainda reprovado: dispense o caminho nas pendências com o motivo.
+Revise como no Step 3. Regenere individualmente as reprovadas aplicando P3 com `mcp__higgsfield__generate_image` (mesmos `params` do item, com o prompt ajustado e `"count": 1`), no máximo 5 regenerações na tarefa, cada uma com sua linha de crédito. Imagem de apoio ainda reprovada: descarte (o apoio aceita de 1 a 12 arquivos; se todas forem descartadas, dispense a chave `src/assets/media/apoio/` nas pendências). Tratamento ainda reprovado: dispense o caminho nas pendências com o motivo.
 
 - [ ] **Step 6: Exportar**
 
@@ -2759,22 +2798,22 @@ node "$T/export-photo.mjs" --in "$I/textura-seda-blush.png" --out src/assets/med
 
 Faça o mesmo para cada imagem aprovada, com o destino e a proporção da tabela (use a extensão real do arquivo baixado).
 
-- [ ] **Step 7: Verificar**
+- [ ] **Step 7: Manifesto e verificação**
+
+No manifesto: em "Gerações", `### recraft` com os parâmetros comuns, o sufixo S e, por item, prompt e `job_id`; em "Arquivos entregues", uma linha por arquivo, com o caminho completo entre crases (ex.: `` `src/assets/media/apoio/luz-arco.jpg` ``), "Gerado por IA? sim" e "Pode representar a clínica real? não (ilustrativa; alt decorativo ou genérico, nunca 'clínica')". Só depois verifique (o grupo `manifesto` falha se algum arquivo entregue não estiver citado):
 
 ```bash
 node "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools/verify-contract.mjs" --only tratamentos,apoio,manifesto,extras; echo "saida=$?"
 ```
 
-Esperado: `OK` nos 4 tratamentos (≥ 1000 px de largura, 4:5) e em cada apoio (lado maior ≥ 1600), `RESULTADO: OK`, `saida=0`.
+Esperado: `OK` nos 4 tratamentos (≥ 1000 px de largura, 4:5) e em cada apoio (lado maior ≥ 1600), manifesto `OK`, `RESULTADO: OK`, `saida=0`.
 
-- [ ] **Step 8: Manifesto e commit**
-
-No manifesto: em "Gerações", `### recraft` com os parâmetros comuns, o sufixo S e, por item, prompt e `job_id`; em "Arquivos entregues", uma linha por arquivo com "Gerado por IA? sim" e "Pode representar a clínica real? não (ilustrativa; alt decorativo ou genérico, nunca 'clínica')".
+- [ ] **Step 8: Commit**
 
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 git -C "$WT" add src/assets/media/tratamentos src/assets/media/apoio docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "feat(midia): imagens de apoio e dos tratamentos" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "feat(midia): imagens de apoio e dos tratamentos" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 Esperado: 1 commit.
@@ -2790,7 +2829,7 @@ Esperado: 1 commit.
 
 **Interfaces:**
 - Consumes: entrada `recepcao` com `"pessoas": "ninguém"` (Task 4) e a versão aprovada da Task 8 (`higgsfield/upscale/recepcao.png`, ou o original se o upscale foi reprovado); `export-photo.mjs`, `grid.mjs`, `compare-regions.mjs`, `encode-video.mjs`; P3, P4 e P5 ("Procedimentos comuns").
-- Produces: `public/media/cta-final.*` (opcional no contrato). O contrato não tem caminho para vídeo na galeria da seção 9; a foto viva é entregue como vídeo do CTA final.
+- Produces: `public/media/cta-final.*` (opcional no contrato). O contrato não tem caminho para vídeo na galeria da seção 9; a foto viva é entregue como vídeo do CTA final. O vídeo sempre parte do arquivo de trabalho (original ou upscale) em `media-src/`, nunca do JPEG 4:5 final em `src/assets/media/clinica/recepcao.jpg`; ele é só o fundo de `public/media/cta-final.*`, e a galeria da seção 9 continua com as 4 fotos estáticas da clínica.
 
 Prompt K (imagem→vídeo):
 
@@ -2801,6 +2840,8 @@ Prompt K (imagem→vídeo):
 Confira em `coleta.json` se existe `recepcao` com `"pessoas": "ninguém"`. Se não existir, não gere nada: escreva `- FOTO VIVA: nenhuma foto da recepção sem pessoas; cta-final não gerado` em "Avisos" e vá ao Step 6. Se existir: ToolSearch `select:mcp__higgsfield__balance,mcp__higgsfield__transactions,mcp__higgsfield__media_upload,mcp__higgsfield__media_confirm,mcp__higgsfield__generate_video,mcp__higgsfield__jobs_wait,mcp__higgsfield__job_display`.
 
 - [ ] **Step 2: Imagem inicial 16:9**
+
+`<fonte da recepção>` = a foto `recepcao` com `"pessoas": "ninguém"` da coleta: se for a mesma exportada na Task 8, use a versão aprovada lá (`media-src/higgsfield/upscale/recepcao.png`, ou o `arquivo` original se o upscale foi reprovado); senão, o `arquivo` dela na coleta. Nunca parta de foto com gente, nem recortando a pessoa fora.
 
 ```bash
 T="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools"
@@ -2882,7 +2923,7 @@ Nas linhas do manifesto da reserva: "Pode representar a clínica real? não (ilu
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 node "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/.tools/verify-contract.mjs" --only cta-final,manifesto,extras; echo "saida=$?"
 git -C "$WT" add public/media docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "feat(midia): vídeo do CTA final a partir da recepção" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "feat(midia): vídeo do CTA final a partir da recepção" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
 Esperado: `OK` nos 3 arquivos `cta-final.*` ou `OPCIONAL`, `RESULTADO: OK`, `saida=0`. Se nada foi gerado, troque a mensagem do commit por `docs(midia): registro da foto viva descartada` e adicione só os dois arquivos de `docs/`.
@@ -2897,7 +2938,7 @@ Esperado: `OK` nos 3 arquivos `cta-final.*` ou `OPCIONAL`, `RESULTADO: OK`, `sai
 
 **Interfaces:**
 - Consumes: tudo das Tasks 1–11.
-- Produces: branch `feat/midia` no remoto e um PR aberto para `main` (sem merge).
+- Produces: até o Step 6 (subagente): commits finais no worktree e `media-src/textos/pr-body.md` pronto. Steps 7–9 (orquestrador): branch `feat/midia` no remoto e um PR aberto para `main` (sem merge).
 
 - [ ] **Step 1: Suíte de testes**
 
@@ -2938,21 +2979,11 @@ Releia `docs/media-pendencias.md` e confirme: cada dispensa com motivo; avisos d
 ```bash
 WT="C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia"
 git -C "$WT" add docs/media-manifest.md docs/media-pendencias.md
-git -C "$WT" commit -m "docs(midia): manifesto final e pendências da clínica" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" --trailer "Claude-Session: https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr"
+git -C "$WT" commit -m "docs(midia): manifesto final e pendências da clínica" --trailer "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 git -C "$WT" status --short
 ```
 
 Esperado: 1 commit; `status` vazio.
-
-- [ ] **Step 7: Push**
-
-```bash
-git -C "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia" push -u origin feat/midia
-```
-
-Esperado: branch `feat/midia` criada no remoto `git@github.com:GabrielBotelhoeng/clinicalauratavaress.git`.
-
-- [ ] **Step 8: Abrir o PR**
 
 Grave com a ferramenta Write `C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/textos/pr-body.md`, preenchendo os números com os valores reais do manifesto e da saída do verificador:
 
@@ -2984,9 +3015,23 @@ Gasto: <Gasto total> de 450 (saldo inicial <x>, final <y>).
 Não fazer merge por aqui: o orquestrador revisa e faz o merge.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr
 ```
+
+Reporte ao orquestrador: `media-src/textos/pr-body.md` pronto, gasto de créditos e resumo das pendências. Feche abas do Chrome que ainda estiverem abertas.
+
+**Nota:** o subagente para depois do Step 6 e entrega o corpo do PR pronto em `C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/textos/pr-body.md`, terminando na linha `🤖 Generated with [Claude Code](https://claude.com/claude-code)` (sem link de sessão). Os Steps 7–9 a seguir são executados pelo orquestrador.
+
+- [ ] **Step 7: Push (executado pelo orquestrador)**
+
+```bash
+git -C "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/.worktrees/midia" push -u origin feat/midia
+```
+
+Esperado: branch `feat/midia` criada no remoto `git@github.com:GabrielBotelhoeng/clinicalauratavaress.git`.
+
+- [ ] **Step 8: Abrir o PR (executado pelo orquestrador)**
+
+Use o corpo do PR já pronto em `media-src/textos/pr-body.md` (Step 6):
 
 ```bash
 gh pr create --repo GabrielBotelhoeng/clinicalauratavaress --base main --head feat/midia --title "feat(midia): fotos, vídeos, depoimentos e imprensa da landing" --body-file "C:/Users/botel/OneDrive/Desktop/clinicalauratavares/media-src/textos/pr-body.md"
@@ -2994,14 +3039,14 @@ gh pr create --repo GabrielBotelhoeng/clinicalauratavaress --base main --head fe
 
 Esperado: a URL do PR.
 
-- [ ] **Step 9: Conferir o PR e reportar**
+- [ ] **Step 9: Conferir o PR (executado pelo orquestrador)**
 
 ```bash
 gh pr view feat/midia --repo GabrielBotelhoeng/clinicalauratavaress --json url,state,baseRefName,headRefName
 gh pr view feat/midia --repo GabrielBotelhoeng/clinicalauratavaress --json body --jq .body | tail -n 4
 ```
 
-Esperado: `state` `OPEN`, `baseRefName` `main`, `headRefName` `feat/midia`; o corpo termina com a linha `🤖 Generated with [Claude Code](https://claude.com/claude-code)`, uma linha em branco e `https://claude.ai/code/session_01LeX8QvmLLh9p9Zw7Zza2Nr` (pode haver uma linha vazia final). Reporte ao orquestrador: URL do PR, gasto de créditos e resumo das pendências. **Não faça merge.** Feche abas do Chrome que ainda estiverem abertas.
+Esperado: `state` `OPEN`, `baseRefName` `main`, `headRefName` `feat/midia`; o corpo termina com a linha `🤖 Generated with [Claude Code](https://claude.com/claude-code)` (pode haver uma linha vazia final). **Não faça merge.**
 
 ---
 
@@ -3018,8 +3063,8 @@ Esperado: `state` `OPEN`, `baseRefName` `main`, `headRefName` `feat/midia`; o co
 | Foto viva da recepção (Kling, descartar se o letreiro deformar) e reserva | Task 11 |
 | ~10 imagens de apoio com a paleta da marca (Recraft V4.1) | Task 10 |
 | Nunca gerar/animar pessoas; nada gerado como clínica real | Global Constraints; checklists visuais das Tasks 9–11; coluna no manifesto |
-| Teto de 450 créditos, gasto por job, prioridade | Orçamento; P3 ("Procedimentos comuns"); ordem das Tasks 8 → 11; checagem `manifesto` do verificador |
+| Meta de 450 créditos (decisão 19: acima só com justificativa), gasto por job, prioridade | Orçamento; P3 ("Procedimentos comuns"); ordem das Tasks 8 → 11; checagem `manifesto` do verificador (falha acima de 450 sem `- CRÉDITOS: acima da meta`) |
 | Originais em `media-src/`, manifesto versionado, vídeos H.264 + WebM ≤ 2 MB com poster | Tasks 1, 3, 9, 11; grupo `metodo`/`cta-final` do verificador |
 | Pendências da clínica 1 (registro) e 2 (termos) | Tasks 4, 5, 6, 12 |
 | Contrato de caminhos e formatos; propriedade dos arquivos | Task 2 (`GRUPOS`, `PERMITIDOS`, grupo `extras`); Task 12, Step 3 |
-| Commits convencionais com trailers; PR com rodapé; sem merge | Global Constraints; Tasks 1, 4–12 |
+| Commits convencionais com o trailer `Co-Authored-By`; PR com rodapé; sem merge | Global Constraints; Tasks 1, 4–12 |
