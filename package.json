@@ -25,6 +25,7 @@
     "sharp": true
   },
   "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
     "@fontsource/cormorant-garamond": "5.3.0",
     "@fontsource/jost": "5.3.0",
     "@fontsource/pinyon-script": "5.3.0",

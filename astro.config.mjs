@@ -1,4 +1,5 @@
 // @ts-check
+import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
 // URL pública usada em canonical, Open Graph, sitemap e robots. Confirmada na Task 38 (deploy).
@@ -9,6 +10,7 @@ export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'file' },
   devToolbar: { enabled: false },
+  integrations: [sitemap()],
   vite: {
     build: {
       // Scripts processados nunca viram <script> inline: o CSP (Task 36) libera só 'self' + hashes conhecidos.

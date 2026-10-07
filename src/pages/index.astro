@@ -1,18 +1,29 @@
 ---
-// Página provisória da fundação: substituída pela BaseLayout (Task 7) e pelas seções (Etapas 2–4).
-import '../styles/index';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { media } from '../content/media';
+import { listPending } from '../content/pending';
+import { site } from '../content/site';
+import { buildBusinessJsonLd } from '../lib/seo';
+
+for (const line of listPending(site)) console.warn(`[pendente] ${line}`);
+for (const line of media.reportLines()) console.warn(`[mídia] ${line}`);
+
+const jsonLd = [
+  buildBusinessJsonLd(site, {
+    url: new URL('/', Astro.site).href,
+    image: new URL('/og.jpg', Astro.site).href,
+  }),
+];
 ---
 
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Clínica Laura Tavares</title>
-  </head>
-  <body class="lt">
-    <main>
-      <h1 class="lt-title is-display">Clínica Laura Tavares</h1>
-    </main>
-  </body>
-</html>
+<BaseLayout path="/" jsonLd={jsonLd}>
+  <section class="section">
+    <div class="container">
+      <h1 class="lt-title is-display">
+        {site.hero.title.before}
+        <em>{site.hero.title.em}</em>
+        {site.hero.title.after}
+      </h1>
+    </div>
+  </section>
+</BaseLayout>
