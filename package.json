@@ -18,7 +18,8 @@
     "test:watch": "vitest",
     "test:dist": "vitest run --config vitest.dist.config.ts",
     "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:dist",
-    "placeholders": "node scripts/make-placeholders.mjs"
+    "placeholders": "node scripts/make-placeholders.mjs",
+    "lighthouse": "node scripts/with-preview.mjs node scripts/lighthouse.mjs"
   },
   "allowScripts": {
     "esbuild": true,
