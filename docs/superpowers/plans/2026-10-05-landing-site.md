@@ -4724,7 +4724,7 @@ AB=(agent-browser --session lt-check)
   return 'menu aberto com foco dentro';
 })()
 JS
-"${AB[@]}" screenshot .e2e-tmp/menu-375.png >/dev/null
+"${AB[@]}" screenshot "" .e2e-tmp/menu-375.png >/dev/null
 "${AB[@]}" press Escape >/dev/null
 "${AB[@]}" eval --stdin <<'JS'
 (() => {
@@ -6255,7 +6255,7 @@ for _ in 1 2 3 4 5; do "${AB[@]}" press ArrowRight >/dev/null; done
 JS
 "${AB[@]}" press Home >/dev/null
 "${AB[@]}" eval "document.querySelector('[data-ba]').style.getPropertyValue('--pos')"
-"${AB[@]}" screenshot .e2e-tmp/resultados-1280.png >/dev/null
+"${AB[@]}" screenshot "" .e2e-tmp/resultados-1280.png >/dev/null
 "${AB[@]}" close >/dev/null
 EOF
 node scripts/with-preview.mjs bash .e2e-tmp/slider-check.sh
@@ -11362,7 +11362,7 @@ for WIDTH in 375 768 1280 1440; do
   "${AB[@]}" set viewport "$WIDTH" "${HEIGHTS[$WIDTH]}" >/dev/null
   "${AB[@]}" open "$BASE_URL" >/dev/null
   "${AB[@]}" wait --load networkidle >/dev/null
-  "${AB[@]}" screenshot --full "$QA/home-$WIDTH.png" >/dev/null
+  "${AB[@]}" screenshot --full "" "$QA/home-$WIDTH.png" >/dev/null
   echo "  $QA/home-$WIDTH.png"
 done
 
