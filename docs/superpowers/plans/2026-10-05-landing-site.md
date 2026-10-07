@@ -3527,7 +3527,8 @@ for WIDTH in "${WIDTHS[@]}"; do
   printf 'document.querySelector(%s)?.scrollIntoView({ block: "start" }); true\n' "$SELECTOR_JSON" \
     | "${AB[@]}" eval --stdin >/dev/null
   "${AB[@]}" wait 1500 >/dev/null
-  "${AB[@]}" screenshot "$OUT/$NAME-$WIDTH.png" >/dev/null
+  # seletor vazio = captura o viewport inteiro (agent-browser 0.27.0 espera: screenshot [selector] [path])
+  "${AB[@]}" screenshot "" "$OUT/$NAME-$WIDTH.png" >/dev/null
   echo "$OUT/$NAME-$WIDTH.png"
 done
 "${AB[@]}" close >/dev/null
@@ -10679,7 +10680,7 @@ done
 "${AB[@]}" open "$URL" >/dev/null
 "${AB[@]}" wait --load networkidle >/dev/null
 "${AB[@]}" eval "document.fonts.ready.then(() => true)" >/dev/null
-"${AB[@]}" screenshot "$OUT/raw.png" >/dev/null
+"${AB[@]}" screenshot "" "$OUT/raw.png" >/dev/null
 "${AB[@]}" close >/dev/null
 
 node -e "import('sharp').then(async ({ default: sharp }) => { await sharp('$OUT/raw.png').resize(1200, 630, { fit: 'cover' }).jpeg({ quality: 85, mozjpeg: true }).toFile('public/og.jpg'); const m = await sharp('public/og.jpg').metadata(); console.log('public/og.jpg', m.width + 'x' + m.height, m.format); })"
@@ -11391,7 +11392,7 @@ step "menu mobile"
 "${AB[@]}" click "[data-nav-open]" >/dev/null
 "${AB[@]}" wait 300 >/dev/null
 "${AB[@]}" eval "JSON.stringify(document.querySelector('[data-nav-menu]').open === true && document.querySelector('[data-nav-open]').getAttribute('aria-expanded') === 'true')" > "$OUT/menu-open.json"
-"${AB[@]}" screenshot "$QA/menu-mobile-375.png" >/dev/null
+"${AB[@]}" screenshot "" "$QA/menu-mobile-375.png" >/dev/null
 "${AB[@]}" press Escape >/dev/null
 "${AB[@]}" wait 300 >/dev/null
 "${AB[@]}" eval "JSON.stringify(document.querySelector('[data-nav-menu]').open === false)" > "$OUT/menu-closed.json"
