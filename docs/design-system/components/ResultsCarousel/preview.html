@@ -1,0 +1,16 @@
+<!-- @dsCard group="Resultados" height=420 width=1200 -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../bundle.css"><meta charset="utf-8"><title>ResultsCarousel</title>
+<style>html,body{margin:0;background:var(--surface)} body{padding:24px}</style></head>
+<body class="lt">
+<div class="lt-eyebrow" style="text-align:center">Elas confiaram na Dra. Laura</div>
+<div class="lt-reel"><div class="lt-reel__track" id="r1"></div></div>
+<script>var caps=['Lábios · 1 sessão','Rejuvenescimento 40+','Contorno mandibular','Skincare coreano','Bioestimulador · 3 meses','Olheiras','Glow natural','Harmonização completa'];
+var tones=['var(--brand-blush)','var(--brand-rose)','var(--surface-rose)','var(--brand-blush)'];
+var h=caps.map(function(c,i){return '<div class="lt-shot" style="background:'+tones[i%4]+'"><div class="lt-shot__cap">'+c+'</div></div>'}).join('');
+document.getElementById('r1').innerHTML=h+h;</script>
+</body>
+</html>

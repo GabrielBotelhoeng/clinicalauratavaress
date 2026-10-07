@@ -1,0 +1,17 @@
+<!-- @dsCard group="Prova social" height=200 width=1100 -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../bundle.css"><meta charset="utf-8"><title>StatBlock</title>
+<style>html,body{margin:0;background:var(--surface)} body{padding:24px}</style></head>
+<body class="lt">
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center">
+  <div><div class="lt-stat__num" data-n="25" data-pre="+" data-suf=" mil">+25 mil</div><div class="lt-stat__label">atendimentos</div></div>
+  <div style="border-left:1px solid var(--hairline)"><div class="lt-stat__num" data-n="9" data-suf=" anos">9 anos</div><div class="lt-stat__label">de experiência</div></div>
+  <div style="border-left:1px solid var(--hairline)"><div class="lt-stat__num" data-n="8" data-suf=" anos">8 anos</div><div class="lt-stat__label">de clínica no Sudoeste</div></div>
+  <div style="border-left:1px solid var(--hairline)"><div class="lt-stat__num">AMWC</div><div class="lt-stat__label">Coreia 2026</div></div>
+</div>
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('[data-n]').forEach(function(el){var n=+el.dataset.n,p=el.dataset.pre||'',s=el.dataset.suf||'',st=performance.now();(function f(t){var k=Math.min((t-st)/1400,1),e=1-Math.pow(1-k,3);el.textContent=p+Math.round(n*e)+s;if(k<1)requestAnimationFrame(f)})(st)})}</script>
+</body>
+</html>

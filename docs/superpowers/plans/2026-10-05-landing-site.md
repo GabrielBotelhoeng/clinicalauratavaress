@@ -3527,7 +3527,8 @@ for WIDTH in "${WIDTHS[@]}"; do
   printf 'document.querySelector(%s)?.scrollIntoView({ block: "start" }); true\n' "$SELECTOR_JSON" \
     | "${AB[@]}" eval --stdin >/dev/null
   "${AB[@]}" wait 1500 >/dev/null
-  "${AB[@]}" screenshot "$OUT/$NAME-$WIDTH.png" >/dev/null
+  # seletor vazio = captura o viewport inteiro (agent-browser 0.27.0 espera: screenshot [selector] [path])
+  "${AB[@]}" screenshot "" "$OUT/$NAME-$WIDTH.png" >/dev/null
   echo "$OUT/$NAME-$WIDTH.png"
 done
 "${AB[@]}" close >/dev/null
@@ -4723,7 +4724,7 @@ AB=(agent-browser --session lt-check)
   return 'menu aberto com foco dentro';
 })()
 JS
-"${AB[@]}" screenshot .e2e-tmp/menu-375.png >/dev/null
+"${AB[@]}" screenshot "" .e2e-tmp/menu-375.png >/dev/null
 "${AB[@]}" press Escape >/dev/null
 "${AB[@]}" eval --stdin <<'JS'
 (() => {
@@ -6254,7 +6255,7 @@ for _ in 1 2 3 4 5; do "${AB[@]}" press ArrowRight >/dev/null; done
 JS
 "${AB[@]}" press Home >/dev/null
 "${AB[@]}" eval "document.querySelector('[data-ba]').style.getPropertyValue('--pos')"
-"${AB[@]}" screenshot .e2e-tmp/resultados-1280.png >/dev/null
+"${AB[@]}" screenshot "" .e2e-tmp/resultados-1280.png >/dev/null
 "${AB[@]}" close >/dev/null
 EOF
 node scripts/with-preview.mjs bash .e2e-tmp/slider-check.sh
@@ -10199,17 +10200,24 @@ console.log(placeholders.length === 0 ? 'Todos os 18 slots do contrato com foto 
 "
 ```
 
-Expected: nenhuma linha `arquivo ignorado`/`arquivo duplicado` (se aparecer alguma, pare e resolva com a frente de mídia antes de continuar — o código nunca deve corrigir isso trocando ou renomeando arquivos em `src/assets/media/`); a mensagem final confirma 18 slots reais ou lista quantos placeholders restam, todos citados em `docs/media-pendencias.md`.
+Expected: nenhuma linha `arquivo ignorado`/`arquivo duplicado` — **e se aparecer alguma, o script FALHA a etapa** (`process.exit(1)`, saída não-zero), não é só um aviso: o glob eager de `src/content/media.ts` (`import.meta.glob(..., { eager: true })`) copia todo arquivo de `src/assets/media/**` para `dist/_astro/` mesmo sem nenhum `<img>`/`<Picture>` o referenciar, então um arquivo fora do contrato (ex.: uma foto de paciente sem autorização) já teria ido para o `dist/` publicável antes mesmo desta checagem rodar. Pare e resolva com a frente de mídia (o código nunca deve corrigir isso trocando ou renomeando arquivos em `src/assets/media/`) e repita o Step 1 antes de seguir para o Step 2. Sem nenhum arquivo fora do contrato, a mensagem final confirma 18 slots reais ou lista quantos placeholders restam, todos citados em `docs/media-pendencias.md`.
 
 - [ ] **Step 2: Escrever `tests/dist/media-integration.test.ts`**
 
 ```ts
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { MEDIA_SLOTS } from '../../src/content/media';
+import { media, MEDIA_SLOTS } from '../../src/content/media';
 import { loadPage } from './load';
 
 describe('integração das mídias reais', () => {
+  it('nenhum arquivo fora do contrato em src/assets/media (o glob eager copia pro dist mesmo sem uso)', () => {
+    const bad = media
+      .reportLines()
+      .filter((line) => line.includes('arquivo ignorado') || line.includes('arquivo duplicado'));
+    expect(bad).toEqual([]);
+  });
+
   it('toda foto do contrato com arquivo real não tem data-placeholder e tem alt não vazio', () => {
     const { document } = loadPage();
     for (const slot of Object.keys(MEDIA_SLOTS)) {
@@ -10679,7 +10687,7 @@ done
 "${AB[@]}" open "$URL" >/dev/null
 "${AB[@]}" wait --load networkidle >/dev/null
 "${AB[@]}" eval "document.fonts.ready.then(() => true)" >/dev/null
-"${AB[@]}" screenshot "$OUT/raw.png" >/dev/null
+"${AB[@]}" screenshot "" "$OUT/raw.png" >/dev/null
 "${AB[@]}" close >/dev/null
 
 node -e "import('sharp').then(async ({ default: sharp }) => { await sharp('$OUT/raw.png').resize(1200, 630, { fit: 'cover' }).jpeg({ quality: 85, mozjpeg: true }).toFile('public/og.jpg'); const m = await sharp('public/og.jpg').metadata(); console.log('public/og.jpg', m.width + 'x' + m.height, m.format); })"
@@ -11361,7 +11369,7 @@ for WIDTH in 375 768 1280 1440; do
   "${AB[@]}" set viewport "$WIDTH" "${HEIGHTS[$WIDTH]}" >/dev/null
   "${AB[@]}" open "$BASE_URL" >/dev/null
   "${AB[@]}" wait --load networkidle >/dev/null
-  "${AB[@]}" screenshot --full "$QA/home-$WIDTH.png" >/dev/null
+  "${AB[@]}" screenshot --full "" "$QA/home-$WIDTH.png" >/dev/null
   echo "  $QA/home-$WIDTH.png"
 done
 
@@ -11391,7 +11399,7 @@ step "menu mobile"
 "${AB[@]}" click "[data-nav-open]" >/dev/null
 "${AB[@]}" wait 300 >/dev/null
 "${AB[@]}" eval "JSON.stringify(document.querySelector('[data-nav-menu]').open === true && document.querySelector('[data-nav-open]').getAttribute('aria-expanded') === 'true')" > "$OUT/menu-open.json"
-"${AB[@]}" screenshot "$QA/menu-mobile-375.png" >/dev/null
+"${AB[@]}" screenshot "" "$QA/menu-mobile-375.png" >/dev/null
 "${AB[@]}" press Escape >/dev/null
 "${AB[@]}" wait 300 >/dev/null
 "${AB[@]}" eval "JSON.stringify(document.querySelector('[data-nav-menu]').open === false)" > "$OUT/menu-closed.json"
@@ -11500,6 +11508,8 @@ EOF
 - Produces: `sha256Base64(text: string): string`, `cspHash(text: string): string`, `isExecutableScriptType(type: string | null): boolean`, `collectInlineScriptHashes(html: string): string[]`, `buildCsp(hashes: string[]): string`; `node scripts/csp.mjs` (grava `vercel.json`) e `node scripts/csp.mjs --check` (confere; sai com 1 se desatualizado).
 
 > **O que o build realmente produz (inspecionado antes de escrever o CSP):** um único `<script>` inline executável por página — o failsafe `html.js` da Task 26, sem `src` e sem `type` — todo o resto de JS é `<script type="module" src="...">` externo (Global Constraints, linha 549). Os blocos `<script type="application/ld+json">` (Task 7) não são JavaScript: CSP `script-src` não os governa, então não entram nos hashes. O único atributo de estilo inline do projeto é `style="object-position: ..."` nas fotos de mídia (Global Constraints, linha 24; 6 ocorrências, todas o mesmo padrão) — liberado por `style-src-attr`, não por `style-src`, para manter `style-src` estrito.
+
+> **Vercel `cleanUrls` (emenda da revisão final da Etapa 1):** com `build.format: 'file'` (Task 2) o build gera `dist/politica-de-privacidade.html`, mas canonical, sitemap e rodapé linkam `/politica-de-privacidade` sem `.html` (Tasks 7/24). Isso só resolve na Vercel com `"cleanUrls": true` no `vercel.json` — sem ele, essa URL dá 404 em produção. `trailingSlash: false` acompanha, para a Vercel não discordar do `trailingSlash: 'never'` do Astro (Task 2). Por isso `scripts/csp.mjs` (Step 4 abaixo) também grava essas duas chaves no `vercel.json`, e `--check` as confere junto com o CSP.
 
 - [ ] **Step 1: Escrever o teste que falha — `scripts/lib/csp.test.mjs`**
 
@@ -11695,20 +11705,38 @@ if (process.argv.includes('--check')) {
   const current = loadVercelJson();
   const block = current.headers?.find((entry) => entry.source === SOURCE);
   const currentCsp = block?.headers?.find((header) => header.key === 'Content-Security-Policy')?.value;
+  const problems = [];
   if (currentCsp !== csp) {
-    console.error('CSP desatualizado em vercel.json. Rode "npm run csp" e commite o arquivo.');
-    console.error(`Esperado: ${csp}`);
-    console.error(`Atual:    ${currentCsp ?? '(ausente)'}`);
+    problems.push(`CSP desatualizado.\n  Esperado: ${csp}\n  Atual:    ${currentCsp ?? '(ausente)'}`);
+  }
+  if (current.cleanUrls !== true) {
+    problems.push(
+      `cleanUrls deveria ser true (atual: ${JSON.stringify(current.cleanUrls)}) — sem ele, /politica-de-privacidade (canonical/sitemap/rodapé) dá 404 na Vercel.`,
+    );
+  }
+  if (current.trailingSlash !== false) {
+    problems.push(`trailingSlash deveria ser false (atual: ${JSON.stringify(current.trailingSlash)}).`);
+  }
+  if (problems.length > 0) {
+    console.error('vercel.json desatualizado. Rode "npm run csp" e commite o arquivo.');
+    for (const problem of problems) console.error(problem);
     process.exit(1);
   }
-  console.log('CSP em dia com o dist/ atual.');
+  console.log('CSP, cleanUrls e trailingSlash em dia com o dist/ atual.');
   process.exit(0);
 }
 
 const data = loadVercelJson();
 data.headers = [headerBlock(csp), ...(data.headers ?? []).filter((entry) => entry.source !== SOURCE)];
+// cleanUrls: true é o que resolve /politica-de-privacidade (sem .html) na Vercel — o build
+// (format: 'file', Task 2) gera dist/politica-de-privacidade.html, mas canonical/sitemap/rodapé
+// (Tasks 7/24) linkam sem extensão. trailingSlash: false acompanha o trailingSlash: 'never' do Astro.
+data.cleanUrls = true;
+data.trailingSlash = false;
 writeFileSync(VERCEL_JSON, `${JSON.stringify(data, null, 2)}\n`);
-console.log(`vercel.json atualizado — script-src com ${csp.match(/sha256-/g)?.length ?? 0} hash(es).`);
+console.log(
+  `vercel.json atualizado — script-src com ${csp.match(/sha256-/g)?.length ?? 0} hash(es); cleanUrls e trailingSlash ajustados.`,
+);
 ```
 
 - [ ] **Step 5: Registrar os scripts npm e incluir `csp:check` no gate**
@@ -11722,7 +11750,7 @@ npm pkg set scripts.check="npm run lint && npm run typecheck && npm test && npm 
 - [ ] **Step 6: Gerar o `vercel.json` e confirmar que o `--check` fica em dia**
 
 Run: `npm run build && npm run csp && npm run csp:check`
-Expected: a primeira chamada imprime `vercel.json atualizado — script-src com 1 hash(es).`; a segunda imprime `CSP em dia com o dist/ atual.` e sai com 0. Abra `vercel.json` com a ferramenta Read: `headers[0].source` é `/(.*)`  e traz os 5 cabeçalhos (`Content-Security-Policy`, `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`).
+Expected: a primeira chamada imprime `vercel.json atualizado — script-src com 1 hash(es); cleanUrls e trailingSlash ajustados.`; a segunda imprime `CSP, cleanUrls e trailingSlash em dia com o dist/ atual.` e sai com 0. Abra `vercel.json` com a ferramenta Read: `cleanUrls` é `true` e `trailingSlash` é `false` (sem isso, `/politica-de-privacidade` — o link que canonical, sitemap e rodapé usam, Tasks 7/24 — dá 404 na Vercel, já que o build gera `dist/politica-de-privacidade.html` com extensão); `headers[0].source` é `/(.*)` e traz os 5 cabeçalhos (`Content-Security-Policy`, `Strict-Transport-Security`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`).
 
 - [ ] **Step 7: Gate completo da tarefa (agora com `csp:check`) e commit**
 
@@ -11876,7 +11904,15 @@ grep -ciE '^(content-security-policy|strict-transport-security|x-content-type-op
 
 Expected: a última linha imprime `5`. Se vier `401`/uma página de login no corpo (em vez dos 5 cabeçalhos), a Proteção de Deploy da Vercel está exigindo autenticação para preview — desative em **Project Settings → Deployment Protection** (ou gere um bypass token) e repita o `curl`.
 
-- [ ] **Step 5: Lighthouse e e2e contra a URL de preview**
+- [ ] **Step 5: Confirmar o `cleanUrls` — `/politica-de-privacidade` sem `.html` resolve na URL publicada (emenda da revisão final da Etapa 1)**
+
+```bash
+curl -sI "$PREVIEW_URL/politica-de-privacidade" | tr -d '\r' | tee .e2e-tmp/preview-clean-url.txt | head -1
+```
+
+Expected: a primeira linha é `HTTP/2 200` (ou `200` logo após o protocolo). Se vier `404`, o `cleanUrls: true` do `vercel.json` (Task 36) não chegou ao deploy — confirme que o `vercel.json` gerado por `npm run csp` foi commitado antes deste deploy e repita o Step 3.
+
+- [ ] **Step 6: Lighthouse e e2e contra a URL de preview**
 
 ```bash
 BASE_URL="$PREVIEW_URL" node scripts/lighthouse.mjs
@@ -11885,7 +11921,7 @@ BASE_URL="$PREVIEW_URL" bash scripts/e2e.sh
 
 Expected: ambos terminam com `Resultado: **aprovado**` — agora contra a infraestrutura real da Vercel (HTTPS, CDN, os cabeçalhos do Step 4), não contra o `astro preview` local.
 
-- [ ] **Step 6: Anotar a URL de preview para as próximas tarefas**
+- [ ] **Step 7: Anotar a URL de preview para as próximas tarefas**
 
 Guarde `$PREVIEW_URL` (ela entra no README e no HANDOFF da Task 39). Nenhum commit nesta tarefa — nada de novo fica versionado.
 

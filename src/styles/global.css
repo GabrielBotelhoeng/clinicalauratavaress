@@ -1,0 +1,198 @@
+/* Base global — layout, tipografia responsiva e acessibilidade.
+   Tokens: tokens.css · Componentes do design system: bundle.css (classes lt-*). */
+
+:root {
+  --gutter: var(--space-6);
+  --section-pad: var(--space-24);
+  --container: 1200px;
+  --nav-offset: 104px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: var(--space-8);
+    --section-pad: var(--space-32);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--surface);
+  color: var(--ink);
+  font: 400 16px/26px var(--font-sans);
+}
+
+img,
+picture,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+p,
+figure,
+blockquote,
+ul,
+ol {
+  margin: 0;
+}
+
+ul[role='list'],
+ol[role='list'] {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Layout: container de 1200px e grade de 12 colunas */
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+/* Seções: espaçamento do design system e alternância claro → rosado → noite (data-theme) */
+.section {
+  position: relative;
+  padding-block: var(--section-pad);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.section--blush {
+  background: var(--surface-blush);
+}
+
+.section--compact {
+  padding-block: var(--space-16);
+}
+
+section[id] {
+  scroll-margin-top: var(--nav-offset);
+}
+
+/* Tipografia responsiva: escala do design system, reduzida no mobile */
+.lt-title.is-display {
+  font-size: clamp(2.75rem, 1.55rem + 5.2vw, 4.75rem);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+}
+
+.lt-title.is-h2 {
+  font-size: clamp(2rem, 1.6rem + 1.8vw, 2.625rem);
+  line-height: 1.1;
+}
+
+.lt-title.is-h3 {
+  font-size: clamp(1.5rem, 1.35rem + 0.6vw, 1.75rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.lt-lead {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  line-height: 1.6;
+}
+
+/* Numerais em gold-ink: o gold (#B8925A) dá 2,7:1 e reprova o contraste AA de texto grande no axe */
+.lt-stat__num {
+  color: var(--gold-ink);
+}
+
+/* Ícones Phosphor são preenchidos (fill), não traçados como no exemplo do bundle */
+.lt-icon svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Foco visível em todos os controles */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 100;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: 500 14px/1 var(--font-sans);
+  text-decoration: none;
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Movimento reduzido: corta animações e transições CSS (o GSAP ganha ramo próprio na Etapa 5) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

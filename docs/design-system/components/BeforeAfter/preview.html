@@ -1,0 +1,29 @@
+<!-- @dsCard group="Resultados" height=560 -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../bundle.css"><meta charset="utf-8"><title>BeforeAfter</title>
+<style>html,body{margin:0;background:var(--surface)} body{padding:24px}</style></head>
+<body class="lt">
+<div style="display:grid;grid-template-columns:360px 1fr;gap:40px;align-items:center;max-width:860px">
+  <div class="lt-ba" id="ba">
+    <div class="lt-ba__layer lt-ph" style="background-color:var(--surface-rose)">Foto antes</div>
+    <div class="lt-ba__layer lt-ba__after lt-ph" style="background-color:var(--brand-blush);justify-content:flex-end">Foto depois</div>
+    <span class="lt-ba__tag" style="left:16px">Antes</span><span class="lt-ba__tag" style="right:16px">Depois</span>
+    <input class="lt-ba__range" type="range" min="0" max="100" value="50" aria-label="Comparar antes e depois">
+    <div class="lt-ba__handle"><div class="lt-ba__knob"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></div></div>
+  </div>
+  <div>
+    <div class="lt-eyebrow">Resultados reais</div>
+    <h2 class="lt-title" style="font-size:42px;margin:12px 0 16px">Naturalidade que <em>se vê</em>, não que se nota.</h2>
+    <p class="lt-body">Rejuvenescimento facial · 2 sessões · paciente de 47 anos.</p>
+    <p class="lt-caption" style="margin-top:16px">Imagens publicadas com autorização. Resultados variam de pessoa para pessoa.</p>
+  </div>
+</div>
+<script>var ba=document.getElementById('ba'),r=ba.querySelector('input');
+function s(v){ba.style.setProperty('--pos',v+'%')}
+r.addEventListener('input',function(){s(r.value)});
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var k=[50,30,70,50],i=0;var t=setInterval(function(){i++;if(i>=k.length){clearInterval(t);return}ba.style.transition='none';var a=parseFloat(getComputedStyle(ba).getPropertyValue('--pos'))||50,b=k[i],st=performance.now();(function f(n){var p=Math.min((n-st)/450,1),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;s(a+(b-a)*e);r.value=a+(b-a)*e;if(p<1)requestAnimationFrame(f)})(st)},520)}</script>
+</body>
+</html>
