@@ -9,7 +9,7 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 - Meta: 450 (não é teto rígido — decisão 19 da spec; acima dela, só com justificativa)
 - Saldo inicial: 900.25 (2026-10-06 13:52)
 - Gasto total: 197.5
-- Saldo final: (preenchido na Task 12)
+- Saldo final: 702.75 (2026-10-07 20:05)
 
 | # | Data/hora | Ferramenta | Modelo/opção | Item | job_id | Créditos | Saldo antes | Saldo depois | Obs. |
 |---|---|---|---|---|---|---|---|---|---|
