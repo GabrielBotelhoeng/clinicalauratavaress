@@ -43,4 +43,13 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 
 ## Depoimentos (fontes)
 
+- Rafael N. — google — https://www.google.com/maps/search/?api=1&query=Cl%C3%ADnica%20Laura%20Tavares%20Sudoeste — id/quadro de origem: g-08 (`media-src/textos/google-avaliacoes.json`)
+- Maria O. — google — https://www.google.com/maps/search/?api=1&query=Cl%C3%ADnica%20Laura%20Tavares%20Sudoeste — id/quadro de origem: g-02
+- Suzanne N. — google — https://www.google.com/maps/search/?api=1&query=Cl%C3%ADnica%20Laura%20Tavares%20Sudoeste — id/quadro de origem: g-03
+- Juliany F. — google — https://www.google.com/maps/search/?api=1&query=Cl%C3%ADnica%20Laura%20Tavares%20Sudoeste — id/quadro de origem: g-06
+- Josy C. — google — https://www.google.com/maps/search/?api=1&query=Cl%C3%ADnica%20Laura%20Tavares%20Sudoeste — id/quadro de origem: g-09
+- Andrea F. — google — https://www.google.com/maps/search/?api=1&query=Cl%C3%ADnica%20Laura%20Tavares%20Sudoeste — id/quadro de origem: g-04
+
+Avaliações lidas na ficha do Google (Dra Laura Tavares | Harmonização Facial, CLSW 303, Sudoeste, Brasília — 5,0 de 308 avaliações, verificado em 2026-10-07) via Chrome do usuário logado, aba "Avaliações" aberta a partir de uma busca no Google (a aba "Avaliações" do próprio Google Maps não renderizou nesta sessão — ver preocupações no relatório da Task 6; conteúdo e nota conferem com o painel de avaliações carregado, mesma ficha/endereço/telefone). Texto completo das 10 avaliações carregadas (conferidas, "Mais" expandido) em `media-src/textos/google-avaliacoes.json`. Instagram: destaques "Depoimentos" (@dra.lauratavares e @clinicalauratavaress) e "LT Clinic" (@dra.lauratavares) revisados quadro a quadro — nenhum quadro com nome completo legível e texto transcrevível; detalhe em `media-src/textos/instagram-depoimentos.md`.
+
 ## Imprensa (evidências)

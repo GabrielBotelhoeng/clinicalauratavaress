@@ -13,6 +13,7 @@ Uma linha por item, no formato lido pelo verificador: hífen, espaço, o caminho
 Uma linha por aviso, começando com `- DEPOIMENTOS: `, `- IMPRENSA: `, `- FOTO VIVA: ` ou `- CRÉDITOS: `.
 
 - FOTO VIVA: fonte confirmada em `rec-01` (canto de espera com parede de flores, poltronas rosé e mesa dourada, sem pessoas; não é a parede do letreiro dourado, que só aparece ocupada por equipe em `equipe-01`) — resolução nativa baixa (360x640), upscale 2k necessário na Task 8 antes de gerar a foto viva na Task 11.
+- DEPOIMENTOS: nenhum depoimento do Instagram utilizável — os destaques "Depoimentos" dos dois perfis e "LT Clinic" da Dra. (verificados em 2026-10-07, Chrome logado) só têm reposts de DM/WhatsApp sem nome completo visível (nome coberto pela legenda ou fora de quadro), um repost de terceiro identificado só por @handle (não citável por privacidade) e vídeos sem legenda transcrevível; os 6 depoimentos finais vêm todos do Google. Detalhe quadro a quadro em `media-src/textos/instagram-depoimentos.md`.
 
 ## Dados encontrados para o checklist da clínica
 
@@ -34,3 +35,4 @@ Uma linha por aviso, começando com `- DEPOIMENTOS: `, `- IMPRENSA: `, `- FOTO V
 - Dados de profissão, conselho de classe e número de registro da Dra. Laura Tavares (não encontrados em nenhuma fonte pública verificada nesta coleta) — necessários para compliance de publicidade na landing page.
 - Termo de autorização de imagem das pacientes destes posts: https://www.instagram.com/dra.lauratavares/p/DbV2qdMRgU6/ , https://www.instagram.com/dra.lauratavares/p/DWcLXDCD0qS/ , https://www.instagram.com/dra.lauratavares/p/DWcL8LNjx5R/ , https://www.instagram.com/dra.lauratavares/p/DbOZCCUlEwI/ , https://www.instagram.com/dra.lauratavares/p/DdEdBtjFnBG/ , https://www.instagram.com/clinicalauratavaress/p/DLtBaSaSoUB/ , https://www.instagram.com/dra.lygiafigueiredo/p/DcPGx6nyIJC/
 - Se possível, enviar os originais desses antes/depois (sem a compressão do Instagram).
+- Ciência/autorização dos autores dos depoimentos usados: Rafael N., Maria O., Suzanne N., Juliany F., Josy C. e Andrea F. — todos avaliações públicas do Google Maps da ficha da clínica (texto literal com corte do código completo em `media-src/textos/google-avaliacoes.json`).
