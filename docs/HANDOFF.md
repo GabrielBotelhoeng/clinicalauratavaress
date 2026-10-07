@@ -1,55 +1,63 @@
 # HANDOFF — Landing Clínica Laura Tavares
 
-> Arquivo de progresso. É atualizado a cada passo concluído e commitado/enviado ao GitHub, para que nada se perca se uma sessão ou um subagente cair (pedido do usuário em 2026-10-05).
+> Atualizado pelo orquestrador ao fim de cada etapa. Plano: `docs/superpowers/plans/2026-10-05-landing-site.md` · Spec: `docs/superpowers/specs/2026-10-05-landing-clinica-laura-tavares-design.md`.
 
-_Última atualização: 2026-10-06, ~09h10 (BRT)_
+## Estado
 
-## Estado atual
+- **Etapa 1 — fundação (`feat/fundacao`): concluída e mergeada na `main`.** Astro 7.3.5 estático (`build.format: 'file'`, `trailingSlash: 'never'`), TypeScript 6.0.x estrito, ESLint 9 + eslint-plugin-astro 1.7, Prettier, Vitest (unitário + `tests/dist`); `src/content/site.ts` com todo o texto; `whatsappLink()`; resolvedor de mídia com placeholders; BaseLayout com SEO, Open Graph, JSON-LD, sitemap e robots; QA local (`npm run lighthouse`, `scripts/shot.sh`).
+- Etapas 2–7: pendentes.
 
-- **Fase:** planejamento (brainstorming concluído e aprovado) → fechando os planos para começar a execução.
-- **Branch ativa:** `docs/design-e-plano`.
+## Como rodar
 
-### Feito
-- Brainstorming aprovado → spec `docs/superpowers/specs/2026-10-05-landing-clinica-laura-tavares-design.md` (entendimento, requisitos não funcionais, premissas, pendências, design final, log de decisões, riscos).
-- `.gitignore` e skills do projeto: find-skills, agent-browser, gsap-core, gsap-scrolltrigger, gsap-performance.
-- Ferramentas na máquina: agent-browser 0.27 + Chrome for Testing; ffmpeg 9; Vercel CLI logado (conta `gabrielbotelhoeng`, time "Gabriel Botelho's projects").
-- Pasta excluída do repo do Desktop (Nutri_Fit) via `.git/info/exclude`.
+| Comando | O que faz |
+|---|---|
+| `npm install` | instala as dependências (Node 22.x) |
+| `npm run dev` | servidor de desenvolvimento em http://localhost:4321 |
+| `npm run check` | lint + typecheck + testes + build + testes do dist |
+| `npm run lighthouse` | Lighthouse mobile contra o `astro preview` (rode `npm run build` antes) |
+| `npm run placeholders` | regenera placeholders e ícones |
 
-- Plano de mídia pronto → `docs/superpowers/plans/2026-10-05-landing-midia.md` (12 tarefas; créditos previstos 191, teto somado 376 ≤ 450; custos confirmados: Recraft 2k = 8/imagem, Seedance rascunho 6 s = 18, Seedance 1080p 6 s = 72, Kling std 6 s = 9, upscale ≈ 2).
+## Decisões
 
-- Plano de mídia: trailers dos commits dos subagentes sem o link da sessão (só `Co-Authored-By`); o orquestrador acrescenta o link no squash e no PR.
-- Chrome para o Instagram escolhido pelo usuário em 2026-10-06: **Browser 2** (`b0c12369-1a01-4a7d-a268-c1599005027b`) — há dois Chrome conectados; selecione com `select_browser` antes de usar.
+- Versões fixas por compatibilidade com o Node 22.15.1 local: TypeScript ~6.0.3 (typescript-eslint exige < 6.1), eslint-plugin-astro 1.7.0 + ESLint 9 (as versões 2.x/3.x exigem Node 22.22.3), Lighthouse 12.8.2 via npx (13.x exige Node 22.19). No TS 6 o padrão de `types` é `[]`, por isso o `tsconfig` declara `"types": ["node"]`.
+- `.gitattributes` força LF (a máquina usa `core.autocrlf=true`).
+- Dados pendentes da clínica ficam `null` em `site.ts` e aparecem no build como `[pendente]`; mídia ausente vira placeholder e aparece como `[mídia]`.
+- WhatsApp: as quatro mensagens do copy; os CTAs gerais (navbar, Método, Sobre, depoimentos, flutuante, rodapé) usam a mensagem do hero/CTA final.
+- Numerais em `gold-ink` (o `gold` reprova contraste AA no axe).
+- O "mapa" da spec virou cartão de endereço com "Abrir no Google Maps" e "Abrir no Waze" (sem embed e sem imagem), por LGPD/performance.
+- Materiais de origem foram movidos da raiz para `docs/fontes/`.
 
-### Em andamento (2026-10-06, tarde — retomado após o limite de uso)
-- Plano do site → `docs/superpowers/plans/2026-10-05-landing-site.md` (ainda fora do git): Etapas 1–5 (Tasks 1–30) escritas; um subagente (Sonnet) escreve as Tasks 31–40 e a auto-revisão, anexando task por task. **Ao retomar:** `grep -n "^### Task" docs/superpowers/plans/2026-10-05-landing-site.md | tail` mostra até onde chegou; complete o que faltar (e a seção `## Auto-revisão`).
-- Plano de mídia: **aprovado** (revisão com correções + decisões abaixo aplicadas) e commitado nesta branch; PR #1 (`docs/design-e-plano` → `main`): https://github.com/GabrielBotelhoeng/clinicalauratavaress/pull/1 — merge squash em seguida. Depois do merge, alinhar a `main` local com `origin/main` (o commit local `2e91ade`, da skill find-skills, entra pelo PR — push direto na `main` é bloqueado).
-- Ledger da execução do site: `.superpowers/sdd/2026-10-05-landing-site/progress.md` (fora do git), com as decisões abaixo.
-- Economia de uso (pedido do usuário em 2026-10-06): subagentes em Sonnet (Haiku nas tarefas mecânicas), Opus só na revisão final da branch; poucos agentes em paralelo. O usuário pediu para instalar o OmniRoute; expliquei que é um gateway que troca o Claude por outros modelos (não uma skill) e ele escolheu **não instalar**.
+## Próximo passo
 
-### Decisões do orquestrador (2026-10-06)
-- Foto viva (Kling, recepção) = fundo do CTA final (`public/media/cta-final.*`); a galeria fica com 4 fotos estáticas 4:5 e parallax.
-- Fotos `clinica/*` chegam da mídia já em 4:5 (mín. 1280×1600), com rostos e letreiro inteiros.
-- Push e PR da frente de mídia (Task 12, Steps 7–9) ficam com o orquestrador.
+- Etapa 2 — `feat/secoes-topo`: Task 10 do plano.
 
-### Intercorrências
-- 2026-10-05 ~22h: os dois subagentes de plano caíram por limite de uso da API antes de salvar qualquer arquivo; foram retomados com o contexto que tinham. A partir daí, todo trabalho é salvo em arquivo durante a execução.
-- 2026-10-05 ~23h: o subagente do plano do site caiu de novo por limite de uso, depois de anexar a Task 30. Retomado em 2026-10-06 com um subagente novo só para as Tasks 31–40.
-- O classificador de segurança bloqueia enviar o link `Claude-Session` a subagentes: o orquestrador adiciona essa linha só nos commits de squash e nos PRs que ele mesmo cria.
+## Frente de mídia (branch `feat/midia`, worktree `.worktrees/midia`)
 
-## Próximos passos (em ordem)
-1. Receber os dois planos, revisar e aprovar (o usuário delegou a aprovação).
-2. Commitar os planos, push de `docs/design-e-plano`, PR e merge squash na `main`. Para não segurar a frente de mídia, o PR desta branch leva a spec e o plano de mídia; o plano do site entra num PR curto em seguida (`docs/plano-site`).
-3. Criar o worktree `.worktrees/midia` (branch `feat/midia`) e iniciar a frente de mídia em paralelo.
-4. Executar o plano do site com `superpowers:subagent-driven-development`, etapa por etapa (branch → PR → merge squash após validar).
-5. Integração da mídia, QA (agent-browser, axe-core, Lighthouse), deploy na Vercel e entrega.
+- Plano: `docs/superpowers/plans/2026-10-05-landing-midia.md`. Ledger: `.superpowers/sdd/2026-10-05-landing-midia/progress.md` (fora do git). Ferramentas e mídia bruta em `media-src/` (fora do git).
+- Tasks 1–5 concluídas e revisadas: worktree, verificador do contrato e scripts de foto/vídeo (49 testes), coleta no Instagram (hero = `dra-06`, sobre = `dra-04`, equipe, recepção vazia para a foto viva, sala, detalhes), antes/depois das 4 queixas e carrossel (7 imagens). Em seguida: Task 6 (depoimentos), busca extra de pares dedicados de lábios/mandíbula/bigode, Task 7 (imprensa), Tasks 8–11 (Higgsfield), Task 12 (fechamento; push e PR pelo orquestrador).
+- Coleta: Chrome do usuário logado no Instagram = deviceId `599065b9-3d50-45cc-95e1-89daa8741f5e` (só descoberta, só leitura — a extensão esconde as URLs do CDN); download pelo agent-browser (sessão isolada, sem login) + curl, com autorização do usuário para as fotos e os vídeos dos reels dos dois perfis.
+- Higgsfield: nenhum crédito gasto até aqui (saldo 900,25).
 
-## Decisões-chave (detalhes no log da spec)
-- Astro + GSAP + Lenis; Vercel com o login do usuário; PR por etapa com merge squash após lint, typecheck, testes, build e revisão.
-- Fotos e antes/depois do Instagram (Chrome do usuário, só leitura); upscale no Higgsfield sem alterar rostos; antes/depois só recortados; depoimentos reais do Google e do Instagram; nunca gerar a Dra., pacientes ou equipe por IA.
-- Higgsfield: meta de 450 créditos (saldo inicial 900,25). Desde 2026-10-05 ~22h45 o usuário autorizou passar da meta se a qualidade exigir — com justificativa no manifesto e economizando sempre (decisão 19 da spec; plano de mídia já ajustado, verificador trata gasto > 450 como aviso).
-- WhatsApp 5561981007522; registro profissional da Dra. pendente (vai para o checklist da clínica).
+## Decisões do orquestrador (execução)
+
+- Foto viva (Kling, recepção sem pessoas) = fundo do CTA final (`public/media/cta-final.*`); a galeria fica com fotos estáticas e parallax.
+- Fotos da clínica em 4:5 (mín. 1280×1600), exceto a equipe, que vem em 4:3 (mín. 1600×1200, 5 pessoas + letreiro) e ganha um bloco largo na galeria (Task 22).
+- `{detail}` é o marcador das mensagens de WhatsApp de resultado/tratamento, substituído por `buildWhatsAppLink` (os testes fixam as mensagens finais do copy).
+- `.superpowers/` (workspace local do orquestrador: briefs, relatórios, ledgers) fica fora de git, Prettier e ESLint; `!tests/dist/` re-incluído no `.gitignore` e no `.prettierignore`.
+- agent-browser 0.27.0: `screenshot "" "<arquivo>"` (seletor vazio = viewport) em todo script e no plano.
+- CSS sempre em arquivo (`build.inlineStylesheets: 'never'`, com teste de dist sem `<style>`), por causa do CSP `style-src 'self'` da Task 36; o `vercel.json` da Task 36 leva `cleanUrls: true` (senão `/politica-de-privacidade` dá 404 na Vercel) e a auditoria da Task 31 reprova mídia "ignorada"/"duplicada" (que seria publicada sem autorização). Emendas feitas no plano após a revisão final da Etapa 1.
+- Push direto na `main` é bloqueado pelo classificador de permissões: cada fechamento atualiza este arquivo na branch da etapa, antes do PR.
+- Economia de uso (pedido do usuário em 2026-10-06): subagentes em Sonnet/Haiku, Opus só na revisão final; o usuário recusou instalar o OmniRoute (gateway que troca o Claude por outros modelos).
+- Todas as decisões, com o custo de cada uma se estiver errada: `.superpowers/sdd/2026-10-05-landing-site/progress.md` e `.superpowers/sdd/2026-10-05-landing-midia/progress.md`.
+
+## Intercorrências
+
+- 2026-10-05 e 2026-10-06: subagentes caíram várias vezes por limite de uso da API. Todo trabalho é salvo em arquivo durante a execução (briefs, relatórios e ledgers em `.superpowers/sdd/`) e retomado de onde parou.
+- O link `Claude-Session` não vai em prompts de subagentes; o orquestrador o acrescenta só nos commits de squash e nos PRs.
+- O PR #1 foi mergeado pelo usuário com merge commit; os demais, por squash.
 
 ## Como retomar
-1. Ler este arquivo, depois a spec e os planos.
-2. `git status`, `git log --oneline -10` e `gh pr list --state all` para ver o estado local e no GitHub.
-3. Continuar do primeiro item não concluído em "Próximos passos".
+
+1. Ler este arquivo e os dois ledgers em `.superpowers/sdd/*/progress.md` (cada `Task N: complete` marca o que já foi revisado).
+2. `git status`, `git log --oneline -10`, `git -C .worktrees/midia log --oneline -5` e `gh pr list --state all`.
+3. Continuar da primeira task sem `complete` em cada ledger.
