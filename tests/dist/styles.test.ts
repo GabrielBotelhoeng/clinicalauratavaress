@@ -2,6 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { cssOf, listDist, loadPage } from './load';
 
 describe('estilos e fontes', () => {
+  it('nenhuma página tem <style> inline (astro.config.mjs: build.inlineStylesheets = "never")', () => {
+    const pages = listDist().filter((file) => file.endsWith('.html'));
+    expect(pages.length).toBeGreaterThan(0);
+    for (const file of pages) {
+      const { document } = loadPage(file);
+      expect(document.querySelectorAll('style'), file).toHaveLength(0);
+    }
+  });
+
   it('serve as três famílias pelo próprio site (@fontsource)', () => {
     const { document } = loadPage();
     const css = cssOf(document);

@@ -8,7 +8,9 @@ const site = process.env.SITE_URL ?? 'https://clinicalauratavaress.vercel.app';
 export default defineConfig({
   site,
   trailingSlash: 'never',
-  build: { format: 'file' },
+  // Nada vira inline: scripts (abaixo) nunca, e CSS também nunca (Astro inlina blocos < 4 KB por
+  // padrão) — colide com o CSP style-src 'self' que a Task 36 vai gerar.
+  build: { format: 'file', inlineStylesheets: 'never' },
   devToolbar: { enabled: false },
   integrations: [sitemap()],
   vite: {
