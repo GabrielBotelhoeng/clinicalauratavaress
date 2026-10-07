@@ -8,11 +8,15 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 
 - Meta: 450 (não é teto rígido — decisão 19 da spec; acima dela, só com justificativa)
 - Saldo inicial: 900.25 (2026-10-06 13:52)
-- Gasto total: 0
+- Gasto total: 8
 - Saldo final: (preenchido na Task 12)
 
 | # | Data/hora | Ferramenta | Modelo/opção | Item | job_id | Créditos | Saldo antes | Saldo depois | Obs. |
 |---|---|---|---|---|---|---|---|---|---|
+| 1 | 2026-10-07 15:06 | upscale_image | bytedance 2k | dra/sobre | 00488b9e-414a-4717-b9f5-a7e044a8583d | 2 | 900.25 | 898.25 | lote de 4 chamadas (Task 8); saldo conferido com `balance` antes e depois do lote inteiro, não entre cada chamada — delta total (8) bate exato com 4×2 créditos |
+| 2 | 2026-10-07 15:06 | upscale_image | bytedance 2k | clinica/recepcao | 8cbf3d01-7f2b-48ce-a0a7-c1b396a61e50 | 2 | 898.25 | 896.25 | saldo intermediário reconstruído (ver linha 1) |
+| 3 | 2026-10-07 15:11 | upscale_image | bytedance 2k | clinica/sala | 471cd8a1-603b-4276-b476-12659ebbbcd9 | 2 | 896.25 | 894.25 | saldo intermediário reconstruído (ver linha 1) |
+| 4 | 2026-10-07 15:11 | upscale_image | bytedance 2k | clinica/equipe | c13501a5-3faa-4d69-a12c-f8bc7d3a8320 | 2 | 894.25 | 892.25 | reprovado na métrica das 5 caixas de rosto (pior bloco 14–19 > limite 10); crédito gasto mas resultado não usado — `equipe.jpg` final é o original ampliado sem IA |
 
 ## Arquivos entregues
 
@@ -33,11 +37,21 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 | `src/assets/media/carrossel/resultado-05.jpg` | Instagram @dra.lauratavares — https://www.instagram.com/dra.lauratavares/p/DdEdBtjFnBG/ (2ª foto do carrossel, mesma paciente) | recorte central 3:4 (caixa 480,0,2883,3844) do composto 3844×3844, redimensionado para 1800×2400, JPEG q88 sRGB sem EXIF | não | não (paciente real) |
 | `src/assets/media/carrossel/resultado-06.jpg` | Instagram @clinicalauratavaress — https://www.instagram.com/clinicalauratavaress/p/DLtBaSaSoUB/ | recorte central 3:4 (caixa 180,0,1080,1440) do composto 1440×1440, JPEG q88 sRGB sem EXIF | não | não (paciente real) |
 | `src/assets/media/carrossel/resultado-07.jpg` | Instagram @clinicalauratavaress — https://www.instagram.com/dra.lygiafigueiredo/p/DcPGx6nyIJC/ (coautoria Dra. Lygia Figueiredo; post aparece na grade de @clinicalauratavaress) | recorte central 3:4 (caixa 48,0,1440,1920) do composto empilhado 1536×1920, JPEG q88 sRGB sem EXIF | não | não (paciente real) |
+| `src/assets/media/dra/hero.jpg` | Instagram @dra.lauratavares — https://www.instagram.com/dra.lauratavares/p/DdFd4ycGryx/ (`dra-06`) | recorte 4:5 meio corpo (caixa 544,0,2096,2620 do original 3024×4032), sem upscale — a resolução nativa já supera o mínimo 1280×1600 —, redimensionado para 1920×2400, JPEG q88 sRGB sem EXIF | não | sim (foto real da Dra., fundo floral da recepção) |
+| `src/assets/media/dra/sobre.jpg` | Instagram @dra.lauratavares — https://www.instagram.com/dra.lauratavares/p/DbggKJKEfWj/ (`dra-04`) | recorte 4:5 excluindo a citação sobreposta e o cabeçalho (caixa 252,160,576,720 do original 1080×1350) + upscale bytedance 2k aprovado (métrica e visual, ver Comparações), redimensionado para 1920×2400, JPEG q88 sRGB sem EXIF | não | sim (foto real da Dra.) |
+| `src/assets/media/clinica/recepcao.jpg` | Instagram @clinicalauratavaress — https://www.instagram.com/clinicalauratavaress/reel/DP4bSo1Evnn/ (`rec-01`) | recorte 4:5 excluindo o ícone de play do reel (caixa 76,380,208,260 do original 360×640) + upscale bytedance 2k aprovado (métrica e visual, ver Comparações), redimensionado para 1920×2400, JPEG q88 sRGB sem EXIF; arquivo aprovado também salvo em `media-src/higgsfield/upscale/recepcao.png` para reuso na Task 11 | não | sim (ambiente real da clínica, sem pessoas) |
+| `src/assets/media/clinica/sala.jpg` | Instagram @clinicalauratavaress — https://www.instagram.com/clinicalauratavaress/p/DNn7PnKtRLx/ (`sala-01`) | recorte 4:5 excluindo o texto queimado "Quando você" e o ícone de play (caixa 0,350,232,290 do original 361×640) + upscale bytedance 2k aprovado (métrica e visual, ver Comparações), redimensionado para 1920×2400, JPEG q88 sRGB sem EXIF | não | sim (ambiente real da clínica, sem pessoas; incerteza se é sala de procedimento ou consultório — ver pendências) |
+| `src/assets/media/clinica/equipe.jpg` | Instagram @clinicalauratavaress — https://www.instagram.com/clinicalauratavaress/p/Dac7LEpEZH5/ (`equipe-01`) | imagem inteira, já nativamente 4:3 (1080×810) — upscale bytedance 2k tentado e REPROVADO na métrica das 5 caixas de rosto (ver Comparações); usado o original redimensionado sem IA (`--allow-enlarge`) para 1600×1200, JPEG q88 sRGB sem EXIF | não | sim (equipe e letreiro reais da clínica) |
+| `src/assets/media/clinica/detalhes.jpg` | Instagram @dra.lauratavares — https://www.instagram.com/dra.lauratavares/p/DWbtPP8jo8C/ (`det-02`) | recorte 4:5 central (caixa 0,60,1440,1800 do original 1440×1920), sem upscale — a resolução nativa já supera o mínimo 1280×1600 —, JPEG q88 sRGB sem EXIF | não | sim (detalhe real de hospitalidade da clínica, sem pessoas) |
 
 ## Comparações de upscale e de quadros
 
 | Foto | Imagem enviada | Caixas (x,y,w,h) | MAE | Pior bloco | Veredito visual | Decisão |
 |---|---|---|---|---|---|---|
+| dra/sobre | work/sobre-recorte.png | 150,20,320,340 | 2.65 | 5.78 | rosto idêntico lado a lado: sobrancelhas, olhos, nariz, boca, contorno do rosto, pintas e textura de pele preservados, sem aspecto plástico | aprovado |
+| clinica/recepcao | work/recepcao-recorte.png | 0,120,100,140 | 2.99 | 7.97 | taça, bandeja dourada, mesa e piso idênticos; nenhum objeto deformado, nenhum texto inventado | aprovado |
+| clinica/sala | work/sala-recorte.png | 5,55,95,135 | 2.75 | 6.94 | decalque e formato do equipamento (robô) idênticos; nenhuma deformação, nenhum texto inventado | aprovado |
+| clinica/equipe | work/equipe-recorte.png | rostos: 210,355,100,90 / 345,360,100,90 / 535,300,100,100 / 700,365,100,90 / 855,330,100,100 — letreiro: 320,5,420,100 | rostos 5.64–8.66 / letreiro 2.73 | rostos 13.08–19.05 (reprovado, limite 10) / letreiro 5.85 (aprovado) | letreiro idêntico e aprovado; nos rostos, os traços (olhos, boca, brincos) parecem preservados ao olho nu, mas a métrica reprova em todas as 5 caixas (pior bloco até quase 2× o limite) — descartado por segurança, sem benefício da dúvida em rosto de pessoa real | reprovado — `equipe.jpg` final usa o original ampliado sem IA |
 
 ## Gerações (prompts e parâmetros)
 
