@@ -1,0 +1,68 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import TreatmentCard from './TreatmentCard.astro';
+import { media } from '../content/media';
+import { site } from '../content/site';
+import { whatsappLink } from '../lib/whatsapp';
+
+const { treatments } = site;
+---
+
+<section id="tratamentos" class="section treatments" aria-labelledby="treatments-title">
+  <div class="container">
+    <SectionHeading
+      id="treatments-title"
+      eyebrow={treatments.eyebrow}
+      title={treatments.title}
+      lead={treatments.lead}
+    />
+    <div class="treatments__grid">
+      {treatments.items.map((item) => (
+        <TreatmentCard
+          title={item.title}
+          text={item.text}
+          href={whatsappLink('treatment', item.whatsappDetail)}
+          linkLabel={treatments.linkLabel}
+          icon={item.icon}
+          photo={media.get(`tratamentos/${item.slug}` as const)}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Mobile: carrossel com snap (DS TreatmentCard); tablet: 2 colunas; desktop: 4 colunas. */
+  .treatments__grid {
+    display: grid;
+    grid-auto-columns: min(78%, 320px);
+    grid-auto-flow: column;
+    gap: var(--space-4);
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0 var(--gutter) var(--space-4);
+    overflow-x: auto;
+    scroll-padding-inline: var(--gutter);
+    scroll-snap-type: x mandatory;
+  }
+
+  .treatments__grid > :global(*) {
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 768px) {
+    .treatments__grid {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-inline: 0;
+      padding: 0;
+      overflow: visible;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .treatments__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-6);
+    }
+  }
+</style>

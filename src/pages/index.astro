@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import Marquee from '../components/Marquee.astro';
 import Navbar from '../components/Navbar.astro';
 import PressStrip from '../components/PressStrip.astro';
+import Treatments from '../components/Treatments.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { media } from '../content/media';
 import { listPending } from '../content/pending';
@@ -26,5 +27,6 @@ const jsonLd = [
   <Navbar slot="header" />
   <Hero />
   <PressStrip />
+  <Treatments />
   <WhatsAppFloat slot="after" />
 </BaseLayout>
