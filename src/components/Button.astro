@@ -1,0 +1,39 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './icons/Icon.astro';
+
+type Variant = 'primary' | 'outline' | 'ghost' | 'whatsapp';
+
+interface Props extends Omit<HTMLAttributes<'a'>, 'class'> {
+  href: string;
+  variant?: Variant;
+  size?: 'md' | 'sm';
+  arrow?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  arrow = variant === 'primary',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const external = /^https?:\/\//.test(href);
+---
+
+<a
+  href={href}
+  class:list={['lt-btn', `lt-btn--${variant}`, { 'lt-btn--sm': size === 'sm' }, className]}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+  {...rest}
+>
+  {variant === 'whatsapp' && <Icon name="whatsapp" size={20} />}
+  <span>
+    <slot />
+  </span>
+  {arrow && <Icon name="arrow-right" size={16} />}
+</a>

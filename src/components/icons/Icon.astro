@@ -1,0 +1,15 @@
+---
+import { decorateSvg } from '../../lib/svg';
+import { icons, type IconName } from './registry';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 24, class: className } = Astro.props;
+const markup = decorateSvg(icons[name], { size, className });
+---
+
+<Fragment set:html={markup} />

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import RichTitle from '../components/RichTitle.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { media } from '../content/media';
 import { listPending } from '../content/pending';
 import { site } from '../content/site';
@@ -19,11 +21,8 @@ const jsonLd = [
 <BaseLayout path="/" jsonLd={jsonLd}>
   <section class="section">
     <div class="container">
-      <h1 class="lt-title is-display">
-        {site.hero.title.before}
-        <em>{site.hero.title.em}</em>
-        {site.hero.title.after}
-      </h1>
+      <RichTitle as="h1" size="display" title={site.hero.title} />
     </div>
   </section>
+  <WhatsAppFloat slot="after" />
 </BaseLayout>
