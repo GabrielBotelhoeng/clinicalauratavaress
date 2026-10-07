@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
 import Marquee from '../components/Marquee.astro';
 import Navbar from '../components/Navbar.astro';
-import RichTitle from '../components/RichTitle.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { media } from '../content/media';
 import { listPending } from '../content/pending';
@@ -23,10 +23,6 @@ const jsonLd = [
 <BaseLayout path="/" jsonLd={jsonLd}>
   <Marquee slot="header" />
   <Navbar slot="header" />
-  <section class="section">
-    <div class="container">
-      <RichTitle as="h1" size="display" title={site.hero.title} />
-    </div>
-  </section>
+  <Hero />
   <WhatsAppFloat slot="after" />
 </BaseLayout>
