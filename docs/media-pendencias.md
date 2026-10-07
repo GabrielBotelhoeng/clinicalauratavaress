@@ -32,3 +32,5 @@ Uma linha por aviso, começando com `- DEPOIMENTOS: `, `- IMPRENSA: `, `- FOTO V
 - Horário de funcionamento da clínica com os horários de abertura/fechamento — só os dias ("de segunda a sábado") apareceram num flyer de uma profissional colaboradora, sem horário específico.
 - Informação sobre estacionamento no local (não encontrado em nenhuma fonte pública verificada nesta coleta).
 - Dados de profissão, conselho de classe e número de registro da Dra. Laura Tavares (não encontrados em nenhuma fonte pública verificada nesta coleta) — necessários para compliance de publicidade na landing page.
+- Termo de autorização de imagem das pacientes destes posts: https://www.instagram.com/dra.lauratavares/p/DbV2qdMRgU6/ , https://www.instagram.com/dra.lauratavares/p/DWcLXDCD0qS/ , https://www.instagram.com/dra.lauratavares/p/DWcL8LNjx5R/ , https://www.instagram.com/dra.lauratavares/p/DbOZCCUlEwI/ , https://www.instagram.com/dra.lauratavares/p/DdEdBtjFnBG/ , https://www.instagram.com/clinicalauratavaress/p/DLtBaSaSoUB/ , https://www.instagram.com/dra.lygiafigueiredo/p/DcPGx6nyIJC/
+- Se possível, enviar os originais desses antes/depois (sem a compressão do Instagram).
