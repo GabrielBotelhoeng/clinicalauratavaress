@@ -1,0 +1,94 @@
+---
+import Icon from './icons/Icon.astro';
+import { site } from '../content/site';
+
+const { marquee, ui } = site;
+// Cada metade repete os itens 2× para cobrir telas largas; o loop anima de 0 a −50%.
+const half = [...marquee, ...marquee];
+---
+
+<aside class="lt-marquee marquee" aria-label={ui.marqueeLabel} data-marquee>
+  <p class="sr-only">{marquee.map((item) => item.text).join(' · ')}</p>
+  <div class="lt-marquee__track" aria-hidden="true" data-marquee-track>
+    {[0, 1].map(() => (
+      <div class="marquee__group">
+        {half.map((item) => (
+          <span class="lt-marquee__item">
+            {item.italic ? <i>{item.text}</i> : item.text}
+            <span class="lt-marquee__star">✦</span>
+          </span>
+        ))}
+      </div>
+    ))}
+  </div>
+  <button type="button" class="marquee__toggle" aria-pressed="false" data-marquee-toggle>
+    <Icon name="pause" size={16} class="marquee__icon marquee__icon--pause" />
+    <Icon name="play" size={16} class="marquee__icon marquee__icon--play" />
+    <span class="sr-only">{ui.pauseMarquee}</span>
+  </button>
+</aside>
+
+<style>
+  .marquee {
+    position: relative;
+  }
+
+  .marquee__group {
+    display: flex;
+  }
+
+  .marquee[data-paused] .lt-marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee.is-gsap .lt-marquee__track {
+    animation: none;
+  }
+
+  .marquee__toggle {
+    position: absolute;
+    top: 50%;
+    right: var(--space-2);
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 0.45);
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--on-accent);
+    translate: 0 -50%;
+  }
+
+  .marquee__toggle:focus-visible {
+    outline: 2px solid var(--on-accent);
+    outline-offset: 2px;
+  }
+
+  .marquee__toggle :global(.marquee__icon--play),
+  .marquee__toggle[aria-pressed='true'] :global(.marquee__icon--pause) {
+    display: none;
+  }
+
+  .marquee__toggle[aria-pressed='true'] :global(.marquee__icon--play) {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__toggle {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-marquee]')) {
+    const toggle = root.querySelector<HTMLButtonElement>('[data-marquee-toggle]');
+    toggle?.addEventListener('click', () => {
+      const paused = toggle.getAttribute('aria-pressed') !== 'true';
+      toggle.setAttribute('aria-pressed', String(paused));
+      root.toggleAttribute('data-paused', paused);
+    });
+  }
+</script>
