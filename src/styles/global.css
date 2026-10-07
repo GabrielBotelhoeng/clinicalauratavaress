@@ -24,6 +24,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* O foco/âncora não deve ficar sob a navbar sticky nem sob o botão flutuante (WCAG 2.4.11). */
+  scroll-padding-top: var(--nav-offset);
+  scroll-padding-bottom: var(--space-24);
 }
 
 body {

@@ -69,10 +69,14 @@ const { title, text, href, linkLabel, icon, photo } = Astro.props;
 
   .treatment__title {
     margin-top: var(--space-2);
+    overflow-wrap: anywhere;
   }
 
   .treatment__link {
     align-self: flex-start;
     margin-top: auto;
+    /* Alvo de toque >= 44px sem mover o sublinhado: a folga entra acima do texto. */
+    min-height: 44px;
+    align-items: flex-end;
   }
 </style>

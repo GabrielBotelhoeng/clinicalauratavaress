@@ -141,6 +141,9 @@ const photo = media.get('dra/hero');
     left: 0;
     padding: var(--space-4) var(--space-6);
     box-shadow: var(--shadow-lift);
+    /* Só box-shadow transiciona: o parallax (scrub) escreve `transform` a cada frame e a
+       transição de 240ms do .lt-card (bundle.css) "arrastaria" cada passo do GSAP. */
+    transition-property: box-shadow;
   }
 
   .hero__badge-value {

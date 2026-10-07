@@ -105,6 +105,7 @@ const scheduleHref = whatsappLink('general');
     font-size: 26px;
     font-weight: 500;
     line-height: 1;
+    white-space: nowrap;
   }
 
   .navbar__tag {
@@ -146,6 +147,12 @@ const scheduleHref = whatsappLink('general');
 
   .navbar__toggle {
     display: none;
+    /* Entre ~480-540px os itens do flex encolhiam o botão (36-41px) e o CTA; mantém os dois no tamanho fixo. */
+    flex: none;
+  }
+
+  .navbar__pill :global(.navbar__cta) {
+    flex: none;
   }
 
   @media (max-width: 1023.98px) {
