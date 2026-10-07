@@ -17,7 +17,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:dist": "vitest run --config vitest.dist.config.ts",
-    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:dist"
+    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:dist",
+    "placeholders": "node scripts/make-placeholders.mjs"
   },
   "allowScripts": {
     "esbuild": true,
@@ -28,6 +29,7 @@
     "@fontsource/jost": "5.3.0",
     "@fontsource/pinyon-script": "5.3.0",
     "astro": "7.3.5",
+    "sharp": "0.35.5",
     "zod": "4.6.5"
   },
   "devDependencies": {
