@@ -8,7 +8,7 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 
 - Meta: 450 (não é teto rígido — decisão 19 da spec; acima dela, só com justificativa)
 - Saldo inicial: 900.25 (2026-10-06 13:52)
-- Gasto total: 8
+- Gasto total: 98
 - Saldo final: (preenchido na Task 12)
 
 | # | Data/hora | Ferramenta | Modelo/opção | Item | job_id | Créditos | Saldo antes | Saldo depois | Obs. |
@@ -17,6 +17,8 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 | 2 | 2026-10-07 15:06 | upscale_image | bytedance 2k | clinica/recepcao | 8cbf3d01-7f2b-48ce-a0a7-c1b396a61e50 | 2 | 898.25 | 896.25 | saldo intermediário reconstruído (ver linha 1) |
 | 3 | 2026-10-07 15:11 | upscale_image | bytedance 2k | clinica/sala | 471cd8a1-603b-4276-b476-12659ebbbcd9 | 2 | 896.25 | 894.25 | saldo intermediário reconstruído (ver linha 1) |
 | 4 | 2026-10-07 15:11 | upscale_image | bytedance 2k | clinica/equipe | c13501a5-3faa-4d69-a12c-f8bc7d3a8320 | 2 | 894.25 | 892.25 | reprovado na métrica das 5 caixas de rosto (pior bloco 14–19 > limite 10); crédito gasto mas resultado não usado — `equipe.jpg` final é o original ampliado sem IA |
+| 5 | 2026-10-07 19:15 | generate_video | seedance_2_5 draft t2v 480p | metodo (rascunho 1) | 288a7ff3-a60b-4aa0-9018-914d5de83854 | 18 | 892.25 | 874.25 | pré-checagem 18 confirmada; preset "IN THE DARK" recusado (`declined_preset_id`) para gerar o prompt literal do brief; aprovado no P5 na 1ª tentativa |
+| 6 | 2026-10-07 19:17 | generate_video | seedance_2_5 final 1080p (`draft_job_id`) | metodo (final) | c556b55a-ca0f-49d5-84e4-7a70d8fa765b | 72 | 874.25 | 802.25 | pré-checagem com só `draft_job_id`+`generate_audio` indicou 60; 1ª tentativa de envio real (mesmos campos) foi recusada por validação (`prompt` vazio); reenviada incluindo `mode`, `prompt`, `duration`, `aspect_ratio` do rascunho + `resolution: "1080p"` (fallback do brief) e preset recusado de novo — cobrança final 72, igual ao custo direto de 1080p/6s da tabela de orçamento (subteto 72, não excedido) |
 
 ## Arquivos entregues
 
@@ -43,6 +45,9 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 | `src/assets/media/clinica/sala.jpg` | Instagram @clinicalauratavaress — https://www.instagram.com/clinicalauratavaress/p/DNn7PnKtRLx/ (`sala-01`) | recorte 4:5 excluindo o texto queimado "Quando você" e o ícone de play (caixa 0,350,232,290 do original 361×640) + upscale bytedance 2k aprovado (métrica e visual, ver Comparações), redimensionado para 1920×2400, JPEG q88 sRGB sem EXIF | não | sim (ambiente real da clínica, sem pessoas; incerteza se é sala de procedimento ou consultório — ver pendências) |
 | `src/assets/media/clinica/equipe.jpg` | Instagram @clinicalauratavaress — https://www.instagram.com/clinicalauratavaress/p/Dac7LEpEZH5/ (`equipe-01`) | imagem inteira, já nativamente 4:3 (1080×810) — upscale bytedance 2k tentado e REPROVADO na métrica das 5 caixas de rosto (ver Comparações); usado o original redimensionado sem IA (`--allow-enlarge`) para 1600×1200, JPEG q88 sRGB sem EXIF | não | sim (equipe e letreiro reais da clínica) |
 | `src/assets/media/clinica/detalhes.jpg` | Instagram @dra.lauratavares — https://www.instagram.com/dra.lauratavares/p/DWbtPP8jo8C/ (`det-02`) | recorte 4:5 central (caixa 0,60,1440,1800 do original 1440×1920), sem upscale — a resolução nativa já supera o mínimo 1280×1600 —, JPEG q88 sRGB sem EXIF | não | sim (detalhe real de hospitalidade da clínica, sem pessoas) |
+| `public/media/metodo.mp4` | Higgsfield Seedance 2.5, t2v, rascunho 480p `288a7ff3-a60b-4aa0-9018-914d5de83854` aprovado no P5 → final 1080p `c556b55a-ca0f-49d5-84e4-7a70d8fa765b` | gerado 1920×1080/6s, codificado H.264 `+faststart` 16:9 via `encode-video.mjs` (621327 bytes) | sim | não (ilustrativo) |
+| `public/media/metodo.webm` | idem `metodo.mp4` | mesma codificação, saída VP9 (215569 bytes) | sim | não (ilustrativo) |
+| `public/media/metodo-poster.jpg` | idem `metodo.mp4` | quadro extraído pelo `encode-video.mjs`, JPEG 1280×720 (48903 bytes) | sim | não (ilustrativo) |
 
 ## Comparações de upscale e de quadros
 
@@ -54,6 +59,19 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 | clinica/equipe | work/equipe-recorte.png | rostos: 210,355,100,90 / 345,360,100,90 / 535,300,100,100 / 700,365,100,90 / 855,330,100,100 — letreiro: 320,5,420,100 | rostos 5.64–8.66 / letreiro 2.73 | rostos 13.08–19.05 (reprovado, limite 10) / letreiro 5.85 (aprovado) | letreiro idêntico e aprovado; nos rostos, os traços (olhos, boca, brincos) parecem preservados ao olho nu, mas a métrica reprova em todas as 5 caixas (pior bloco até quase 2× o limite) — descartado por segurança, sem benefício da dúvida em rosto de pessoa real | reprovado — `equipe.jpg` final usa o original ampliado sem IA |
 
 ## Gerações (prompts e parâmetros)
+
+### metodo
+
+- Modelo: `seedance_2_5`, modo `t2v`, 16:9, 6 s, sem áudio (`generate_audio: false`).
+- Prompt final (idêntico no rascunho e no final; nenhum ajuste necessário — aprovado na 1ª tentativa):
+
+  > Low-key cinematic shot in a quiet room at golden hour: warm sunbeams slowly drifting through sheer blush curtains, soft glints of champagne gold on a white marble surface, white orchids softly out of focus, glowing dust floating in the light, deep warm shadows, slow continuous camera push-in, single take, no cuts, shallow depth of field, rosé and nude color grade, calm and sophisticated, no people, no hands, no faces, no text, no logos
+
+- Rascunho 480p aprovado: `job_id` `288a7ff3-a60b-4aa0-9018-914d5de83854` (854×480, ~6s); P5 aprovado na 1ª tentativa (nenhuma pessoa/mão/rosto/silhueta — sombras atrás da cortina são de folhagem/galhos —, sem texto/logo, sem aspecto de consultório, paleta rosé/champagne com luz quente, câmera avançando devagar sem cortes nem deformação). Único rascunho necessário (1 de 3 permitidos).
+- Final 1080p: `job_id` `c556b55a-ca0f-49d5-84e4-7a70d8fa765b` via `draft_job_id` do rascunho aprovado (1920×1080, ~6s). Primeira tentativa de envio recusada por validação (campo `prompt` vazio ao enviar só `draft_job_id`+`generate_audio`); reenviada incluindo `mode`, `prompt`, `duration`, `aspect_ratio` do rascunho e `resolution: "1080p"`, conforme o fallback do brief. P5 aprovado (mesmos critérios do rascunho, composição idêntica em resolução maior).
+- Preset sugerido pelo servidor ("IN THE DARK") recusado nas duas chamadas pagas (`declined_preset_id`) para manter o prompt literal do brief.
+- Codificação: `encode-video.mjs` → `metodo.mp4` (H.264 faststart, 621327 bytes), `metodo.webm` (VP9, 215569 bytes), `metodo-poster.jpg` (1280×720, 48903 bytes).
+- Créditos: linhas 5 e 6 da tabela acima (18 + 72 = 90).
 
 ## Depoimentos (fontes)
 
