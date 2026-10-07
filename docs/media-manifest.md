@@ -8,7 +8,7 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 
 - Meta: 450 (não é teto rígido — decisão 19 da spec; acima dela, só com justificativa)
 - Saldo inicial: 900.25 (2026-10-06 13:52)
-- Gasto total: 98
+- Gasto total: 178
 - Saldo final: (preenchido na Task 12)
 
 | # | Data/hora | Ferramenta | Modelo/opção | Item | job_id | Créditos | Saldo antes | Saldo depois | Obs. |
@@ -19,6 +19,8 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 | 4 | 2026-10-07 15:11 | upscale_image | bytedance 2k | clinica/equipe | c13501a5-3faa-4d69-a12c-f8bc7d3a8320 | 2 | 894.25 | 892.25 | reprovado na métrica das 5 caixas de rosto (pior bloco 14–19 > limite 10); crédito gasto mas resultado não usado — `equipe.jpg` final é o original ampliado sem IA |
 | 5 | 2026-10-07 19:15 | generate_video | seedance_2_5 draft t2v 480p | metodo (rascunho 1) | 288a7ff3-a60b-4aa0-9018-914d5de83854 | 18 | 892.25 | 874.25 | pré-checagem 18 confirmada; preset "IN THE DARK" recusado (`declined_preset_id`) para gerar o prompt literal do brief; aprovado no P5 na 1ª tentativa |
 | 6 | 2026-10-07 19:17 | generate_video | seedance_2_5 final 1080p (`draft_job_id`) | metodo (final) | c556b55a-ca0f-49d5-84e4-7a70d8fa765b | 72 | 874.25 | 802.25 | pré-checagem com só `draft_job_id`+`generate_audio` indicou 60; 1ª tentativa de envio real (mesmos campos) foi recusada por validação (`prompt` vazio); reenviada incluindo `mode`, `prompt`, `duration`, `aspect_ratio` do rascunho + `resolution: "1080p"` (fallback do brief) e preset recusado de novo — cobrança final 72, igual ao custo direto de 1080p/6s da tabela de orçamento (subteto 72, não excedido) |
+| 7 | 2026-10-07 19:24 | generate_image_batch | recraft_v4_1 2k standard | tratamentos/harmonizacao + apoio/textura-seda-blush | f7e0645b-21a8-487f-a29b-17d53f0dfbd2, aff6beb0-5fc0-4e6e-83db-8d77b35454c4 | 16 | 802.25 | 786.25 | lote A (Task 10); pré-checagem `get_cost` confirmou 8 créditos em 4:5 e em 16:9 antes do lote; ambas aprovadas na 1ª revisão, sem ajuste de sufixo |
+| 8 | 2026-10-07 19:26 | generate_image_batch | recraft_v4_1 2k standard | tratamentos/rejuvenescimento + tratamentos/kbeauty + tratamentos/corporal + apoio/textura-marmore-champagne + apoio/luz-arco + apoio/gotas-serum + apoio/petalas-rosa + apoio/orquideas-marmore | 7f326a62-b0c0-4dac-8961-760b0e445001, 7ae36c37-3ef7-460f-87a2-655893e280d2, d149f168-2970-4e95-bc50-c6ba2f0d9a88, f436b072-ded7-4afb-8d8c-8abfe05b89ee, 17ee0ae3-134d-4a22-a8cc-310f375b42ea, ad526236-1767-4ee9-9ba5-ecf126a7ee91, 42e577b4-5590-4372-9469-6514c2088cf1, cad81962-0924-4186-b4b1-beb2e1e1af17 | 64 | 786.25 | 722.25 | lote B (Task 10); todas as 8 aprovadas na 1ª revisão, nenhuma regeneração necessária |
 
 ## Arquivos entregues
 
@@ -47,7 +49,17 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 | `src/assets/media/clinica/detalhes.jpg` | Instagram @dra.lauratavares — https://www.instagram.com/dra.lauratavares/p/DWbtPP8jo8C/ (`det-02`) | recorte 4:5 central (caixa 0,60,1440,1800 do original 1440×1920), sem upscale — a resolução nativa já supera o mínimo 1280×1600 —, JPEG q88 sRGB sem EXIF | não | sim (detalhe real de hospitalidade da clínica, sem pessoas) |
 | `public/media/metodo.mp4` | Higgsfield Seedance 2.5, t2v, rascunho 480p `288a7ff3-a60b-4aa0-9018-914d5de83854` aprovado no P5 → final 1080p `c556b55a-ca0f-49d5-84e4-7a70d8fa765b` | gerado 1920×1080/6s, codificado H.264 `+faststart` 16:9 via `encode-video.mjs` (621327 bytes) | sim | não (ilustrativo) |
 | `public/media/metodo.webm` | idem `metodo.mp4` | mesma codificação, saída VP9 (215569 bytes) | sim | não (ilustrativo) |
-| `public/media/metodo-poster.jpg` | idem `metodo.mp4` | quadro extraído pelo `encode-video.mjs`, JPEG 1280×720 (48903 bytes) | sim | não (ilustrativo) |
+| `public/media/metodo-poster.jpg` | idem `metodo.mp4` | quadro extraído pelo `encode-video.mjs`, JPEG 1280×720 (48903 bytes) | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/tratamentos/harmonizacao.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `f7e0645b-21a8-487f-a29b-17d53f0dfbd2` | gerado 1792×2304, exportado 4:5 (caixa 0,32,1792,2240) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 1792×2240 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/tratamentos/rejuvenescimento.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `7f326a62-b0c0-4dac-8961-760b0e445001` | gerado 1792×2304, exportado 4:5 (caixa 0,32,1792,2240) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 1792×2240 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/tratamentos/kbeauty.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `7ae36c37-3ef7-460f-87a2-655893e280d2` | gerado 1792×2304, exportado 4:5 (caixa 0,32,1792,2240) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 1792×2240 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/tratamentos/corporal.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `d149f168-2970-4e95-bc50-c6ba2f0d9a88` | gerado 1792×2304, exportado 4:5 (caixa 0,32,1792,2240) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 1792×2240 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/apoio/textura-seda-blush.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `aff6beb0-5fc0-4e6e-83db-8d77b35454c4` | gerado 2688×1536, exportado 16:9 (caixa 0,12,2688,1512) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 2400×1350 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/apoio/textura-marmore-champagne.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `f436b072-ded7-4afb-8d8c-8abfe05b89ee` | gerado 2688×1536, exportado 16:9 (caixa 0,12,2688,1512) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 2400×1350 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/apoio/luz-arco.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `17ee0ae3-134d-4a22-a8cc-310f375b42ea` | gerado 2688×1536, exportado 16:9 (caixa 0,12,2688,1512) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 2400×1350 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/apoio/gotas-serum.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `ad526236-1767-4ee9-9ba5-ecf126a7ee91` | gerado 1792×2304, exportado 4:5 (caixa 0,32,1792,2240) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 1792×2240 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/apoio/petalas-rosa.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `42e577b4-5590-4372-9469-6514c2088cf1` | gerado 1792×2304, exportado 4:5 (caixa 0,32,1792,2240) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 1792×2240 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
+| `src/assets/media/apoio/orquideas-marmore.jpg` | Higgsfield Recraft V4.1, `generate_image_batch`, `job_id` `cad81962-0924-4186-b4b1-beb2e1e1af17` | gerado 1792×2304, exportado 4:5 (caixa 0,32,1792,2240) via `export-photo.mjs`, JPEG q88 sRGB sem EXIF, 1792×2240 | sim | não (ilustrativa; alt decorativo ou genérico, nunca "clínica") |
 
 ## Comparações de upscale e de quadros
 
@@ -72,6 +84,29 @@ Regras: nada gerado por IA mostra a Dra., pacientes ou equipe; antes/depois só 
 - Preset sugerido pelo servidor ("IN THE DARK") recusado nas duas chamadas pagas (`declined_preset_id`) para manter o prompt literal do brief.
 - Codificação: `encode-video.mjs` → `metodo.mp4` (H.264 faststart, 621327 bytes), `metodo.webm` (VP9, 215569 bytes), `metodo-poster.jpg` (1280×720, 48903 bytes).
 - Créditos: linhas 5 e 6 da tabela acima (18 + 72 = 90).
+
+### recraft
+
+Imagens de apoio e dos 4 tratamentos geradas no Higgsfield (Recraft V4.1), sem pessoas, com a paleta da marca (`tokens.css` sem o vermelho assinatura).
+
+Parâmetros comuns: `"model": "recraft_v4_1"`, `"resolution": "2k"`, `"model_type": "standard"`, `"colors": ["#FBF6F2", "#F1DCD6", "#E4B9B0", "#EBCBC3", "#B8925A", "#8C4A55", "#33241F"]`.
+
+Sufixo S (acrescentado a todo prompt abaixo, sem ajuste — aprovado na 1ª revisão dos dois lotes): `, editorial beauty photography, soft warm side light, late afternoon glow, shallow depth of field, rosé and nude color grade, calm and sophisticated, no people, no hands, no faces, no text, no letters, no logos, no watermark`
+
+| Destino | aspect_ratio | Prompt (antes do sufixo S) | job_id |
+|---|---|---|---|
+| `tratamentos/harmonizacao.jpg` | 4:5 | Still life about balance and proportion: smooth blush marble spheres and a small champagne-gold arch arranged in calm symmetry on a porcelain plinth, a single white orchid stem | `f7e0645b-21a8-487f-a29b-17d53f0dfbd2` |
+| `apoio/textura-seda-blush.jpg` | 16:9 | Full-frame macro texture of blush pink silk with soft flowing folds | `aff6beb0-5fc0-4e6e-83db-8d77b35454c4` |
+| `tratamentos/rejuvenescimento.jpg` | 4:5 | Still life about firmness and glow: an unbranded clear glass serum bottle with a dropper, golden serum droplets catching the light, white peony petals on blush silk | `7f326a62-b0c0-4dac-8961-760b0e445001` |
+| `tratamentos/kbeauty.jpg` | 4:5 | Still life of minimalist unbranded skincare: frosted glass ampoules and a white ceramic jar on wet white marble, a translucent hydrating gel swatch, gentle water ripples | `7ae36c37-3ef7-460f-87a2-655893e280d2` |
+| `tratamentos/corporal.jpg` | 4:5 | Abstract still life evoking body contour: flowing nude and blush satin fabric forming soft sculptural curves over a rounded marble form | `d149f168-2970-4e95-bc50-c6ba2f0d9a88` |
+| `apoio/textura-marmore-champagne.jpg` | 16:9 | Full-frame close-up texture of white marble with fine champagne-gold veins, polished surface | `f436b072-ded7-4afb-8d8c-8abfe05b89ee` |
+| `apoio/luz-arco.jpg` | 16:9 | Warm late-afternoon sunlight casting the soft shadow of an arched window and delicate leaves on a plain blush plaster wall, generous empty space | `17ee0ae3-134d-4a22-a8cc-310f375b42ea` |
+| `apoio/gotas-serum.jpg` | 4:5 | Macro of clear serum drops and tiny bubbles on glass over a soft blush background | `ad526236-1767-4ee9-9ba5-ecf126a7ee91` |
+| `apoio/petalas-rosa.jpg` | 4:5 | Top view of pale rose petals scattered on porcelain-white linen | `42e577b4-5590-4372-9469-6514c2088cf1` |
+| `apoio/orquideas-marmore.jpg` | 4:5 | White phalaenopsis orchids in a slim clear glass vase on a marble ledge against a blush wall, generous negative space | `cad81962-0924-4186-b4b1-beb2e1e1af17` |
+
+Revisão (P3/Step 3 e Step 5 do brief): todas as 10 imagens abertas com Read e aprovadas na 1ª tentativa — nenhuma pessoa/mão/rosto/silhueta, nenhum texto/letra/logo/marca d'água, nenhuma aparência de recepção ou interior de clínica, paleta da marca com luz quente lateral, sem artefatos (objetos derretidos, simetria quebrada). Nenhuma regeneração necessária; 0 de 5 regenerações permitidas usadas. Créditos: linhas 7 e 8 da tabela acima (16 + 64 = 80).
 
 ## Depoimentos (fontes)
 
