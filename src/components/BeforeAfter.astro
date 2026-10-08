@@ -1,0 +1,191 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './icons/Icon.astro';
+import { altText, type ResolvedImage } from '../content/media';
+
+interface Props {
+  before: ResolvedImage;
+  after: ResolvedImage;
+  /** Rótulo do grupo: alt do copy ("Antes e depois de tratamento para …"). */
+  label: string;
+  /** Nome do controle deslizante (teclado e leitor de tela). */
+  controlLabel: string;
+  beforeLabel: string;
+  afterLabel: string;
+}
+
+const { before, after, label, controlLabel, beforeLabel, afterLabel } = Astro.props;
+---
+
+<div class="lt-ba ba" role="group" aria-label={label} data-ba data-arch-reveal>
+  <div class="lt-ba__layer">
+    <Picture
+      src={before.image}
+      alt={altText(before, beforeLabel)}
+      widths={[360, 540, 720, 920]}
+      sizes="(min-width: 1024px) 460px, min(90vw, 460px)"
+      formats={['avif', 'webp']}
+      class="ba__img"
+      style={`object-position: ${before.position}`}
+      data-slot={before.slot}
+      data-placeholder={before.isPlaceholder ? '' : undefined}
+    />
+  </div>
+  <div class="lt-ba__layer lt-ba__after">
+    <Picture
+      src={after.image}
+      alt={altText(after, afterLabel)}
+      widths={[360, 540, 720, 920]}
+      sizes="(min-width: 1024px) 460px, min(90vw, 460px)"
+      formats={['avif', 'webp']}
+      class="ba__img"
+      style={`object-position: ${after.position}`}
+      data-slot={after.slot}
+      data-placeholder={after.isPlaceholder ? '' : undefined}
+    />
+  </div>
+  <span class="lt-ba__tag ba__tag--before" aria-hidden="true">
+    {beforeLabel}
+  </span>
+  <span class="lt-ba__tag ba__tag--after" aria-hidden="true">
+    {afterLabel}
+  </span>
+  <input
+    class="ba__range"
+    type="range"
+    min="0"
+    max="100"
+    step="1"
+    value="50"
+    aria-label={controlLabel}
+    data-ba-range
+  />
+  <div class="lt-ba__handle" aria-hidden="true">
+    <div class="lt-ba__knob">
+      <Icon name="arrows-left-right" size={22} />
+    </div>
+  </div>
+</div>
+
+<style>
+  .ba {
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+    background: var(--surface-rose);
+    cursor: ew-resize;
+  }
+
+  .ba :global(picture),
+  .ba :global(.ba__img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ba :global(.ba__img) {
+    object-fit: cover;
+  }
+
+  .ba__tag--before {
+    left: 16px;
+  }
+
+  .ba__tag--after {
+    right: 16px;
+  }
+
+  /* O range fica invisível (o arraste é tratado por pointer events na raiz), mas recebe foco e teclado. */
+  .ba__range {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ba__range:focus-visible + .lt-ba__handle .lt-ba__knob {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+</style>
+
+<script>
+  import { clampPercent, isHorizontalIntent, percentFromPointer } from '../lib/before-after';
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-ba]')) {
+    const range = root.querySelector<HTMLInputElement>('[data-ba-range]');
+    if (!range) continue;
+
+    // O navegador inicia o drag nativo da <img> ao arrastar com o mouse; cancela o gesto do slider.
+    root.addEventListener('dragstart', (event) => event.preventDefault());
+
+    const setPosition = (value: number) => {
+      const position = clampPercent(value);
+      root.style.setProperty('--pos', `${position}%`);
+      range.value = String(Math.round(position));
+    };
+    const interact = () => root.dispatchEvent(new CustomEvent('ba:interact'));
+
+    // Só dispara quando o valor muda por ação da pessoa (teclado inclusive); o `ba:set` da dica
+    // automática não dispara `input`, e o Tab que sai do range não emite `ba:interact`.
+    range.addEventListener('input', () => {
+      interact();
+      setPosition(Number(range.value));
+    });
+    root.addEventListener('ba:set', (event) => {
+      const detail = (event as CustomEvent<number>).detail;
+      if (typeof detail === 'number') setPosition(detail);
+    });
+
+    let pointerId: number | null = null;
+    let startX = 0;
+    let startY = 0;
+    let dragging = false;
+
+    root.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      pointerId = event.pointerId;
+      startX = event.clientX;
+      startY = event.clientY;
+      // Mouse/caneta arrastam a partir do toque inicial; o toque só vira arraste em pointermove
+      // (gesto horizontal) ou posiciona no toque simples (pointerup sem arraste, ver `stop`).
+      dragging = event.pointerType !== 'touch';
+      if (dragging) {
+        interact();
+        root.setPointerCapture(event.pointerId);
+        setPosition(percentFromPointer(event.clientX, root.getBoundingClientRect()));
+      }
+    });
+
+    root.addEventListener('pointermove', (event) => {
+      if (event.pointerId !== pointerId) return;
+      if (!dragging) {
+        if (!isHorizontalIntent(event.clientX - startX, event.clientY - startY)) return;
+        dragging = true;
+        interact();
+        root.setPointerCapture(event.pointerId);
+      }
+      setPosition(percentFromPointer(event.clientX, root.getBoundingClientRect()));
+    });
+
+    const stop = (event: PointerEvent) => {
+      if (event.pointerId !== pointerId) return;
+      // Toque simples (sem arraste): alternativa de ponteiro único exigida pela WCAG 2.5.7.
+      if (event.type === 'pointerup' && event.pointerType === 'touch' && !dragging) {
+        interact();
+        setPosition(percentFromPointer(event.clientX, root.getBoundingClientRect()));
+      }
+      if (root.hasPointerCapture(event.pointerId)) root.releasePointerCapture(event.pointerId);
+      pointerId = null;
+      dragging = false;
+    };
+    root.addEventListener('pointerup', stop);
+    root.addEventListener('pointercancel', stop);
+
+    setPosition(Number(range.value));
+  }
+</script>

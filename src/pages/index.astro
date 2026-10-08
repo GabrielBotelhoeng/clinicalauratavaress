@@ -2,8 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Marquee from '../components/Marquee.astro';
+import MethodSteps from '../components/MethodSteps.astro';
 import Navbar from '../components/Navbar.astro';
 import PressStrip from '../components/PressStrip.astro';
+import Results from '../components/Results.astro';
 import Treatments from '../components/Treatments.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { media } from '../content/media';
@@ -28,5 +30,7 @@ const jsonLd = [
   <Hero />
   <PressStrip />
   <Treatments />
+  <Results />
+  <MethodSteps />
   <WhatsAppFloat slot="after" />
 </BaseLayout>

@@ -1,0 +1,198 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './icons/Icon.astro';
+import { altText, media } from '../content/media';
+import { site } from '../content/site';
+import { loopCopies } from '../lib/carousel';
+
+const { results, ui } = site;
+const shots = media.carousel();
+const half = Array.from({ length: loopCopies(shots.length) }, () => shots).flat();
+const rows = [
+  { direction: -1, items: half },
+  { direction: 1, items: [...half].reverse() },
+];
+---
+
+<div class="carousel" data-reel>
+  <div class="container carousel__header">
+    <p class="carousel__intro">{results.carouselIntro}</p>
+    <button type="button" class="carousel__toggle" aria-pressed="false" data-reel-toggle>
+      <Icon name="pause" size={18} class="carousel__icon carousel__icon--pause" />
+      <Icon name="play" size={18} class="carousel__icon carousel__icon--play" />
+      <span class="sr-only">{ui.pauseCarousel}</span>
+    </button>
+  </div>
+  {rows.map((row, rowIndex) => (
+    <div
+      class:list={[
+        'lt-reel',
+        'carousel__row',
+        { 'lt-reel--reverse': row.direction === 1, 'carousel__row--secondary': rowIndex === 1 },
+      ]}
+      role={rowIndex === 0 ? 'region' : undefined}
+      aria-label={rowIndex === 0 ? results.carouselIntro : undefined}
+      aria-hidden={rowIndex === 1 ? 'true' : undefined}
+      tabindex={rowIndex === 0 ? 0 : undefined}
+    >
+      <ul
+        class="lt-reel__track carousel__track"
+        role="list"
+        data-reel-track
+        data-reel-direction={row.direction}
+      >
+        {[...row.items, ...row.items].map((shot, index) => {
+          const exposed = rowIndex === 0 && index < shots.length;
+          return (
+            <li
+              class="lt-shot"
+              aria-hidden={exposed ? undefined : 'true'}
+              data-copy={exposed ? undefined : ''}
+            >
+              <Picture
+                src={shot.image}
+                alt={exposed ? altText(shot, results.carouselAlt) : ''}
+                widths={[260, 440, 520]}
+                sizes="(max-width: 1023.98px) min(64vw, 260px), 220px"
+                formats={['avif', 'webp']}
+                class="carousel__img"
+                style={`object-position: ${shot.position}`}
+                data-slot={shot.slot}
+                data-placeholder={shot.isPlaceholder ? '' : undefined}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ))}
+  <p class="container lt-caption carousel__legend">{results.legend}</p>
+</div>
+
+<style>
+  .carousel {
+    margin-top: var(--space-16);
+  }
+
+  .carousel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .carousel__intro {
+    color: var(--ink);
+    font: 500 clamp(1.5rem, 1.3rem + 0.8vw, 1.75rem) / 1.25 var(--font-serif);
+  }
+
+  .carousel__toggle {
+    display: none;
+    flex: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--hairline);
+    border-radius: 50%;
+    background: var(--surface-raised);
+    color: var(--ink);
+  }
+
+  .carousel__toggle :global(.carousel__icon--play),
+  .carousel__toggle[aria-pressed='true'] :global(.carousel__icon--pause) {
+    display: none;
+  }
+
+  .carousel__toggle[aria-pressed='true'] :global(.carousel__icon--play) {
+    display: block;
+  }
+
+  .carousel__row--secondary {
+    display: none;
+  }
+
+  .carousel[data-paused] .lt-reel__track {
+    animation-play-state: paused;
+  }
+
+  .carousel.is-gsap .lt-reel__track {
+    animation: none;
+  }
+
+  .carousel :global(.carousel__img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .carousel__legend {
+    margin-top: var(--space-4);
+    text-align: center;
+  }
+
+  /* Mobile e tablet: 1 fileira, sem animação, deslize com snap ("Deslize e veja mais resultados"). */
+  @media (max-width: 1023.98px) {
+    .carousel__row {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+
+    .carousel__track {
+      padding-inline: var(--gutter);
+      animation: none;
+    }
+
+    .carousel__track [data-copy] {
+      display: none;
+    }
+
+    .carousel__track .lt-shot {
+      width: min(64vw, 260px);
+      scroll-snap-align: start;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .carousel__toggle {
+      display: grid;
+    }
+
+    .carousel__row--secondary {
+      display: block;
+    }
+
+    /* Respiro vertical do bundle: ul[role='list'] { padding: 0 } do global.css (0,1,1) vence o
+       .lt-reel__track do bundle.css (0,1,0); aqui a especificidade do atributo de escopo (0,2,0)
+       devolve o espaço entre as fileiras e evita que o hover do card seja cortado. */
+    .carousel__track {
+      padding-block: var(--space-6);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__toggle {
+      display: none;
+    }
+
+    /* Blindagem: garante o trilho parado mesmo se a regra do bundle.css perder a disputa de
+       especificidade com `.lt-reel__track { animation: lt-scroll … }`. */
+    .lt-reel__track {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-reel]')) {
+    const toggle = root.querySelector<HTMLButtonElement>('[data-reel-toggle]');
+    toggle?.addEventListener('click', () => {
+      const paused = toggle.getAttribute('aria-pressed') !== 'true';
+      toggle.setAttribute('aria-pressed', String(paused));
+      root.toggleAttribute('data-paused', paused);
+    });
+  }
+</script>

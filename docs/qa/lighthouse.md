@@ -4,6 +4,6 @@ Gerado em 2026-10-08 contra o `astro preview`, com o Lighthouse 12.8.2 (emulaç�
 
 | Página | Performance | Acessibilidade | Boas práticas | SEO | LCP | CLS | TBT |
 |---|---|---|---|---|---|---|---|
-| home | 99 | 100 | 100 | 100 | 1,82 s | 0,000 | 0 ms |
+| home | 98 | 100 | 100 | 100 | 2,20 s | 0,000 | 0 ms |
 
 Resultado: **aprovado** (todas as categorias ≥ 90).

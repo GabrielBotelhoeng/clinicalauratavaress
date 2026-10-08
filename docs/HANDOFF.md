@@ -6,7 +6,8 @@
 
 - **Etapa 1 — fundação (`feat/fundacao`): concluída e mergeada na `main`.** Astro 7.3.5 estático (`build.format: 'file'`, `trailingSlash: 'never'`), TypeScript 6.0.x estrito, ESLint 9 + eslint-plugin-astro 1.7, Prettier, Vitest (unitário + `tests/dist`); `src/content/site.ts` com todo o texto; `whatsappLink()`; resolvedor de mídia com placeholders; BaseLayout com SEO, Open Graph, JSON-LD, sitemap e robots; QA local (`npm run lighthouse`, `scripts/shot.sh`).
 - **Etapa 2 — seções do topo (`feat/secoes-topo`): concluída e mergeada na `main`.** Marquee com pausa, navbar sticky com gaveta `<dialog>`, hero com foto em arco, Na mídia (lê `imprensa.json` quando existir) e Tratamentos (foto real ou ícone); botão flutuante do WhatsApp.
-- Etapas 3–7: pendentes.
+- **Etapa 3 — resultados e método (`feat/resultados-metodo`): concluída e mergeada na `main`.** BenefitResult × 4 com slider antes/depois (pointer events + range por teclado; eventos `ba:set`/`ba:interact`), carrossel infinito (CSS por enquanto) e O Método em tema noite com `BackgroundVideo` (lê `public/media/metodo.*` quando existir).
+- Etapas 4–7: pendentes.
 
 ## Como rodar
 
@@ -29,19 +30,26 @@
 - Materiais de origem foram movidos da raiz para `docs/fontes/`.
 - Botões de pausa na marquee (e no carrossel, Etapa 3) por causa do critério WCAG 2.2.2 (conteúdo que se move sozinho).
 - No mobile estreito (< 480 px) o CTA da navbar some da barra (fica na gaveta e no botão flutuante) para não estourar a largura.
+- Slider: arraste tratado por pointer events na raiz (com `touch-action: pan-y` a página continua rolando no toque vertical); o `input range` fica invisível só para teclado e leitor de tela.
+- Carrossel sem lightbox (fora da spec); fotos do carrossel sem legenda individual (o contrato de mídia não traz legendas) — alt genérico do copy adaptado.
+- Slider: toque simples posiciona a alça (WCAG 2.5.7) e `ba:interact` só dispara em arraste horizontal, clique ou mudança de valor pelo teclado (rolar a página não cancela a dica da Task 29).
+- Vídeo de fundo com botão de pausa no topo da seção (WCAG 2.2.2, como a marquee e o carrossel); abaixo de 768 px e com movimento reduzido, só o poster.
+- Numerais grandes em algarismos alinhados (`lining-nums`): os de estilo antigo do Cormorant faziam "01" ser lido como "OI".
+- Pares de antes/depois do olhar e da mandíbula realinhados só por recorte/escala (sem IA), para o rosto ficar contínuo na linha do slider; ficaram com 700×875 e 409×511.
 
 ## Próximo passo
 
-- Etapa 3 — `feat/resultados-metodo`: Task 16 do plano.
+- Etapa 4 — `feat/sobre-ao-rodape`: Task 20 do plano.
 
 ## Para o usuário decidir (sem bloquear o trabalho)
 
-- **Primeira tela no celular:** como o plano manda, no mobile a foto da Dra. (arco, 70% da altura da tela) vem antes do título; numa tela de 375×667 o título "Rejuvenescer sem deixar de ser você." começa abaixo da dobra e o CTA principal mais abaixo ainda — só o botão flutuante do WhatsApp aparece de cara. Alternativas: arco mais baixo no mobile ou texto antes da foto abaixo de 1024 px. Fica como está até você escolher (de preferência vendo a foto real, na Etapa 6).
+- **Primeira tela no celular:** como o plano manda, no mobile a foto da Dra. (arco, 70% da altura da tela) vem antes do título; numa tela de 375×667 o título "Rejuvenescer sem deixar de ser você." começa abaixo da dobra e o CTA principal mais abaixo ainda — só o botão flutuante do WhatsApp aparece de cara. Alternativas: arco mais baixo no mobile ou texto antes da foto abaixo de 1024 px. Fica como está até você escolher — combinado em 2026-10-07: decidir ao ver o resultado final (Etapa 7).
+- **Autorização das imagens:** a legenda dos resultados diz "Imagens publicadas com autorização", mas os termos das pacientes ainda estão pendentes (`docs/media-pendencias.md`). Recomendação: só publicar no domínio final depois de receber os termos; até lá, só a URL de prévia da Vercel.
 
-## Frente de mídia (branch `feat/midia`, worktree `.worktrees/midia`)
+## Frente de mídia (concluída — PR #5 mergeado na `main`)
 
 - Plano: `docs/superpowers/plans/2026-10-05-landing-midia.md`. Ledger: `.superpowers/sdd/2026-10-05-landing-midia/progress.md` (fora do git). Ferramentas e mídia bruta em `media-src/` (fora do git).
-- Tasks 1–12 concluídas e revisadas; revisão final (Opus) com uma rodada de correção. PR #5 aberto: fotos reais da Dra. (hero, sobre) e da clínica (recepção, equipe 4:3, detalhes), antes/depois das 4 queixas (lábios e bigode de pacientes dedicadas; mandíbula repete a paciente do "Face Prime" até a clínica mandar outra), carrossel com 6 resultados, 6 depoimentos do Google, 4 matérias de imprensa (1 com link), vídeo do Método e foto viva do CTA final, 4 fotos de tratamento e 5 texturas de apoio geradas no Higgsfield.
+- Tasks 1–12 concluídas e revisadas; revisão final (Opus) com uma rodada de correção; PR #5 mergeado (squash) e worktree removido. Entregue: fotos reais da Dra. (hero, sobre) e da clínica (recepção, equipe 4:3, detalhes), antes/depois das 4 queixas (lábios e bigode de pacientes dedicadas; mandíbula repete a paciente do "Face Prime" até a clínica mandar outra), carrossel com 6 resultados, 6 depoimentos do Google, 4 matérias de imprensa (1 com link), vídeo do Método e foto viva do CTA final, 4 fotos de tratamento e 5 texturas de apoio geradas no Higgsfield.
 - Ficou sem foto: `clinica/sala` (o upscale da fonte de 361 px inventou letras numa plaquinha — dispensada; a galeria das Tasks 22/31 tem de lidar com a ausência). Pedidos à clínica (autorizações, originais, WhatsApp oficial, horário, registro profissional, links de imprensa) em `docs/media-pendencias.md`.
 - Coleta: Chrome do usuário logado no Instagram = deviceId `599065b9-3d50-45cc-95e1-89daa8741f5e` (só descoberta, só leitura — a extensão esconde as URLs do CDN); download pelo agent-browser (sessão isolada, sem login) + curl, com autorização do usuário para as fotos e os vídeos dos reels dos dois perfis.
 - Higgsfield: 197,5 de 450 créditos gastos (saldo 702,75); detalhe por chamada em `docs/media-manifest.md`.
