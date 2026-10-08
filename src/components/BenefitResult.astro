@@ -1,0 +1,99 @@
+---
+import BeforeAfter from './BeforeAfter.astro';
+import Button from './Button.astro';
+import RichTitle from './RichTitle.astro';
+import { media } from '../content/media';
+import { site, type Site } from '../content/site';
+import { whatsappLink } from '../lib/whatsapp';
+
+interface Props {
+  block: Site['results']['blocks'][number];
+  index: number;
+}
+
+const { block, index } = Astro.props;
+const { results, ui } = site;
+const flip = index % 2 === 1;
+const panel = index % 2 === 0;
+const label = results.altTemplate.replace('{area}', block.area);
+---
+
+<article
+  class:list={['benefit', { 'benefit--flip': flip, 'benefit--panel': panel }]}
+  aria-labelledby={`resultado-${block.slug}`}
+>
+  <div class="benefit__copy" data-reveal>
+    <p class="lt-stat__num benefit__number">{block.number}</p>
+    <RichTitle id={`resultado-${block.slug}`} as="h3" size="h2" title={block.title} />
+    <p class="lt-body benefit__text">{block.text}</p>
+    <Button href={whatsappLink('result', block.area)} data-wa-origin="result">
+      {results.cta}
+    </Button>
+  </div>
+  <figure class="benefit__media">
+    <BeforeAfter
+      before={media.get(`resultados/${block.slug}-antes` as const)}
+      after={media.get(`resultados/${block.slug}-depois` as const)}
+      label={label}
+      controlLabel={`${ui.compare}: ${block.area}`}
+      beforeLabel={results.beforeLabel}
+      afterLabel={results.afterLabel}
+    />
+    <figcaption class="lt-caption benefit__legend">{results.legend}</figcaption>
+  </figure>
+</article>
+
+<style>
+  .benefit {
+    display: grid;
+    align-items: center;
+    gap: var(--space-8);
+    padding-block: var(--space-12);
+  }
+
+  .benefit--panel {
+    padding: var(--space-8) var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  .benefit__copy {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+  }
+
+  .benefit__number {
+    font-size: 48px;
+  }
+
+  .benefit__text {
+    max-width: 440px;
+    margin-bottom: var(--space-4);
+  }
+
+  .benefit__media {
+    margin: 0;
+  }
+
+  .benefit__legend {
+    margin-top: var(--space-3);
+    text-align: center;
+  }
+
+  @media (min-width: 1024px) {
+    .benefit {
+      grid-template-columns: 5fr 6fr;
+      gap: var(--space-16);
+      padding: var(--space-12);
+    }
+
+    .benefit--flip {
+      grid-template-columns: 6fr 5fr;
+    }
+
+    .benefit--flip .benefit__copy {
+      order: 2;
+    }
+  }
+</style>

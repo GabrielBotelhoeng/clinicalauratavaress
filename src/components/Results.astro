@@ -1,0 +1,30 @@
+---
+import BenefitResult from './BenefitResult.astro';
+import SectionHeading from './SectionHeading.astro';
+import { site } from '../content/site';
+
+const { results } = site;
+---
+
+<section id="resultados" class="section section--blush results" aria-labelledby="results-title">
+  <div class="container">
+    <SectionHeading
+      id="results-title"
+      eyebrow={results.eyebrow}
+      title={results.title}
+      lead={results.lead}
+    />
+    <div class="results__blocks">
+      {results.blocks.map((block, index) => (
+        <BenefitResult block={block} index={index} />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .results__blocks {
+    display: grid;
+    gap: var(--space-8);
+  }
+</style>
