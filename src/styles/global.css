@@ -135,9 +135,11 @@ section[id] {
   line-height: 1.6;
 }
 
-/* Numerais em gold-ink: o gold (#B8925A) dá 2,7:1 e reprova o contraste AA de texto grande no axe */
+/* Numerais em gold-ink: o gold (#B8925A) dá 2,7:1 e reprova o contraste AA de texto grande no axe.
+   Algarismos alinhados: os de estilo antigo do Cormorant fazem "01" ser lido como "OI". */
 .lt-stat__num {
   color: var(--gold-ink);
+  font-variant-numeric: lining-nums;
 }
 
 /* Ícones Phosphor são preenchidos (fill), não traçados como no exemplo do bundle */
