@@ -136,6 +136,7 @@ const rows = [
     .carousel__row {
       overflow-x: auto;
       scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
       mask-image: none;
       -webkit-mask-image: none;
     }
@@ -163,11 +164,24 @@ const rows = [
     .carousel__row--secondary {
       display: block;
     }
+
+    /* Respiro vertical do bundle: ul[role='list'] { padding: 0 } do global.css (0,1,1) vence o
+       .lt-reel__track do bundle.css (0,1,0); aqui a especificidade do atributo de escopo (0,2,0)
+       devolve o espaço entre as fileiras e evita que o hover do card seja cortado. */
+    .carousel__track {
+      padding-block: var(--space-6);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .carousel__toggle {
       display: none;
+    }
+
+    /* Blindagem: garante o trilho parado mesmo se a regra do bundle.css perder a disputa de
+       especificidade com `.lt-reel__track { animation: lt-scroll … }`. */
+    .lt-reel__track {
+      animation: none;
     }
   }
 </style>
