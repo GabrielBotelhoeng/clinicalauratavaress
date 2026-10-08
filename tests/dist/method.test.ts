@@ -44,4 +44,15 @@ describe('o método', () => {
     expect(video.querySelectorAll('source[src]')).toHaveLength(0);
     expect(video.closest('[aria-hidden="true"]')).not.toBeNull();
   });
+
+  it('botão de pausa do vídeo (se houver vídeo): aria-pressed inicial, rótulo e fora do aria-hidden', () => {
+    const { document } = loadPage();
+    const video = document.querySelector('#metodo video[data-lazy-video]');
+    const toggle = document.querySelector('#metodo [data-video-toggle]');
+    expect(toggle !== null).toBe(video !== null);
+    if (!toggle) return;
+    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    expect(textOf(toggle)).toBe('Pausar vídeo de fundo');
+    expect(toggle.closest('[aria-hidden="true"]')).toBeNull();
+  });
 });
