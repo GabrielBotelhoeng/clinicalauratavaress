@@ -1,0 +1,48 @@
+---
+import { resolveVideo } from '../lib/public-media';
+
+interface Props {
+  /** Nome-base em public/media (ex.: "metodo" → metodo.webm, metodo.mp4, metodo-poster.jpg). */
+  name: string;
+}
+
+const video = resolveVideo(Astro.props.name);
+const hasMedia = video.sources.length > 0 || video.poster !== undefined;
+---
+
+{hasMedia && (
+  <div class="bg-video" aria-hidden="true">
+    <video
+      class="bg-video__media"
+      muted
+      loop
+      playsinline
+      preload="none"
+      data-lazy-video
+      data-poster={video.poster}
+    >
+      {video.sources.map((source) => (
+        <source data-src={source.src} type={source.type} />
+      ))}
+    </video>
+  </div>
+)}
+
+<style>
+  .bg-video {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+  }
+
+  .bg-video__media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  import '../scripts/lazy-video';
+</script>

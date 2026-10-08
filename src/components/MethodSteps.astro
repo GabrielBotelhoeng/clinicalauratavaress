@@ -1,0 +1,99 @@
+---
+import BackgroundVideo from './BackgroundVideo.astro';
+import Button from './Button.astro';
+import Icon from './icons/Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { site } from '../content/site';
+import { whatsappLink } from '../lib/whatsapp';
+
+const { method } = site;
+---
+
+<section id="metodo" class="section method" data-theme="noite" aria-labelledby="method-title">
+  <BackgroundVideo name="metodo" />
+  <div class="method__veil" aria-hidden="true"></div>
+  <div class="container">
+    <SectionHeading
+      id="method-title"
+      eyebrow={method.eyebrow}
+      title={method.title}
+      lead={method.lead}
+      align="center"
+    />
+    <ol class="method__steps" role="list">
+      {method.steps.map((step, index) => (
+        <li class="method__step" data-reveal>
+          <span class="lt-icon">
+            <Icon name={step.icon} size={26} />
+          </span>
+          <span class="method__index" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <h3 class="lt-title is-h3">{step.title}</h3>
+          <p class="lt-body">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+    <div class="method__cta">
+      <Button href={whatsappLink('general')} data-wa-origin="method">
+        {method.cta}
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .method {
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Véu espresso sobre o vídeo: garante contraste AA do texto claro */
+  .method__veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgb(28 21 19 / 0.84), rgb(28 21 19 / 0.94));
+  }
+
+  .method__steps {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .method__step {
+    display: grid;
+    justify-items: start;
+    align-content: start;
+    gap: var(--space-3);
+    padding: var(--space-8) var(--space-6);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    background: rgb(37 28 25 / 0.72);
+  }
+
+  .method__index {
+    margin-top: var(--space-3);
+    color: var(--gold-ink);
+    font: 500 13px/1 var(--font-sans);
+    letter-spacing: 0.22em;
+  }
+
+  .method__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .method__steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .method__steps {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>
