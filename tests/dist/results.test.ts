@@ -78,6 +78,14 @@ describe('resultados por queixa', () => {
     ]).toEqual(['0', '100', '50']);
   });
 
+  it('o slider nunca baixa mais que 460px (sizes corrigido)', () => {
+    const { document } = loadPage();
+    const img = document.querySelector(
+      '#resultados [data-ba] img[data-slot="resultados/olhar-antes"]',
+    );
+    expect(img?.getAttribute('sizes')).toBe('(min-width: 1024px) 460px, min(90vw, 460px)');
+  });
+
   it('usa as 8 fotos do contrato (reais ou placeholders marcados)', () => {
     const { document } = loadPage();
     for (const slug of ['olhar', 'mandibula', 'labios', 'bigode']) {

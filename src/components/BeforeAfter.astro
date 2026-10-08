@@ -23,7 +23,7 @@ const { before, after, label, controlLabel, beforeLabel, afterLabel } = Astro.pr
       src={before.image}
       alt={altText(before, beforeLabel)}
       widths={[360, 540, 720, 920]}
-      sizes="(min-width: 1024px) 460px, 90vw"
+      sizes="(min-width: 1024px) 460px, min(90vw, 460px)"
       formats={['avif', 'webp']}
       class="ba__img"
       style={`object-position: ${before.position}`}
@@ -36,7 +36,7 @@ const { before, after, label, controlLabel, beforeLabel, afterLabel } = Astro.pr
       src={after.image}
       alt={altText(after, afterLabel)}
       widths={[360, 540, 720, 920]}
-      sizes="(min-width: 1024px) 460px, 90vw"
+      sizes="(min-width: 1024px) 460px, min(90vw, 460px)"
       formats={['avif', 'webp']}
       class="ba__img"
       style={`object-position: ${after.position}`}
@@ -120,6 +120,9 @@ const { before, after, label, controlLabel, beforeLabel, afterLabel } = Astro.pr
     const range = root.querySelector<HTMLInputElement>('[data-ba-range]');
     if (!range) continue;
 
+    // O navegador inicia o drag nativo da <img> ao arrastar com o mouse; cancela o gesto do slider.
+    root.addEventListener('dragstart', (event) => event.preventDefault());
+
     const setPosition = (value: number) => {
       const position = clampPercent(value);
       root.style.setProperty('--pos', `${position}%`);
@@ -127,8 +130,12 @@ const { before, after, label, controlLabel, beforeLabel, afterLabel } = Astro.pr
     };
     const interact = () => root.dispatchEvent(new CustomEvent('ba:interact'));
 
-    range.addEventListener('input', () => setPosition(Number(range.value)));
-    range.addEventListener('keydown', interact);
+    // Só dispara quando o valor muda por ação da pessoa (teclado inclusive); o `ba:set` da dica
+    // automática não dispara `input`, e o Tab que sai do range não emite `ba:interact`.
+    range.addEventListener('input', () => {
+      interact();
+      setPosition(Number(range.value));
+    });
     root.addEventListener('ba:set', (event) => {
       const detail = (event as CustomEvent<number>).detail;
       if (typeof detail === 'number') setPosition(detail);
@@ -144,9 +151,11 @@ const { before, after, label, controlLabel, beforeLabel, afterLabel } = Astro.pr
       pointerId = event.pointerId;
       startX = event.clientX;
       startY = event.clientY;
+      // Mouse/caneta arrastam a partir do toque inicial; o toque só vira arraste em pointermove
+      // (gesto horizontal) ou posiciona no toque simples (pointerup sem arraste, ver `stop`).
       dragging = event.pointerType !== 'touch';
-      interact();
       if (dragging) {
+        interact();
         root.setPointerCapture(event.pointerId);
         setPosition(percentFromPointer(event.clientX, root.getBoundingClientRect()));
       }
@@ -157,6 +166,7 @@ const { before, after, label, controlLabel, beforeLabel, afterLabel } = Astro.pr
       if (!dragging) {
         if (!isHorizontalIntent(event.clientX - startX, event.clientY - startY)) return;
         dragging = true;
+        interact();
         root.setPointerCapture(event.pointerId);
       }
       setPosition(percentFromPointer(event.clientX, root.getBoundingClientRect()));
@@ -164,6 +174,11 @@ const { before, after, label, controlLabel, beforeLabel, afterLabel } = Astro.pr
 
     const stop = (event: PointerEvent) => {
       if (event.pointerId !== pointerId) return;
+      // Toque simples (sem arraste): alternativa de ponteiro único exigida pela WCAG 2.5.7.
+      if (event.type === 'pointerup' && event.pointerType === 'touch' && !dragging) {
+        interact();
+        setPosition(percentFromPointer(event.clientX, root.getBoundingClientRect()));
+      }
       if (root.hasPointerCapture(event.pointerId)) root.releasePointerCapture(event.pointerId);
       pointerId = null;
       dragging = false;
