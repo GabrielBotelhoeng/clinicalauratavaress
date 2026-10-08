@@ -56,6 +56,7 @@ const rows = [
                 sizes="(max-width: 1023.98px) min(64vw, 260px), 220px"
                 formats={['avif', 'webp']}
                 class="carousel__img"
+                style={`object-position: ${shot.position}`}
                 data-slot={shot.slot}
                 data-placeholder={shot.isPlaceholder ? '' : undefined}
               />
