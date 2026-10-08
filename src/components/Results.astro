@@ -1,5 +1,6 @@
 ---
 import BenefitResult from './BenefitResult.astro';
+import ResultsCarousel from './ResultsCarousel.astro';
 import SectionHeading from './SectionHeading.astro';
 import { site } from '../content/site';
 
@@ -20,6 +21,7 @@ const { results } = site;
       ))}
     </div>
   </div>
+  <ResultsCarousel />
 </section>
 
 <style>
