@@ -1,0 +1,173 @@
+---
+import { Picture } from 'astro:assets';
+import Button from './Button.astro';
+import Icon from './icons/Icon.astro';
+import RichTitle from './RichTitle.astro';
+import { altText, media } from '../content/media';
+import { site } from '../content/site';
+import { whatsappLink } from '../lib/whatsapp';
+
+const { hero } = site;
+const photo = media.get('dra/hero');
+---
+
+<section id="inicio" class="section hero" aria-labelledby="hero-title">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="lt-eyebrow">{hero.eyebrow}</p>
+      <RichTitle id="hero-title" as="h1" size="display" title={hero.title} />
+      <p class="lt-lead hero__subtitle">{hero.subtitle}</p>
+      <div class="hero__ctas">
+        <Button href={whatsappLink('general')} data-wa-origin="hero">
+          {hero.primaryCta}
+        </Button>
+        <Button href="#resultados" variant="outline">
+          {hero.secondaryCta}
+        </Button>
+      </div>
+      <ul class="hero__seals lt-caption" role="list">
+        {hero.seals.map((seal) => (
+          <li>
+            {seal.star && (
+              <span class="hero__star" data-highlight>
+                <Icon name="star-fill" size={14} />
+              </span>
+            )}
+            <b>{seal.lead}</b>
+            {seal.rest}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="hero__media">
+      <div class="lt-arch hero__arch" data-arch-reveal data-parallax="-10">
+        <Picture
+          src={photo.image}
+          alt={altText(photo, hero.imageAlt)}
+          widths={[480, 720, 960, 1280]}
+          sizes="(min-width: 1024px) 520px, 88vw"
+          formats={['avif', 'webp']}
+          priority
+          class="hero__img"
+          style={`object-position: ${photo.position}`}
+          data-slot={photo.slot}
+          data-placeholder={photo.isPlaceholder ? '' : undefined}
+        />
+      </div>
+      <div class="lt-card hero__badge" data-parallax="6">
+        <p class="lt-stat__num hero__badge-value">{hero.badge.value}</p>{' '}
+        <p class="lt-caption">{hero.badge.label}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--space-12) var(--section-pad);
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .hero__subtitle {
+    max-width: 460px;
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+  }
+
+  .hero__seals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-8);
+    margin-top: var(--space-4);
+  }
+
+  .hero__seals li {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--space-1);
+  }
+
+  .hero__seals b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .hero__star {
+    display: inline-grid;
+    color: var(--highlight);
+  }
+
+  .hero__media {
+    position: relative;
+    order: -1;
+  }
+
+  .hero__arch {
+    height: min(70vh, 620px);
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+  .hero__arch :global(picture),
+  .hero__arch :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__arch :global(img) {
+    object-fit: cover;
+  }
+
+  .hero__badge {
+    position: absolute;
+    bottom: var(--space-8);
+    left: 0;
+    padding: var(--space-4) var(--space-6);
+    box-shadow: var(--shadow-lift);
+    /* Só box-shadow transiciona: o parallax (scrub) escreve `transform` a cada frame e a
+       transição de 240ms do .lt-card (bundle.css) "arrastaria" cada passo do GSAP. */
+    transition-property: box-shadow;
+  }
+
+  .hero__badge-value {
+    font-size: 44px;
+  }
+
+  @media (min-width: 1024px) {
+    .hero__grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gutter);
+    }
+
+    .hero__copy {
+      grid-column: 1 / span 5;
+    }
+
+    .hero__media {
+      grid-column: 7 / span 6;
+      order: 0;
+    }
+
+    .hero__arch {
+      height: 600px;
+      margin-inline: 40px 0;
+    }
+  }
+</style>

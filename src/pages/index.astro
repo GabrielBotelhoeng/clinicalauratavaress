@@ -1,5 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Navbar from '../components/Navbar.astro';
+import PressStrip from '../components/PressStrip.astro';
+import Treatments from '../components/Treatments.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { media } from '../content/media';
 import { listPending } from '../content/pending';
 import { site } from '../content/site';
@@ -17,13 +23,10 @@ const jsonLd = [
 ---
 
 <BaseLayout path="/" jsonLd={jsonLd}>
-  <section class="section">
-    <div class="container">
-      <h1 class="lt-title is-display">
-        {site.hero.title.before}
-        <em>{site.hero.title.em}</em>
-        {site.hero.title.after}
-      </h1>
-    </div>
-  </section>
+  <Marquee slot="header" />
+  <Navbar slot="header" />
+  <Hero />
+  <PressStrip />
+  <Treatments />
+  <WhatsAppFloat slot="after" />
 </BaseLayout>

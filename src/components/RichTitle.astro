@@ -1,0 +1,20 @@
+---
+// RichTitle.astro — título com o trecho em itálico rosé do copy (campo `em`).
+import type { RichTitle as RichTitleData } from '../content/site';
+
+interface Props {
+  title: RichTitleData;
+  as?: 'h1' | 'h2' | 'h3';
+  size?: 'display' | 'h2' | 'h3';
+  id?: string;
+  class?: string;
+}
+
+const { title, as: Tag = 'h2', size = 'h2', id, class: className } = Astro.props;
+---
+
+<Tag id={id} class:list={['lt-title', `is-${size}`, className]} data-title>
+  {title.before}
+  <em>{title.em}</em>
+  {title.after}
+</Tag>

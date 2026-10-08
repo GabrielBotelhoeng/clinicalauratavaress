@@ -1,0 +1,82 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './icons/Icon.astro';
+import type { IconName } from './icons/registry';
+import type { ResolvedImage } from '../content/media';
+import { site } from '../content/site';
+
+interface Props {
+  title: string;
+  text: string;
+  href: string;
+  linkLabel: string;
+  icon: IconName;
+  photo: ResolvedImage;
+}
+
+const { title, text, href, linkLabel, icon, photo } = Astro.props;
+---
+
+<article class="lt-card treatment" data-reveal>
+  {photo.isPlaceholder ? (
+    <div class="lt-icon treatment__icon">
+      <Icon name={icon} size={26} />
+    </div>
+  ) : (
+    <Picture
+      src={photo.image}
+      alt=""
+      widths={[360, 540, 720]}
+      sizes="(min-width: 1024px) 260px, (min-width: 768px) 44vw, 78vw"
+      formats={['avif', 'webp']}
+      class="treatment__img"
+      style={`object-position: ${photo.position}`}
+      data-slot={photo.slot}
+    />
+  )}
+  <h3 class="lt-title is-h3 treatment__title">{title}</h3>
+  <p class="lt-body">{text}</p>
+  <a
+    class="lt-btn lt-btn--ghost treatment__link"
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    data-wa-origin="treatment"
+  >
+    {linkLabel}
+    <span class="sr-only">
+      {' '}
+      {site.ui.moreAbout} {title}
+    </span>
+  </a>
+</article>
+
+<style>
+  .treatment {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    height: 100%;
+  }
+
+  .treatment :global(.treatment__img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+  }
+
+  .treatment__title {
+    margin-top: var(--space-2);
+    overflow-wrap: anywhere;
+  }
+
+  .treatment__link {
+    align-self: flex-start;
+    margin-top: auto;
+    /* Alvo de toque >= 44px sem mover o sublinhado: a folga entra acima do texto. */
+    min-height: 44px;
+    align-items: flex-end;
+  }
+</style>

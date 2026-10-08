@@ -1,0 +1,68 @@
+---
+import Icon from './icons/Icon.astro';
+import { site } from '../content/site';
+import { whatsappLink } from '../lib/whatsapp';
+
+const label = site.floatingButton.label;
+---
+
+<aside class="lt-wa float" aria-label={label} data-wa-float>
+  <span class="lt-wa__tip float__tip" aria-hidden="true">
+    {label}
+  </span>
+  <a
+    class="lt-wa__btn"
+    href={whatsappLink('general')}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={label}
+    data-wa-origin="floating"
+  >
+    <Icon name="whatsapp" size={30} />
+  </a>
+</aside>
+
+<style>
+  .float__tip {
+    opacity: 0;
+    transform: translateX(8px);
+    pointer-events: none;
+    transition:
+      opacity var(--dur-base) var(--ease-lux),
+      transform var(--dur-base) var(--ease-lux);
+  }
+
+  .float[data-tip-visible] .float__tip {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 767.98px) {
+    .float {
+      right: var(--space-4);
+      bottom: var(--space-4);
+    }
+  }
+</style>
+
+<script>
+  // Balão "Agende pelo WhatsApp": aparece após 6 s ou 40% de rolagem; no mobile some 4 s depois.
+  const root = document.querySelector<HTMLElement>('[data-wa-float]');
+  if (root) {
+    const isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+    let shown = false;
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max > 0 && window.scrollY / max >= 0.4) show();
+    };
+    const show = () => {
+      if (shown) return;
+      shown = true;
+      root.setAttribute('data-tip-visible', '');
+      window.removeEventListener('scroll', onScroll);
+      if (isMobile) window.setTimeout(() => root.removeAttribute('data-tip-visible'), 4000);
+    };
+    window.setTimeout(show, 6000);
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>
