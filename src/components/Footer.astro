@@ -1,0 +1,117 @@
+---
+import { site } from '../content/site';
+import { technicianLine } from '../lib/credentials';
+import { whatsappLink } from '../lib/whatsapp';
+
+const { business, whatsapp, footer, brand, responsibleTechnician: tech } = site;
+const technician = technicianLine(
+  footer.technicianLabel,
+  tech.name,
+  tech.profession,
+  tech.registration,
+);
+---
+
+<footer class="footer" data-theme="noite">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <p class="footer__name">{brand.wordmark}</p>
+      <p class="lt-eyebrow">{brand.tagline}</p>
+    </div>
+    <div class="footer__info">
+      <p class="footer__legal">{business.legalName}</p>
+      <p>{business.address.full}</p>
+      <ul class="footer__contacts" role="list">
+        <li>
+          {footer.whatsappLabel}
+          <a
+            href={whatsappLink('general')}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-wa-origin="footer"
+          >
+            {whatsapp.display}
+          </a>
+        </li>
+        {business.instagram.map((profile, index) => (
+          <li>
+            {index === 0 && `${footer.instagramLabel} `}
+            <a href={profile.url} target="_blank" rel="noopener noreferrer">
+              {profile.handle}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="footer__technician">{technician}</p>
+    </div>
+  </div>
+  <div class="container">
+    <p class="footer__bottom">
+      {footer.copyright} · <a href="/politica-de-privacidade">{footer.privacyLabel}</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: var(--space-16) var(--space-8);
+    border-top: 1px solid var(--hairline);
+    background: var(--surface);
+    color: var(--ink-muted);
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .footer__name {
+    color: var(--ink);
+    font: 500 28px / 1 var(--font-serif);
+  }
+
+  .footer__info {
+    display: grid;
+    gap: var(--space-2);
+    font: 400 14px / 22px var(--font-sans);
+    overflow-wrap: anywhere;
+  }
+
+  .footer__legal {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .footer__contacts {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .footer__contacts li + li::before {
+    content: '·';
+    margin-inline: 0.5em;
+    color: var(--gold);
+  }
+
+  .footer a {
+    color: var(--ink);
+    text-decoration-color: var(--accent);
+  }
+
+  .footer a:hover {
+    color: var(--accent);
+  }
+
+  .footer__bottom {
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--hairline);
+    font: 400 13px / 20px var(--font-sans);
+  }
+
+  @media (min-width: 1024px) {
+    .footer__grid {
+      grid-template-columns: 4fr 8fr;
+    }
+  }
+</style>

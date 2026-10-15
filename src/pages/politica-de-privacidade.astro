@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../content/site';
+
+const { privacy, brand, ui } = site;
+---
+
+<BaseLayout
+  path="/politica-de-privacidade"
+  title={privacy.seoTitle}
+  description={privacy.seoDescription}
+  ogTitle={privacy.seoTitle}
+>
+  <header slot="header" class="container privacy-header">
+    <a class="privacy-header__brand" href="/">
+      <span class="privacy-header__name">{brand.wordmark}</span>
+      <span class="lt-eyebrow">{brand.tagline}</span>
+    </a>
+    <a class="lt-btn lt-btn--ghost" href="/">
+      {ui.backHome}
+    </a>
+  </header>
+  <article class="section">
+    <div class="container privacy">
+      <h1 class="lt-title is-h2">{privacy.title}</h1>
+      <p class="lt-caption">{privacy.updated}</p>
+      {privacy.sections.map((section) => (
+        <section class="privacy__section">
+          <h2 class="lt-title is-h3">{section.heading}</h2>
+          {section.paragraphs.map((paragraph) => (
+            <p class="lt-body">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+    </div>
+  </article>
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .privacy-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-6);
+  }
+
+  .privacy-header__brand {
+    display: grid;
+    gap: 4px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .privacy-header__name {
+    font: 500 26px / 1 var(--font-serif);
+  }
+
+  .privacy {
+    display: grid;
+    gap: var(--space-6);
+    max-width: 760px;
+  }
+
+  .privacy__section {
+    display: grid;
+    gap: var(--space-3);
+  }
+</style>
