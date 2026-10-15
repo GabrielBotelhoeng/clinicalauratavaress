@@ -54,6 +54,15 @@
 - `docs/CHECKLIST-CLINICA.md` é gerado (`npm run checklist`), não escrito à mão.
 - Pares de antes/depois do olhar e da mandíbula realinhados só por recorte/escala (sem IA), para o rosto ficar contínuo na linha do slider; ficaram com 700×875 e 409×511.
 
+## Entrega
+
+- **URL de preview:** https://clinicalauratavaress-q6hxyvzxw-gabriel-botelhos-projects.vercel.app (Task 38) — cabeçalhos de segurança, Lighthouse e e2e conferidos contra ela. Protegida por login da Vercel (Deployment Protection), mantida de propósito até a clínica enviar os termos de autorização de imagem (ver "Para o usuário decidir" e `docs/CHECKLIST-CLINICA.md`); nada foi promovido para produção.
+  - **Como abrir:** logado na conta Vercel do projeto, ou peça a quem tem acesso ao painel para gerar um link de visualização pelo botão "Share" do deployment (não exige login de quem recebe).
+  - **Como conferir cabeçalhos com a proteção ligada:** `vercel curl <url>` em vez de `curl -I` direto (que bateria na tela de login).
+  - **Como promover depois:** `vercel --prod`, só depois dos termos de autorização de imagem e dos dados `[pendente]` do checklist resolvidos.
+- **URL de produção:** preenchida pelo fechamento da Etapa 7 (Task 40).
+- **Documentação:** `README.md` (raiz), `docs/HANDOFF.md` (este arquivo), `docs/CHECKLIST-CLINICA.md`, `docs/qa/README.md` (Lighthouse + e2e).
+
 ## Próximo passo
 
 - Etapa 7 — `feat/qa-deploy`: Task 35 do plano.
@@ -61,8 +70,8 @@
 ## Para o usuário decidir (sem bloquear o trabalho)
 
 - **Pendências da clínica:** a lista completa (registro profissional, autorização de imagens — bloqueante para o domínio final —, WhatsApp oficial, horário, logo em vetor, links de imprensa, foto da sala, revisão da política de privacidade) está em `docs/CHECKLIST-CLINICA.md`.
-- **Primeira tela no celular:** como o plano manda, no mobile a foto da Dra. (arco, 70% da altura da tela) vem antes do título; numa tela de 375×667 o título "Rejuvenescer sem deixar de ser você." começa abaixo da dobra e o CTA principal mais abaixo ainda — só o botão flutuante do WhatsApp aparece de cara. Alternativas: arco mais baixo no mobile ou texto antes da foto abaixo de 1024 px. Fica como está até você escolher — combinado em 2026-10-07: decidir ao ver o resultado final (Etapa 7).
-- **Autorização das imagens:** a legenda dos resultados diz "Imagens publicadas com autorização", mas os termos das pacientes ainda estão pendentes (`docs/media-pendencias.md`). Recomendação: só publicar no domínio final depois de receber os termos; até lá, só a URL de prévia da Vercel.
+- **Primeira tela no celular:** como o plano manda, no mobile a foto da Dra. (arco, 70% da altura da tela) vem antes do título; numa tela de 375×667 o título "Rejuvenescer sem deixar de ser você." começa abaixo da dobra e o CTA principal mais abaixo ainda — só o botão flutuante do WhatsApp aparece de cara. Alternativas: arco mais baixo no mobile ou texto antes da foto abaixo de 1024 px. Fica como está até você escolher — combinado em 2026-10-07: decidir ao ver o resultado final (Etapa 7), agora disponível com a foto real na URL de prévia (ver "## Entrega").
+- **Autorização das imagens:** a legenda dos resultados diz "Imagens publicadas com autorização", mas os termos das pacientes ainda estão pendentes (`docs/media-pendencias.md`). Recomendação: só publicar no domínio final depois de receber os termos; até lá, só a URL de prévia da Vercel (ver "## Entrega").
 
 ## Frente de mídia (concluída — PR #5 mergeado na `main`)
 
