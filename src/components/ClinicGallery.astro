@@ -104,11 +104,11 @@ const lonelyLastNarrow = narrow.length % 2 === 1;
     margin: 0;
   }
 
+  /* Foto 4:5 ímpar: ocupa a linha inteira e fica centralizada com a largura de uma coluna. */
   .clinic__item--lonely {
-    grid-column: 1 / span 1;
+    grid-column: 1 / -1;
     justify-self: center;
-    width: 100%;
-    max-width: calc(50% - var(--space-4) / 2);
+    width: calc(50% - var(--space-4) / 2);
   }
 
   .clinic__frame {
