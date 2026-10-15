@@ -40,7 +40,12 @@ describe('movimento — padrões 2, 3 e 9 marcados no HTML', () => {
     expect(document.querySelector('#dra-laura [data-arch-reveal]')).not.toBeNull();
     expect(document.querySelector('#inicio [data-parallax="-10"]')).not.toBeNull();
     expect(document.querySelector('#inicio [data-parallax="6"]')).not.toBeNull();
-    expect(document.querySelectorAll('#a-clinica [data-parallax-inner]')).toHaveLength(4);
+    // Uma camada de parallax por foto da galeria (a sala dispensada fica fora até a clínica mandar a foto).
+    const galleryItems = document.querySelectorAll('#a-clinica .clinic__item').length;
+    expect(galleryItems).toBeGreaterThanOrEqual(3);
+    expect(document.querySelectorAll('#a-clinica [data-parallax-inner]')).toHaveLength(
+      galleryItems,
+    );
     expect(document.querySelectorAll('[data-signature]')).toHaveLength(1);
   });
 
