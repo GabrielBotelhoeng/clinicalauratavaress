@@ -19,7 +19,9 @@
     "test:dist": "vitest run --config vitest.dist.config.ts",
     "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:dist",
     "placeholders": "node scripts/make-placeholders.mjs",
-    "lighthouse": "node scripts/with-preview.mjs node scripts/lighthouse.mjs"
+    "lighthouse": "node scripts/with-preview.mjs node scripts/lighthouse.mjs",
+    "og": "bash scripts/og/render.sh",
+    "checklist": "node scripts/checklist.mjs"
   },
   "allowScripts": {
     "esbuild": true,

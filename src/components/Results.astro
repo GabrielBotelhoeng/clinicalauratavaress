@@ -2,12 +2,14 @@
 import BenefitResult from './BenefitResult.astro';
 import ResultsCarousel from './ResultsCarousel.astro';
 import SectionHeading from './SectionHeading.astro';
+import SectionTexture from './SectionTexture.astro';
 import { site } from '../content/site';
 
 const { results } = site;
 ---
 
 <section id="resultados" class="section section--blush results" aria-labelledby="results-title">
+  <SectionTexture name="textura-marmore-champagne" />
   <div class="container">
     <SectionHeading
       id="results-title"
@@ -28,5 +30,10 @@ const { results } = site;
   .results__blocks {
     display: grid;
     gap: var(--space-8);
+  }
+
+  .results {
+    position: relative;
+    isolation: isolate;
   }
 </style>

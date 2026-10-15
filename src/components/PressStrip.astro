@@ -1,6 +1,7 @@
 ---
 import { press } from '../content/press';
 import { site } from '../content/site';
+import SectionTexture from './SectionTexture.astro';
 ---
 
 <section
@@ -8,6 +9,7 @@ import { site } from '../content/site';
   class="section section--blush section--compact press"
   aria-labelledby="press-title"
 >
+  <SectionTexture name="textura-seda-blush" />
   <div class="container">
     <div class="press__header">
       <h2 id="press-title" class="lt-eyebrow">
@@ -91,5 +93,10 @@ import { site } from '../content/site';
     .press__list {
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
+  }
+
+  .press {
+    position: relative;
+    isolation: isolate;
   }
 </style>

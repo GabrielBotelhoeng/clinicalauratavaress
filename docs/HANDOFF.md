@@ -9,7 +9,8 @@
 - **Etapa 3 — resultados e método (`feat/resultados-metodo`): concluída e mergeada na `main`.** BenefitResult × 4 com slider antes/depois (pointer events + range por teclado; eventos `ba:set`/`ba:interact`), carrossel infinito (CSS por enquanto) e O Método em tema noite com `BackgroundVideo` (lê `public/media/metodo.*` quando existir).
 - **Etapa 4 — do Sobre ao rodapé (`feat/sobre-ao-rodape`): concluída e mergeada na `main`.** Página completa com as 11 seções da spec + política de privacidade; depoimentos lidos de `src/content/depoimentos.json` (6 reais, do Google). Lighthouse mobile: home 94/100/100/100 (LCP 2,80 s — a página dobrou de tamanho; a Etapa 5/7 reavalia), política 100/100/100/100.
 - **Etapa 5 — movimento (`feat/movimento`): concluída e mergeada na `main`.** Lenis + GSAP (títulos por linhas, reveals, arco, parallax, assinatura, marquee que acelera, carrossel em GSAP, dica do antes/depois, contadores) num único `gsap.matchMedia()` com ramo de movimento reduzido; módulo carregado depois do `load`. Lighthouse mobile: home 90/100/100/100 (LCP 3,30 s — margem estreita, revisitar na Etapa 7), política 99/100/100/100.
-- Etapas 6–7: pendentes.
+- **Etapa 6 — integração das mídias reais (`feat/integracao-midia`): concluída e mergeada na `main`.** Fotos/vídeos reais auditados (sem arquivo ignorado/duplicado; só `clinica/sala` dispensada); texturas de apoio no Hero, Na mídia, Resultados e Depoimentos; `public/og.jpg` final (fontes reais + foto da Dra.); `docs/CHECKLIST-CLINICA.md` gerado por `npm run checklist`. Lighthouse mobile: home 90/100/100/100 (LCP 3,27 s), política 99/100/100/100.
+- Etapa 7 (QA e deploy): pendente.
 
 ## Como rodar
 
@@ -46,14 +47,20 @@
 - Padrões de disparo único usam `ScrollTrigger.create({ once, onEnter })` separado da timeline: preso à timeline, recarregar no meio da página ou girar um tablet deixava conteúdo invisível para sempre. Cada padrão roda em `try/catch` para `motion-ready` sempre chegar; failsafe de 4 s tira a classe `js` se o módulo não vier.
 - Pausa da marquee/carrossel só considera hover de mouse (toque não "prende" a faixa parada) e pausar zera a aceleração do scroll.
 - Parallax do badge do hero num invólucro (`.hero__badge-wrap`) para o `:hover` do cartão continuar funcionando.
+- Texturas de apoio em 4 seções, opacidade baixa e `mix-blend-mode: lighten` (só clareiam o fundo: o texto mantém ≥ 4,5:1); `gotas-serum` foi descartada pela mídia e `orquideas-marmore` fica sem uso (ainda é copiada para o `dist` pelo glob da mídia — 303 KB não referenciados; avaliar na Etapa 7).
+- Fotos dos 4 tratamentos são ilustrações (geradas, sem pessoas): `alt=""` + `aria-hidden` — o título do card já as nomeia.
+- Uma folha de CSS só (`vite.build.cssCodeSplit: false`): duas folhas bloqueantes custavam ~0,5 s de LCP no mobile.
+- Imagem Open Graph renderizada por agent-browser a partir de `scripts/og/template.html` (`npm run og`), fora do gate e do build da Vercel. O circunflexo alto de "você" é o desenho do glifo da Cormorant Garamond itálica (o título do site é igual).
+- `docs/CHECKLIST-CLINICA.md` é gerado (`npm run checklist`), não escrito à mão.
 - Pares de antes/depois do olhar e da mandíbula realinhados só por recorte/escala (sem IA), para o rosto ficar contínuo na linha do slider; ficaram com 700×875 e 409×511.
 
 ## Próximo passo
 
-- Etapa 6 — `feat/integracao-midia`: Task 31 do plano.
+- Etapa 7 — `feat/qa-deploy`: Task 35 do plano.
 
 ## Para o usuário decidir (sem bloquear o trabalho)
 
+- **Pendências da clínica:** a lista completa (registro profissional, autorização de imagens — bloqueante para o domínio final —, WhatsApp oficial, horário, logo em vetor, links de imprensa, foto da sala, revisão da política de privacidade) está em `docs/CHECKLIST-CLINICA.md`.
 - **Primeira tela no celular:** como o plano manda, no mobile a foto da Dra. (arco, 70% da altura da tela) vem antes do título; numa tela de 375×667 o título "Rejuvenescer sem deixar de ser você." começa abaixo da dobra e o CTA principal mais abaixo ainda — só o botão flutuante do WhatsApp aparece de cara. Alternativas: arco mais baixo no mobile ou texto antes da foto abaixo de 1024 px. Fica como está até você escolher — combinado em 2026-10-07: decidir ao ver o resultado final (Etapa 7).
 - **Autorização das imagens:** a legenda dos resultados diz "Imagens publicadas com autorização", mas os termos das pacientes ainda estão pendentes (`docs/media-pendencias.md`). Recomendação: só publicar no domínio final depois de receber os termos; até lá, só a URL de prévia da Vercel.
 

@@ -16,6 +16,8 @@ export default defineConfig({
   vite: {
     build: {
       // Scripts processados nunca viram <script> inline: o CSP (Task 36) libera só 'self' + hashes conhecidos.
+      // Uma folha de CSS só: duas folhas bloqueantes custavam ~0,5 s de LCP no mobile.
+      cssCodeSplit: false,
       assetsInlineLimit: (filePath) => (filePath.endsWith('.js') ? false : undefined),
     },
   },
