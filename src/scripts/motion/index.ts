@@ -3,8 +3,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { revealArches } from './arches';
 import { revealCards } from './cards';
+import { loopCarousels } from './carousel';
 import { MOTION_CONDITIONS, readConditions } from './conditions';
 import { startLenis } from './lenis';
+import { loopMarquees } from './marquee';
 import { parallax } from './parallax';
 import { reducedReveal } from './reduced';
 import { revealSignatures } from './signature';
@@ -24,8 +26,8 @@ gsap.matchMedia().add(MOTION_CONDITIONS, (context) => {
   if (reduceMotion) {
     if (revealsAllowed) cleanups.push(reducedReveal());
   } else {
-    cleanups.push(startLenis());
-    if (isDesktop) cleanups.push(parallax());
+    cleanups.push(startLenis(), loopMarquees());
+    if (isDesktop) cleanups.push(loopCarousels(), parallax());
     if (revealsAllowed) {
       cleanups.push(animateTitles(), revealCards(), revealSignatures());
       if (isDesktop) cleanups.push(revealArches());
