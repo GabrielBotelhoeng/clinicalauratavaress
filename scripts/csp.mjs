@@ -8,6 +8,11 @@ import { buildCsp, collectInlineScriptHashes } from './lib/csp.mjs';
 const PAGES = ['dist/index.html', 'dist/politica-de-privacidade.html'];
 const VERCEL_JSON = 'vercel.json';
 const SOURCE = '/(.*)';
+// Arquivos do build com hash no nome: cache longo e imutável (o HTML segue sem cache explícito).
+const ASSETS_BLOCK = {
+  source: '/_astro/(.*)',
+  headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+};
 
 const EXTRA_HEADERS = {
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
@@ -61,6 +66,13 @@ if (process.argv.includes('--check')) {
     problems.push(
       `CSP desatualizado.\n  Esperado: ${csp}\n  Atual:    ${currentCsp ?? '(ausente)'}`,
     );
+  } else if (JSON.stringify(block) !== JSON.stringify(headerBlock(csp))) {
+    // Os outros cabeçalhos de segurança (HSTS, nosniff, Referrer, Permissions) também são conferidos.
+    problems.push('Cabeçalhos de segurança diferentes do gerado (algum foi editado à mão).');
+  }
+  const assets = current.headers?.find((entry) => entry.source === ASSETS_BLOCK.source);
+  if (JSON.stringify(assets) !== JSON.stringify(ASSETS_BLOCK)) {
+    problems.push('Cache imutável de /_astro/* ausente ou diferente do gerado.');
   }
   if (current.cleanUrls !== true) {
     problems.push(
@@ -77,14 +89,19 @@ if (process.argv.includes('--check')) {
     for (const problem of problems) console.error(problem);
     process.exit(1);
   }
-  console.log('CSP, cleanUrls e trailingSlash em dia com o dist/ atual.');
+  console.log(
+    'CSP, cabeçalhos, cache de /_astro, cleanUrls e trailingSlash em dia com o dist/ atual.',
+  );
   process.exit(0);
 }
 
 const data = loadVercelJson();
 data.headers = [
   headerBlock(csp),
-  ...(data.headers ?? []).filter((entry) => entry.source !== SOURCE),
+  ASSETS_BLOCK,
+  ...(data.headers ?? []).filter(
+    (entry) => entry.source !== SOURCE && entry.source !== ASSETS_BLOCK.source,
+  ),
 ];
 // cleanUrls: true é o que resolve /politica-de-privacidade (sem .html) na Vercel — o build
 // (format: 'file', Task 2) gera dist/politica-de-privacidade.html, mas canonical/sitemap/rodapé
