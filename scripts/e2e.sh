@@ -12,6 +12,15 @@ AB=(agent-browser --session lt-e2e)
 mkdir -p "$OUT" "$QA"
 "${AB[@]}" close >/dev/null 2>&1 || true
 
+# Fecha as sessões do navegador e o servidor "sem JS" mesmo se algo falhar no meio (host com pouca memória).
+NOJS_PID=""
+cleanup() {
+  agent-browser --session lt-e2e close >/dev/null 2>&1 || true
+  agent-browser --session lt-e2e-res close >/dev/null 2>&1 || true
+  if [ -n "$NOJS_PID" ]; then kill "$NOJS_PID" >/dev/null 2>&1 || true; fi
+}
+trap cleanup EXIT
+
 FAIL=0
 step() { echo "▶ $1"; }
 
@@ -293,7 +302,6 @@ createServer((req, res) => {
 }).listen(PORT);
 JS
 NOJS_PID=$!
-trap 'kill "$NOJS_PID" >/dev/null 2>&1 || true' EXIT
 curl --silent --retry 20 --retry-delay 1 --retry-connrefused "http://127.0.0.1:$NOJS_PORT/" >/dev/null
 
 NOJS_URL="http://127.0.0.1:$NOJS_PORT/"
@@ -304,7 +312,7 @@ NOJS_URL="http://127.0.0.1:$NOJS_PORT/"
 "${AB[@]}" eval "JSON.stringify([...document.querySelectorAll('[data-reveal]')].every((el) => getComputedStyle(el).opacity === '1') && !document.documentElement.classList.contains('js'))" > "$OUT/no-js-visible.json"
 "${AB[@]}" close >/dev/null 2>&1 || true
 kill "$NOJS_PID" >/dev/null 2>&1 || true
-trap - EXIT
+NOJS_PID=""
 
 # 11) axe-core sem violações serious/critical --------------------------------------
 step "axe-core"
@@ -312,12 +320,12 @@ step "axe-core"
 "${AB[@]}" open "$BASE_URL" --init-script node_modules/axe-core/axe.min.js >/dev/null
 "${AB[@]}" wait --load networkidle >/dev/null
 "${AB[@]}" eval --stdin > "$OUT/axe-home.json" <<'JS'
-(async () => JSON.stringify(await axe.run()))()
+(async () => ({ violations: (await axe.run()).violations }))()
 JS
 "${AB[@]}" open "${BASE_URL%/}/politica-de-privacidade" --init-script node_modules/axe-core/axe.min.js >/dev/null
 "${AB[@]}" wait --load networkidle >/dev/null
 "${AB[@]}" eval --stdin > "$OUT/axe-privacidade.json" <<'JS'
-(async () => JSON.stringify(await axe.run()))()
+(async () => ({ violations: (await axe.run()).violations }))()
 JS
 
 "${AB[@]}" close >/dev/null 2>&1 || true

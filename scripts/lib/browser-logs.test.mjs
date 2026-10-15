@@ -71,6 +71,16 @@ describe('blockingAxeViolations', () => {
   it('sem violações devolve lista vazia', () => {
     expect(blockingAxeViolations(JSON.stringify({ violations: [] }))).toEqual([]);
   });
+
+  it('aceita o resultado serializado duas vezes (eval do agent-browser)', () => {
+    expect(
+      blockingAxeViolations(JSON.stringify(AXE_JSON)).map((violation) => violation.id),
+    ).toEqual(['color-contrast', 'image-alt']);
+  });
+
+  it('recusa resultado sem a lista de violações (não aprova por engano)', () => {
+    expect(() => blockingAxeViolations(JSON.stringify({ testEngine: {} }))).toThrow(/violations/);
+  });
 });
 
 describe('describeViolation', () => {

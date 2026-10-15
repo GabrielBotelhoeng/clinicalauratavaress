@@ -29,8 +29,15 @@ export function invalidCtaHrefs(hrefsByOrigin) {
 
 /** Violações bloqueantes (serious/critical) do resultado de axe.run(); moderate/minor não bloqueiam. */
 export function blockingAxeViolations(raw) {
-  const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
-  return (parsed?.violations ?? []).filter((violation) => BLOCKING_IMPACT.has(violation.impact));
+  let parsed = raw;
+  // O agent-browser serializa o retorno do eval; um JSON.stringify no script viraria string dupla.
+  while (typeof parsed === 'string') parsed = JSON.parse(parsed);
+  if (!Array.isArray(parsed?.violations)) {
+    throw new Error(
+      'resultado do axe sem a lista "violations" — o eval do axe falhou ou mudou de formato',
+    );
+  }
+  return parsed.violations.filter((violation) => BLOCKING_IMPACT.has(violation.impact));
 }
 
 /** Uma linha por violação, para o relatório e para a mensagem de erro do e2e. */
