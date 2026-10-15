@@ -55,10 +55,10 @@ const label = site.floatingButton.label;
 </style>
 
 <script>
-  // Balão "Agende pelo WhatsApp": aparece após 6 s ou 40% de rolagem; no mobile some 4 s depois.
+  // Balão "Agende pelo WhatsApp": aparece após 6 s ou 40% de rolagem e some 4 s depois — em
+  // qualquer largura, para não cobrir CTAs largos do desktop (M6, pendência da Etapa 4).
   const root = document.querySelector<HTMLElement>('[data-wa-float]');
   if (root) {
-    const isMobile = window.matchMedia('(max-width: 767.98px)').matches;
     let shown = false;
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -69,7 +69,7 @@ const label = site.floatingButton.label;
       shown = true;
       root.setAttribute('data-tip-visible', '');
       window.removeEventListener('scroll', onScroll);
-      if (isMobile) window.setTimeout(() => root.removeAttribute('data-tip-visible'), 4000);
+      window.setTimeout(() => root.removeAttribute('data-tip-visible'), 4000);
     };
     window.setTimeout(show, 6000);
     window.addEventListener('scroll', onScroll, { passive: true });
