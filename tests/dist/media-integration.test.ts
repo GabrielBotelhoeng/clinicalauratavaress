@@ -18,7 +18,9 @@ describe('integração das mídias reais', () => {
       if (!img) continue; // slot sem <img> direto nesta página (não é o caso de nenhum dos 18 hoje)
       const real = existsSync(`src/assets/media/${slot}.jpg`);
       expect(img.hasAttribute('data-placeholder'), slot).toBe(!real);
-      if (real) expect((img.getAttribute('alt') ?? '').length > 0, slot).toBe(true);
+      // Fotos de tratamento são ilustrações (media-manifest: "alt decorativo"); o h3 ao lado já nomeia.
+      if (real && slot.startsWith('tratamentos/')) expect(img.getAttribute('alt'), slot).toBe('');
+      else if (real) expect((img.getAttribute('alt') ?? '').length > 0, slot).toBe(true);
     }
   });
 
