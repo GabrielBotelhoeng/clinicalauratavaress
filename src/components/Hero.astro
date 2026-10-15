@@ -49,6 +49,7 @@ const glow = media.support('luz-arco');
           sizes="640px"
           formats={['avif', 'webp']}
           class="hero__glow"
+          aria-hidden="true"
         />
       )}
       <div class="lt-arch hero__arch" data-arch-reveal data-parallax="-10">
@@ -77,6 +78,7 @@ const glow = media.support('luz-arco');
 
 <style>
   .hero {
+    overflow-x: clip;
     padding-block: var(--space-12) var(--section-pad);
   }
 
@@ -190,13 +192,16 @@ const glow = media.support('luz-arco');
     isolation: isolate;
   }
 
+  /* Halo maior que o arco e com borda esfumada (sem o retângulo duro da foto). */
   .hero__glow {
     position: absolute;
     inset: -14%;
     z-index: -1;
-    width: auto;
-    height: auto;
+    width: 128%;
+    height: 128%;
+    max-width: none;
     object-fit: cover;
+    mask-image: radial-gradient(closest-side, #000 55%, transparent);
     opacity: 0.22;
     pointer-events: none;
   }

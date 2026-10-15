@@ -32,6 +32,8 @@ const image = media.support(Astro.props.name);
     overflow: hidden;
     pointer-events: none;
     opacity: 0.16;
+    /* Só clareia o fundo: o texto (ink-muted, gold-ink) mantém >= 4,5:1 sobre a textura. */
+    mix-blend-mode: lighten;
   }
 
   .section-texture__img {
