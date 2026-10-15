@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { formatCount } from '../../lib/counter';
 import type { Cleanup } from './types';
 
@@ -19,14 +20,20 @@ export function countUp(): Cleanup {
     const suffix = element.dataset.countSuffix ?? '';
     const state = { value: 0 };
     element.textContent = formatCount(0, prefix, suffix);
-    gsap.to(state, {
+    const tween = gsap.to(state, {
       value: target,
       duration: 1.4,
       ease: 'power2.out',
-      scrollTrigger: { trigger: element, start: 'top 85%', once: true },
+      paused: true,
       onUpdate: () => {
         element.textContent = formatCount(state.value, prefix, suffix);
       },
+    });
+    ScrollTrigger.create({
+      trigger: element,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => tween.play(),
     });
   });
 

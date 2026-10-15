@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Cleanup } from './types';
 
 /**
@@ -7,16 +8,22 @@ import type { Cleanup } from './types';
  */
 export function revealSignatures(): Cleanup {
   document.querySelectorAll<HTMLElement>('[data-signature]').forEach((signature) => {
-    gsap.fromTo(
+    const tween = gsap.fromTo(
       signature,
       { clipPath: 'inset(-20% 100% -20% -10%)' },
       {
         clipPath: 'inset(-20% -10% -20% -10%)',
         duration: 1.6,
         ease: 'power2.inOut',
-        scrollTrigger: { trigger: signature, start: 'top 85%', once: true },
+        paused: true,
       },
     );
+    ScrollTrigger.create({
+      trigger: signature,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => tween.play(),
+    });
   });
   return () => undefined;
 }

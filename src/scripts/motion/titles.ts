@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import type { Cleanup } from './types';
 
@@ -19,9 +20,7 @@ export function animateTitles(): Cleanup {
         gsap.set(title, { visibility: 'visible' });
         const words = self.words as HTMLElement[];
         const accent = words.filter((word) => word.closest('em') !== null);
-        const timeline = gsap.timeline({
-          scrollTrigger: { trigger: title, start: 'top 88%', once: true },
-        });
+        const timeline = gsap.timeline({ paused: true });
         self.lines.forEach((line, index) => {
           const plain = words.filter((word) => line.contains(word) && !accent.includes(word));
           if (plain.length > 0) {
@@ -39,6 +38,12 @@ export function animateTitles(): Cleanup {
             self.lines.length * LINE_STAGGER + ACCENT_DELAY,
           );
         }
+        ScrollTrigger.create({
+          trigger: title,
+          start: 'top 88%',
+          once: true,
+          onEnter: () => timeline.play(),
+        });
         return timeline;
       },
     }),
