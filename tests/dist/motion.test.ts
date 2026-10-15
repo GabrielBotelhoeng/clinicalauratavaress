@@ -32,3 +32,21 @@ describe('movimento — estrutura no HTML e no CSS', () => {
     expect(cssOf(loadPage().document)).toContain('.lenis');
   });
 });
+
+describe('movimento — padrões 2, 3 e 9 marcados no HTML', () => {
+  it('marca as fotos em arco, o parallax e a assinatura', () => {
+    const { document } = loadPage();
+    expect(document.querySelector('#inicio [data-arch-reveal]')).not.toBeNull();
+    expect(document.querySelector('#dra-laura [data-arch-reveal]')).not.toBeNull();
+    expect(document.querySelector('#inicio [data-parallax="-10"]')).not.toBeNull();
+    expect(document.querySelector('#inicio [data-parallax="6"]')).not.toBeNull();
+    expect(document.querySelectorAll('#a-clinica [data-parallax-inner]')).toHaveLength(4);
+    expect(document.querySelectorAll('[data-signature]')).toHaveLength(1);
+  });
+
+  it('o arco só começa escondido no desktop com JS e sem movimento reduzido', () => {
+    const css = cssOf(loadPage().document);
+    expect(css).toMatch(/html\.js \[data-arch-reveal\]\s*\{\s*clip-path:\s*inset\(100%/);
+    expect(css).toMatch(/html\.js \[data-signature\]\s*\{\s*clip-path:/);
+  });
+});

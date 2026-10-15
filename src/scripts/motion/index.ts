@@ -1,10 +1,13 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { revealArches } from './arches';
 import { revealCards } from './cards';
 import { MOTION_CONDITIONS, readConditions } from './conditions';
 import { startLenis } from './lenis';
+import { parallax } from './parallax';
 import { reducedReveal } from './reduced';
+import { revealSignatures } from './signature';
 import { animateTitles } from './titles';
 import type { Cleanup } from './types';
 
@@ -16,13 +19,17 @@ const root = document.documentElement;
 const revealsAllowed = root.classList.contains('js');
 
 gsap.matchMedia().add(MOTION_CONDITIONS, (context) => {
-  const { reduceMotion } = readConditions(context.conditions);
+  const { isDesktop, reduceMotion } = readConditions(context.conditions);
   const cleanups: Cleanup[] = [];
   if (reduceMotion) {
     if (revealsAllowed) cleanups.push(reducedReveal());
   } else {
     cleanups.push(startLenis());
-    if (revealsAllowed) cleanups.push(animateTitles(), revealCards());
+    if (isDesktop) cleanups.push(parallax());
+    if (revealsAllowed) {
+      cleanups.push(animateTitles(), revealCards(), revealSignatures());
+      if (isDesktop) cleanups.push(revealArches());
+    }
   }
   return () => cleanups.forEach((cleanup) => cleanup());
 });
