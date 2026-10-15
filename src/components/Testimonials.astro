@@ -1,0 +1,87 @@
+---
+import Button from './Button.astro';
+import SectionHeading from './SectionHeading.astro';
+import Testimonial from './Testimonial.astro';
+import { site } from '../content/site';
+import { testimonials, type Testimonial as TestimonialData } from '../content/testimonials';
+import { whatsappLink } from '../lib/whatsapp';
+
+interface Props {
+  /** Padrão: depoimentos reais de src/content/depoimentos.json. */
+  items?: TestimonialData[];
+}
+
+const { items = testimonials } = Astro.props;
+const copy = site.testimonials;
+const few = items.length < 3;
+---
+
+{items.length > 0 && (
+  <section id="depoimentos" class="section section--blush testimonials">
+    <div class="container">
+      <SectionHeading
+        id="testimonials-title"
+        eyebrow={copy.eyebrow}
+        title={copy.title}
+        lead={copy.lead}
+      />
+      <div
+        class:list={['testimonials__grid', { 'testimonials__grid--few': few }]}
+        role="region"
+        aria-labelledby="testimonials-title"
+        tabindex="0"
+      >
+        {items.map((item) => (
+          <Testimonial item={item} />
+        ))}
+      </div>
+      <div class="testimonials__cta">
+        <Button href={whatsappLink('general')} data-wa-origin="testimonials">
+          {copy.cta}
+        </Button>
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  /* Mobile: carrossel com snap; desktop: 3 colunas; com 1–2 depoimentos, cards centralizados. */
+  .testimonials__grid {
+    position: relative;
+    display: grid;
+    grid-auto-columns: min(85%, 360px);
+    grid-auto-flow: column;
+    gap: var(--space-4);
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0 var(--gutter) var(--space-4);
+    overflow-x: auto;
+    scroll-padding-inline: var(--gutter);
+    scroll-snap-type: x mandatory;
+  }
+
+  .testimonials__grid > :global(*) {
+    scroll-snap-align: start;
+  }
+
+  .testimonials__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-12);
+  }
+
+  @media (min-width: 1024px) {
+    .testimonials__grid {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+      margin-inline: 0;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .testimonials__grid--few {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 420px));
+      justify-content: center;
+    }
+  }
+</style>

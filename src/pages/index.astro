@@ -1,17 +1,23 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import About from '../components/About.astro';
+import ClinicGallery from '../components/ClinicGallery.astro';
+import FAQ from '../components/FAQ.astro';
+import FinalCTA from '../components/FinalCTA.astro';
+import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
 import Marquee from '../components/Marquee.astro';
 import MethodSteps from '../components/MethodSteps.astro';
 import Navbar from '../components/Navbar.astro';
 import PressStrip from '../components/PressStrip.astro';
 import Results from '../components/Results.astro';
+import Testimonials from '../components/Testimonials.astro';
 import Treatments from '../components/Treatments.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { media } from '../content/media';
 import { listPending } from '../content/pending';
 import { site } from '../content/site';
-import { buildBusinessJsonLd } from '../lib/seo';
+import { buildBusinessJsonLd, buildFaqJsonLd } from '../lib/seo';
 
 for (const line of listPending(site)) console.warn(`[pendente] ${line}`);
 for (const line of media.reportLines()) console.warn(`[mídia] ${line}`);
@@ -21,6 +27,7 @@ const jsonLd = [
     url: new URL('/', Astro.site).href,
     image: new URL('/og.jpg', Astro.site).href,
   }),
+  buildFaqJsonLd(site.faq.items),
 ];
 ---
 
@@ -32,5 +39,11 @@ const jsonLd = [
   <Treatments />
   <Results />
   <MethodSteps />
+  <About />
+  <Testimonials />
+  <ClinicGallery />
+  <FAQ />
+  <FinalCTA />
+  <Footer slot="footer" />
   <WhatsAppFloat slot="after" />
 </BaseLayout>

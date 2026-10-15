@@ -7,7 +7,8 @@
 - **Etapa 1 — fundação (`feat/fundacao`): concluída e mergeada na `main`.** Astro 7.3.5 estático (`build.format: 'file'`, `trailingSlash: 'never'`), TypeScript 6.0.x estrito, ESLint 9 + eslint-plugin-astro 1.7, Prettier, Vitest (unitário + `tests/dist`); `src/content/site.ts` com todo o texto; `whatsappLink()`; resolvedor de mídia com placeholders; BaseLayout com SEO, Open Graph, JSON-LD, sitemap e robots; QA local (`npm run lighthouse`, `scripts/shot.sh`).
 - **Etapa 2 — seções do topo (`feat/secoes-topo`): concluída e mergeada na `main`.** Marquee com pausa, navbar sticky com gaveta `<dialog>`, hero com foto em arco, Na mídia (lê `imprensa.json` quando existir) e Tratamentos (foto real ou ícone); botão flutuante do WhatsApp.
 - **Etapa 3 — resultados e método (`feat/resultados-metodo`): concluída e mergeada na `main`.** BenefitResult × 4 com slider antes/depois (pointer events + range por teclado; eventos `ba:set`/`ba:interact`), carrossel infinito (CSS por enquanto) e O Método em tema noite com `BackgroundVideo` (lê `public/media/metodo.*` quando existir).
-- Etapas 4–7: pendentes.
+- **Etapa 4 — do Sobre ao rodapé (`feat/sobre-ao-rodape`): concluída e mergeada na `main`.** Página completa com as 11 seções da spec + política de privacidade; depoimentos lidos de `src/content/depoimentos.json` (6 reais, do Google). Lighthouse mobile: home 94/100/100/100 (LCP 2,80 s — a página dobrou de tamanho; a Etapa 5/7 reavalia), política 100/100/100/100.
+- Etapas 5–7: pendentes.
 
 ## Como rodar
 
@@ -35,11 +36,16 @@
 - Slider: toque simples posiciona a alça (WCAG 2.5.7) e `ba:interact` só dispara em arraste horizontal, clique ou mudança de valor pelo teclado (rolar a página não cancela a dica da Task 29).
 - Vídeo de fundo com botão de pausa no topo da seção (WCAG 2.2.2, como a marquee e o carrossel); abaixo de 768 px e com movimento reduzido, só o poster.
 - Numerais grandes em algarismos alinhados (`lining-nums`): os de estilo antigo do Cormorant faziam "01" ser lido como "OI".
+- "Pin" do Sobre feito com CSS `position: sticky` (sem `.pin-spacer` do ScrollTrigger e funcionando sem JS).
+- Mapa simplificado: cartão de endereço + "Abrir no Google Maps" / "Abrir no Waze", sem embed nem imagem de mapa (LGPD/performance) — desvio consciente do item "mapa como imagem + link" da spec.
+- Texto da política de privacidade escrito para o site (não estava no copy) — precisa de revisão da clínica (vai para o CHECKLIST na Etapa 6).
+- Galeria da clínica sem placeholder: a foto da sala (dispensada) fica fora até a clínica mandar uma; a 4:5 ímpar ocupa a linha inteira, centralizada.
+- No mobile o rodapé tem folga para o botão flutuante do WhatsApp e só o botão recebe toque (o balão não bloqueia nada).
 - Pares de antes/depois do olhar e da mandíbula realinhados só por recorte/escala (sem IA), para o rosto ficar contínuo na linha do slider; ficaram com 700×875 e 409×511.
 
 ## Próximo passo
 
-- Etapa 4 — `feat/sobre-ao-rodape`: Task 20 do plano.
+- Etapa 5 — `feat/movimento`: Task 26 do plano.
 
 ## Para o usuário decidir (sem bloquear o trabalho)
 
@@ -71,6 +77,7 @@
 - 2026-10-05 e 2026-10-06: subagentes caíram várias vezes por limite de uso da API. Todo trabalho é salvo em arquivo durante a execução (briefs, relatórios e ledgers em `.superpowers/sdd/`) e retomado de onde parou.
 - O link `Claude-Session` não vai em prompts de subagentes; o orquestrador o acrescenta só nos commits de squash e nos PRs.
 - O PR #1 foi mergeado pelo usuário com merge commit; os demais, por squash.
+- Merge dos PRs: o classificador do auto mode nega `gh pr merge` sem autorização explícita. Em 2026-10-15 o usuário autorizou o orquestrador a abrir e mergear os PRs na sessão; numa sessão nova, a autorização pode precisar ser repetida (ou liberar `Bash(gh pr merge:*)` em `/permissions`).
 
 ## Como retomar
 

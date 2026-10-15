@@ -23,6 +23,15 @@ const label = site.floatingButton.label;
 </aside>
 
 <style>
+  /* Só o botão recebe toque/clique: o balão (visível ou não) não pode bloquear o que está por baixo. */
+  .float {
+    pointer-events: none;
+  }
+
+  .float :global(.lt-wa__btn) {
+    pointer-events: auto;
+  }
+
   .float__tip {
     opacity: 0;
     transform: translateX(8px);

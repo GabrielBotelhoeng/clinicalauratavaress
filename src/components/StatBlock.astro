@@ -1,0 +1,49 @@
+---
+import type { Site } from '../content/site';
+
+interface Props {
+  stats: Site['about']['stats'];
+}
+
+const { stats } = Astro.props;
+---
+
+<ul class="stats" role="list">
+  {stats.map((stat) => (
+    <li class="stats__item">
+      <span class="sr-only">{`${stat.value} ${stat.label}`}</span>
+      <span class="stats__visual" aria-hidden="true">
+        <span
+          class="lt-stat__num stats__num"
+          data-count-to={stat.countTo}
+          data-count-prefix={stat.prefix}
+          data-count-suffix={stat.suffix}
+        >
+          {stat.value}
+        </span>
+        <span class="lt-stat__label">{stat.label}</span>
+      </span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8) var(--space-6);
+  }
+
+  .stats__item {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .stats__visual {
+    display: grid;
+  }
+
+  .stats__num {
+    font-size: clamp(2.5rem, 2rem + 1.6vw, 3.5rem);
+  }
+</style>
