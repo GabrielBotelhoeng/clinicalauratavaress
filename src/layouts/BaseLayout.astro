@@ -80,7 +80,8 @@ const ogImage = new URL('/og.jpg', Astro.site).href;
       // Safari não tem requestIdleCallback: setTimeout(…, 1) como fallback.
       function startMotion() {
         const load = () => void import('../scripts/motion/index');
-        if ('requestIdleCallback' in window) requestIdleCallback(load);
+        // timeout: com a thread ocupada o idle pode demorar; 1,5 s mantém folga para o failsafe de 4 s.
+        if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 1500 });
         else setTimeout(load, 1);
       }
       if (document.readyState === 'complete') startMotion();
