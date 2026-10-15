@@ -43,16 +43,12 @@ e nunca quebra o build.
 Projeto Vercel `clinicalauratavaress`, conectado ao repositório `GabrielBotelhoeng/clinicalauratavaress`
 (preview automático por PR, produção pela `main`).
 
-- **URL de prévia atual:** `https://clinicalauratavaress-q6hxyvzxw-gabriel-botelhos-projects.vercel.app`
-  — protegida por login da Vercel (Deployment Protection), mantida de propósito até a clínica enviar
-  os termos de autorização de imagem (ver `docs/CHECKLIST-CLINICA.md`). Nada foi promovido para
-  produção.
-- **Como abrir a prévia:** logado na própria conta Vercel do projeto, ou peça a quem tiver acesso ao
-  painel para gerar um link de visualização pelo botão "Share" do deployment (não exige login de quem
-  recebe o link).
-- **Como conferir cabeçalhos com a proteção ligada:** `vercel curl <url>` (autenticado via Vercel CLI)
-  em vez de `curl -I` direto, que seria bloqueado pela tela de login.
-- **Como promover para produção (só depois dos termos de autorização e dos dados `[pendente]`
-  resolvidos):** `vercel --prod`.
+- **Produção (pública):** https://clinicalauratavaress.vercel.app — republicada a cada merge na `main`.
+- **Deploys por PR / com hash:** protegidos por login da Vercel (Deployment Protection); para conferir
+  cabeçalhos neles use `vercel curl <url>` em vez de `curl -I`.
+- **Tirar do ar temporariamente:** `vercel alias rm clinicalauratavaress.vercel.app` (volta com
+  `vercel promote <deploy>`), ou ativar a proteção também para produção no painel.
+- **Domínio próprio:** só depois dos termos de autorização de imagem e dos dados `[pendente]` do
+  `docs/CHECKLIST-CLINICA.md`.
 
 Histórico de decisões e estado detalhado em `docs/HANDOFF.md`.
