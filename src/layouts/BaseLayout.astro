@@ -75,7 +75,16 @@ const ogImage = new URL('/og.jpg', Astro.site).href;
     <slot name="footer" />
     <slot name="after" />
     <script>
-      import '../scripts/motion/index';
+      // Carrega o movimento só depois do primeiro paint (load + requestIdleCallback), para não
+      // competir com o LCP; o failsafe de 4 s (classe "js") continua cobrindo o caso lento.
+      // Safari não tem requestIdleCallback: setTimeout(…, 1) como fallback.
+      function startMotion() {
+        const load = () => void import('../scripts/motion/index');
+        if ('requestIdleCallback' in window) requestIdleCallback(load);
+        else setTimeout(load, 1);
+      }
+      if (document.readyState === 'complete') startMotion();
+      else window.addEventListener('load', startMotion, { once: true });
     </script>
   </body>
 </html>
