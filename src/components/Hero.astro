@@ -9,6 +9,7 @@ import { whatsappLink } from '../lib/whatsapp';
 
 const { hero } = site;
 const photo = media.get('dra/hero');
+const glow = media.support('luz-arco');
 ---
 
 <section id="inicio" class="section hero" aria-labelledby="hero-title">
@@ -40,6 +41,16 @@ const photo = media.get('dra/hero');
       </ul>
     </div>
     <div class="hero__media">
+      {glow && (
+        <Picture
+          src={glow}
+          alt=""
+          widths={[480, 960]}
+          sizes="640px"
+          formats={['avif', 'webp']}
+          class="hero__glow"
+        />
+      )}
       <div class="lt-arch hero__arch" data-arch-reveal data-parallax="-10">
         <Picture
           src={photo.image}
@@ -172,5 +183,21 @@ const photo = media.get('dra/hero');
       height: 600px;
       margin-inline: 40px 0;
     }
+  }
+
+  .hero__media {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hero__glow {
+    position: absolute;
+    inset: -14%;
+    z-index: -1;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    opacity: 0.22;
+    pointer-events: none;
   }
 </style>

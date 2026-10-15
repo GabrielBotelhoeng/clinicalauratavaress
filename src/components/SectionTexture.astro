@@ -1,0 +1,42 @@
+---
+import { Picture } from 'astro:assets';
+import { media } from '../content/media';
+
+interface Props {
+  /** Nome em src/assets/media/apoio, sem extensão (ex.: "textura-seda-blush"). */
+  name: string;
+}
+
+const image = media.support(Astro.props.name);
+---
+
+{image && (
+  <div class="section-texture" aria-hidden="true">
+    <Picture
+      src={image}
+      alt=""
+      widths={[480, 960, 1600]}
+      sizes="100vw"
+      formats={['avif', 'webp']}
+      class="section-texture__img"
+    />
+  </div>
+)}
+
+<style>
+  /* Presença discreta — nunca compete com o texto; a seção-mãe precisa de position: relative + isolation: isolate. */
+  .section-texture {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.16;
+  }
+
+  .section-texture__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

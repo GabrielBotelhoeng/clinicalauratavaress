@@ -25,7 +25,7 @@ const { title, text, href, linkLabel, icon, photo } = Astro.props;
   ) : (
     <Picture
       src={photo.image}
-      alt=""
+      alt={title}
       widths={[360, 540, 720]}
       sizes="(min-width: 1024px) 260px, (min-width: 768px) 44vw, 78vw"
       formats={['avif', 'webp']}
