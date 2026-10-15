@@ -54,9 +54,11 @@ const photo = media.get('dra/hero');
           data-placeholder={photo.isPlaceholder ? '' : undefined}
         />
       </div>
-      <div class="lt-card hero__badge" data-parallax="6">
-        <p class="lt-stat__num hero__badge-value">{hero.badge.value}</p>{' '}
-        <p class="lt-caption">{hero.badge.label}</p>
+      <div class="hero__badge-wrap" data-parallax="6">
+        <div class="lt-card hero__badge">
+          <p class="lt-stat__num hero__badge-value">{hero.badge.value}</p>{' '}
+          <p class="lt-caption">{hero.badge.label}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -135,15 +137,16 @@ const photo = media.get('dra/hero');
     object-fit: cover;
   }
 
-  .hero__badge {
+  /* O parallax (scrub) move o invólucro; o :hover do .lt-card continua livre no cartão interno. */
+  .hero__badge-wrap {
     position: absolute;
     bottom: var(--space-8);
     left: 0;
+  }
+
+  .hero__badge {
     padding: var(--space-4) var(--space-6);
     box-shadow: var(--shadow-lift);
-    /* Só box-shadow transiciona: o parallax (scrub) escreve `transform` a cada frame e a
-       transição de 240ms do .lt-card (bundle.css) "arrastaria" cada passo do GSAP. */
-    transition-property: box-shadow;
   }
 
   .hero__badge-value {

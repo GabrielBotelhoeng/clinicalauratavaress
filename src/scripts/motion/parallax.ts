@@ -7,7 +7,6 @@ import type { Cleanup } from './types';
  * clamp() evita salto inicial quando o elemento já está na tela ao carregar.
  */
 export function parallax(): Cleanup {
-  const pointerCleanups: Cleanup[] = [];
   document.querySelectorAll<HTMLElement>('[data-parallax]').forEach((element) => {
     const amount = Number(element.dataset.parallax ?? '-10');
     gsap.fromTo(
@@ -24,16 +23,6 @@ export function parallax(): Cleanup {
         },
       },
     );
-    // .lt-card tem :hover { transform: translateY(-6px) } (bundle.css). O transform inline que o
-    // scrub do parallax escreve continuamente venceria sempre essa regra (inline > stylesheet,
-    // independente de especificidade), travando o hover do badge do hero. Enquanto o ponteiro está
-    // sobre o card, limpamos o transform inline para a regra de :hover valer; ao sair, o próximo
-    // tick de scroll do ScrollTrigger reaplica a posição do parallax normalmente.
-    if (element.classList.contains('lt-card')) {
-      const clear = () => gsap.set(element, { clearProps: 'transform' });
-      element.addEventListener('pointerenter', clear);
-      pointerCleanups.push(() => element.removeEventListener('pointerenter', clear));
-    }
   });
   document.querySelectorAll<HTMLElement>('[data-parallax-inner]').forEach((frame) => {
     const image = frame.querySelector('img');
@@ -55,5 +44,6 @@ export function parallax(): Cleanup {
       },
     );
   });
-  return () => pointerCleanups.forEach((cleanup) => cleanup());
+  // Tweens e ScrollTriggers criados aqui são revertidos pelo gsap.matchMedia() do orquestrador.
+  return () => {};
 }
