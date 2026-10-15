@@ -8,7 +8,8 @@
 - **Etapa 2 — seções do topo (`feat/secoes-topo`): concluída e mergeada na `main`.** Marquee com pausa, navbar sticky com gaveta `<dialog>`, hero com foto em arco, Na mídia (lê `imprensa.json` quando existir) e Tratamentos (foto real ou ícone); botão flutuante do WhatsApp.
 - **Etapa 3 — resultados e método (`feat/resultados-metodo`): concluída e mergeada na `main`.** BenefitResult × 4 com slider antes/depois (pointer events + range por teclado; eventos `ba:set`/`ba:interact`), carrossel infinito (CSS por enquanto) e O Método em tema noite com `BackgroundVideo` (lê `public/media/metodo.*` quando existir).
 - **Etapa 4 — do Sobre ao rodapé (`feat/sobre-ao-rodape`): concluída e mergeada na `main`.** Página completa com as 11 seções da spec + política de privacidade; depoimentos lidos de `src/content/depoimentos.json` (6 reais, do Google). Lighthouse mobile: home 94/100/100/100 (LCP 2,80 s — a página dobrou de tamanho; a Etapa 5/7 reavalia), política 100/100/100/100.
-- Etapas 5–7: pendentes.
+- **Etapa 5 — movimento (`feat/movimento`): concluída e mergeada na `main`.** Lenis + GSAP (títulos por linhas, reveals, arco, parallax, assinatura, marquee que acelera, carrossel em GSAP, dica do antes/depois, contadores) num único `gsap.matchMedia()` com ramo de movimento reduzido; módulo carregado depois do `load`. Lighthouse mobile: home 90/100/100/100 (LCP 3,30 s — margem estreita, revisitar na Etapa 7), política 99/100/100/100.
+- Etapas 6–7: pendentes.
 
 ## Como rodar
 
@@ -41,11 +42,15 @@
 - Texto da política de privacidade escrito para o site (não estava no copy) — precisa de revisão da clínica (vai para o CHECKLIST na Etapa 6).
 - Galeria da clínica sem placeholder: a foto da sala (dispensada) fica fora até a clínica mandar uma; a 4:5 ímpar ocupa a linha inteira, centralizada.
 - No mobile o rodapé tem folga para o botão flutuante do WhatsApp e só o botão recebe toque (o balão não bloqueia nada).
+- Movimento carregado com `import()` após `load` + `requestIdleCallback` (timeout 1,5 s) e títulos divididos (SplitText) só quando chegam perto da tela — sem isso a home caía para 87 no Lighthouse.
+- Padrões de disparo único usam `ScrollTrigger.create({ once, onEnter })` separado da timeline: preso à timeline, recarregar no meio da página ou girar um tablet deixava conteúdo invisível para sempre. Cada padrão roda em `try/catch` para `motion-ready` sempre chegar; failsafe de 4 s tira a classe `js` se o módulo não vier.
+- Pausa da marquee/carrossel só considera hover de mouse (toque não "prende" a faixa parada) e pausar zera a aceleração do scroll.
+- Parallax do badge do hero num invólucro (`.hero__badge-wrap`) para o `:hover` do cartão continuar funcionando.
 - Pares de antes/depois do olhar e da mandíbula realinhados só por recorte/escala (sem IA), para o rosto ficar contínuo na linha do slider; ficaram com 700×875 e 409×511.
 
 ## Próximo passo
 
-- Etapa 5 — `feat/movimento`: Task 26 do plano.
+- Etapa 6 — `feat/integracao-midia`: Task 31 do plano.
 
 ## Para o usuário decidir (sem bloquear o trabalho)
 
