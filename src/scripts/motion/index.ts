@@ -25,15 +25,31 @@ const revealsAllowed = root.classList.contains('js');
 gsap.matchMedia().add(MOTION_CONDITIONS, (context) => {
   const { isDesktop, reduceMotion } = readConditions(context.conditions);
   const cleanups: Cleanup[] = [];
+  // Cada padrão roda isolado: um erro num deles não impede os outros nem o motion-ready.
+  const run = (pattern: () => Cleanup) => {
+    try {
+      cleanups.push(pattern());
+    } catch (error) {
+      console.error('[motion]', error);
+    }
+  };
   if (reduceMotion) {
     // Movimento reduzido: sem Lenis, marquee, carrossel, parallax, splits, dica ou contadores.
-    if (revealsAllowed) cleanups.push(reducedReveal());
+    if (revealsAllowed) run(reducedReveal);
   } else {
-    cleanups.push(startLenis(), loopMarquees(), hintBeforeAfter());
-    if (isDesktop) cleanups.push(loopCarousels(), parallax());
+    run(startLenis);
+    run(loopMarquees);
+    run(hintBeforeAfter);
+    if (isDesktop) {
+      run(loopCarousels);
+      run(parallax);
+    }
     if (revealsAllowed) {
-      cleanups.push(animateTitles(), revealCards(), revealSignatures(), countUp());
-      if (isDesktop) cleanups.push(revealArches());
+      run(animateTitles);
+      run(revealCards);
+      run(revealSignatures);
+      run(countUp);
+      if (isDesktop) run(revealArches);
     }
   }
   return () => cleanups.forEach((cleanup) => cleanup());
