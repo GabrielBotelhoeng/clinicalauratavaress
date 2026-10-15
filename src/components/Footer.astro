@@ -23,7 +23,7 @@ const technician = technicianLine(
       <p>{business.address.full}</p>
       <ul class="footer__contacts" role="list">
         <li>
-          {footer.whatsappLabel}
+          {`${footer.whatsappLabel} `}
           <a
             href={whatsappLink('general')}
             target="_blank"
@@ -84,13 +84,20 @@ const technician = technicianLine(
 
   .footer__contacts {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
   }
 
-  .footer__contacts li + li::before {
-    content: '·';
-    margin-inline: 0.5em;
-    color: var(--gold);
+  @media (min-width: 768px) {
+    .footer__contacts {
+      flex-direction: row;
+    }
+
+    .footer__contacts li + li::before {
+      content: '·';
+      margin-inline: 0.5em;
+      color: var(--gold);
+    }
   }
 
   .footer a {
@@ -107,6 +114,13 @@ const technician = technicianLine(
     padding-top: var(--space-6);
     border-top: 1px solid var(--hairline);
     font: 400 13px / 20px var(--font-sans);
+  }
+
+  /* No mobile o botão flutuante do WhatsApp (60 px + margem) não pode cobrir a última linha (WCAG 2.4.11). */
+  @media (max-width: 767.98px) {
+    .footer {
+      padding-bottom: calc(60px + var(--space-4) * 2);
+    }
   }
 
   @media (min-width: 1024px) {

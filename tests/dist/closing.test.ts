@@ -63,6 +63,10 @@ describe('rodapé', () => {
       'CLSW 303, Bloco C, sala 70, Edifício Le Parc, Sudoeste, Brasília – DF, 70673-623',
     );
     expect(textOf(footer?.querySelector('a[data-wa-origin="footer"]'))).toBe('(61) 98100-7522');
+    // Sem normalizar: o espaço entre o rótulo e o número não pode sumir na compressão do HTML.
+    expect(
+      footer?.querySelector('a[data-wa-origin="footer"]')?.parentElement?.textContent?.trim(),
+    ).toMatch(/^WhatsApp\s+\(61\)/);
     const instagram = Array.from(
       footer?.querySelectorAll('a[href^="https://www.instagram.com/"]') ?? [],
       (link) => textOf(link),

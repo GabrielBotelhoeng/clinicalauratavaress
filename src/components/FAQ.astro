@@ -43,20 +43,22 @@ const { faq } = site;
 
   /* Abertura suave onde o navegador suporta interpolar até "auto" (progressivo; sem JS). */
   @supports (interpolate-size: allow-keywords) {
-    .faq__list {
-      interpolate-size: allow-keywords;
-    }
+    @media (prefers-reduced-motion: no-preference) {
+      .faq__list {
+        interpolate-size: allow-keywords;
+      }
 
-    .faq__item::details-content {
-      block-size: 0;
-      overflow-y: clip;
-      transition:
-        block-size var(--dur-base) var(--ease-lux),
-        content-visibility var(--dur-base) var(--ease-lux) allow-discrete;
-    }
+      .faq__item::details-content {
+        block-size: 0;
+        overflow-y: clip;
+        transition:
+          block-size var(--dur-base) var(--ease-lux),
+          content-visibility var(--dur-base) var(--ease-lux) allow-discrete;
+      }
 
-    .faq__item[open]::details-content {
-      block-size: auto;
+      .faq__item[open]::details-content {
+        block-size: auto;
+      }
     }
   }
 </style>
