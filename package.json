@@ -17,12 +17,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:dist": "vitest run --config vitest.dist.config.ts",
-    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:dist",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:dist && npm run csp:check",
     "placeholders": "node scripts/make-placeholders.mjs",
     "lighthouse": "node scripts/with-preview.mjs node scripts/lighthouse.mjs",
     "og": "bash scripts/og/render.sh",
     "checklist": "node scripts/checklist.mjs",
-    "e2e": "node scripts/with-preview.mjs bash scripts/e2e.sh"
+    "e2e": "node scripts/with-preview.mjs bash scripts/e2e.sh",
+    "csp": "node scripts/csp.mjs",
+    "csp:check": "node scripts/csp.mjs --check"
   },
   "allowScripts": {
     "esbuild": true,
