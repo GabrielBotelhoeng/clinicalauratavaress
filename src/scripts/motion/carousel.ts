@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { bindPause } from './pause';
 import type { Cleanup } from './types';
 
 /** Padrão 5 (desktop): 60 s por volta, fileiras em sentidos opostos, pausa no hover e no botão. */
@@ -16,31 +17,14 @@ export function loopCarousels(): Cleanup {
         { xPercent: forward ? -50 : 0, duration: 60, ease: 'none', repeat: -1 },
       );
     });
-    let hovering = false;
-    const sync = () => {
-      const paused = hovering || root.hasAttribute('data-paused');
+    const unbind = bindPause(root, (paused) => {
       for (const loop of loops) {
         if (paused) loop.pause();
         else loop.resume();
       }
-    };
-    const enter = () => {
-      hovering = true;
-      sync();
-    };
-    const leave = () => {
-      hovering = false;
-      sync();
-    };
-    root.addEventListener('mouseenter', enter);
-    root.addEventListener('mouseleave', leave);
-    const observer = new MutationObserver(sync);
-    observer.observe(root, { attributes: true, attributeFilter: ['data-paused'] });
-    sync();
+    });
     cleanups.push(() => {
-      root.removeEventListener('mouseenter', enter);
-      root.removeEventListener('mouseleave', leave);
-      observer.disconnect();
+      unbind();
       root.classList.remove('is-gsap');
     });
   });

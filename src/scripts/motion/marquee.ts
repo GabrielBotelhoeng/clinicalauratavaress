@@ -1,6 +1,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Cleanup } from './types';
+import { bindPause } from './pause';
 import { velocityBoost } from './velocity';
 
 /** Padrão 4: faixa contínua (40 s por volta), pausa no hover e no botão, acelera com o scroll e volta com ease-lux. */
@@ -15,38 +16,28 @@ export function loopMarquees(): Cleanup {
       { xPercent: 0 },
       { xPercent: -50, duration: 40, ease: 'none', repeat: -1 },
     );
-    let hovering = false;
-    const sync = () => {
-      if (hovering || root.hasAttribute('data-paused')) loop.pause();
-      else loop.resume();
-    };
-    const enter = () => {
-      hovering = true;
-      sync();
-    };
-    const leave = () => {
-      hovering = false;
-      sync();
-    };
-    root.addEventListener('mouseenter', enter);
-    root.addEventListener('mouseleave', leave);
-    const observer = new MutationObserver(sync);
-    observer.observe(root, { attributes: true, attributeFilter: ['data-paused'] });
+    let paused = false;
     let settle: gsap.core.Tween | undefined;
+    const unbind = bindPause(root, (value) => {
+      paused = value;
+      if (paused) {
+        // Pausado volta à velocidade base: ao retomar não "salta" com o resto do boost do scroll.
+        settle?.kill();
+        loop.timeScale(1).pause();
+      } else loop.resume();
+    });
     ScrollTrigger.create({
       start: 0,
       end: 'max',
       onUpdate: (self) => {
+        if (paused) return;
         settle?.kill();
         loop.timeScale(velocityBoost(self.getVelocity()));
         settle = gsap.to(loop, { timeScale: 1, duration: 1.2, ease: 'expo.out', delay: 0.15 });
       },
     });
-    sync();
     cleanups.push(() => {
-      root.removeEventListener('mouseenter', enter);
-      root.removeEventListener('mouseleave', leave);
-      observer.disconnect();
+      unbind();
       settle?.kill();
       root.classList.remove('is-gsap');
     });
