@@ -1,5 +1,6 @@
 ---
 import '../styles/index';
+import 'lenis/dist/lenis.css';
 import cormorant500 from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-normal.woff2?url';
 import cormorant500Italic from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-italic.woff2?url';
 import { site } from '../content/site';
@@ -31,6 +32,13 @@ const ogImage = new URL('/og.jpg', Astro.site).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      window.setTimeout(() => {
+        const root = document.documentElement;
+        if (!root.classList.contains('motion-ready')) root.classList.remove('js');
+      }, 4000);
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -66,5 +74,18 @@ const ogImage = new URL('/og.jpg', Astro.site).href;
     </main>
     <slot name="footer" />
     <slot name="after" />
+    <script>
+      // Carrega o movimento só depois do primeiro paint (load + requestIdleCallback), para não
+      // competir com o LCP; o failsafe de 4 s (classe "js") continua cobrindo o caso lento.
+      // Safari não tem requestIdleCallback: setTimeout(…, 1) como fallback.
+      function startMotion() {
+        const load = () => void import('../scripts/motion/index');
+        // timeout: com a thread ocupada o idle pode demorar; 1,5 s mantém folga para o failsafe de 4 s.
+        if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 1500 });
+        else setTimeout(load, 1);
+      }
+      if (document.readyState === 'complete') startMotion();
+      else window.addEventListener('load', startMotion, { once: true });
+    </script>
   </body>
 </html>

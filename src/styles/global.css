@@ -197,3 +197,29 @@ main:focus {
     scroll-behavior: auto !important;
   }
 }
+
+/* Estados iniciais do movimento: valem só com JS ativo (classe js no <html>).
+   Sem JS — ou se o failsafe de 4 s remover a classe — tudo fica visível. */
+html.js [data-reveal] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-title] {
+    visibility: hidden;
+  }
+}
+
+/* Padrão 2: no desktop, as fotos em arco começam fechadas (o mobile mostra a foto direto — LCP). */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  html.js [data-arch-reveal] {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+/* Padrão 9: a assinatura começa recolhida à esquerda. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-signature] {
+    clip-path: inset(-20% 100% -20% -10%);
+  }
+}
