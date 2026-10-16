@@ -68,7 +68,9 @@
 
 ## Próximo passo
 
-- Plano concluído (Tasks 1–40). Próximos passos dependem da clínica (`docs/CHECKLIST-CLINICA.md`) e das duas decisões abaixo; cada mudança futura segue o mesmo fluxo (branch → PR → `npm run check` + `npm run e2e` → merge, que republica a produção).
+- **Retomar em 2026-10-16.** O usuário vai mandar à Dra. Laura uma mensagem de apresentação (protótipo, fotos tiradas do Instagram dela, site não divulgado) e, depois, a lista de pendências (registro profissional, autorização de imagens, formação, WhatsApp oficial, horário/estacionamento, método e tratamentos, logo, links de imprensa, fotos, revisão da política de privacidade) — textos em `.superpowers/mensagens-dra.md` (fora do git).
+- Quando ela responder: preencher os campos `null`/`[pendente]` em `src/content/site.ts`, regenerar `npm run checklist`, rodar `npm run check` + `npm run e2e` e publicar pelo fluxo branch → PR → merge (a `main` republica a produção).
+- Decidido pelo usuário: **não** ativar `noindex` por enquanto.
 
 ## Para o usuário decidir (sem bloquear o trabalho)
 
