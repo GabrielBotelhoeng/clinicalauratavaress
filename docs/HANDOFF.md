@@ -73,8 +73,8 @@
 ## Para o usuário decidir (sem bloquear o trabalho)
 
 - **Pendências da clínica:** a lista completa (registro profissional, autorização de imagens — bloqueante para o domínio final —, WhatsApp oficial, horário, logo em vetor, links de imprensa, foto da sala, revisão da política de privacidade) está em `docs/CHECKLIST-CLINICA.md`.
-- **Primeira tela no celular:** como o plano manda, no mobile a foto da Dra. (arco, 70% da altura da tela) vem antes do título; numa tela de 375×667 o título "Rejuvenescer sem deixar de ser você." começa abaixo da dobra e o CTA principal mais abaixo ainda — só o botão flutuante do WhatsApp aparece de cara. Alternativas: arco mais baixo no mobile ou texto antes da foto abaixo de 1024 px. Fica como está até você escolher — combinado em 2026-10-07: decidir ao ver o resultado final (Etapa 7), agora disponível com a foto real em https://clinicalauratavaress.vercel.app (abra no celular).
-- **Autorização das imagens:** a legenda dos resultados diz "Imagens publicadas com autorização", mas os termos das pacientes ainda estão pendentes (`docs/media-pendencias.md`). Recomendação: só configurar o domínio final depois de receber os termos. Hoje o site já está público em `clinicalauratavaress.vercel.app` — se quiser tirá-lo do ar até os termos chegarem, ver "## Entrega".
+- **Primeira tela no celular:** resolvido em 2026-10-15 — o usuário conferiu no iPhone 17 Pro Max e aprovou como está (foto em arco antes do título).
+- **Autorização das imagens:** em andamento (2026-10-15) — o usuário vai enviar o site à Dra. Laura e pedir os termos das pacientes, explicando que as fotos vieram do Instagram dela; o site segue no ar por decisão dele. Domínio próprio só depois dos termos.
 
 ## Frente de mídia (concluída — PR #5 mergeado na `main`)
 
