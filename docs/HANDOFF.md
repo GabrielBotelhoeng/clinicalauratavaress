@@ -18,8 +18,12 @@
 |---|---|
 | `npm install` | instala as dependências (Node 22.x) |
 | `npm run dev` | servidor de desenvolvimento em http://localhost:4321 |
-| `npm run check` | lint + typecheck + testes + build + testes do dist |
-| `npm run lighthouse` | Lighthouse mobile contra o `astro preview` (rode `npm run build` antes) |
+| `npm run check` | lint + typecheck + testes + build + testes do dist + `csp:check` |
+| `npm run lighthouse` | Lighthouse mobile contra o `astro preview` (rode `npm run build` antes; `BASE_URL=<url> node scripts/lighthouse.mjs` mede outra URL) |
+| `npm run e2e` | suíte e2e com agent-browser + axe-core (rode `npm run build` antes); relatório em `docs/qa/e2e.md` |
+| `npm run csp` | regenera o `vercel.json` (CSP com o hash do script inline + cabeçalhos) a partir do `dist/` |
+| `npm run checklist` | regenera `docs/CHECKLIST-CLINICA.md` |
+| `npm run og` | regenera `public/og.jpg` |
 | `npm run placeholders` | regenera placeholders e ícones |
 
 ## Decisões

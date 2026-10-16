@@ -22,5 +22,6 @@ Checklist completo e capturas (`home-{375,768,1280,1440}.png`, `menu-mobile-375.
 
 O Lighthouse e o e2e acima rodam contra o `astro preview`, que não aplica os cabeçalhos do
 `vercel.json` (CSP, HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy — só a
-Vercel os aplica). A conferência desses cabeçalhos contra a URL publicada (`curl -I`) acontece na
-Task 38 (deploy).
+Vercel os aplica). Conferidos na produção em 2026-10-15 (`curl -sI https://clinicalauratavaress.vercel.app`): os 5
+cabeçalhos presentes e o CSP idêntico ao `vercel.json`; e2e e Lighthouse também passaram contra a
+produção (home 93/100/100/100, política 100/100/100/100 na revisão final da Etapa 7).
