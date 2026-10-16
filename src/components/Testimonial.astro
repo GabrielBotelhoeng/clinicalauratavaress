@@ -74,6 +74,9 @@ const source = item.fonte === 'google' ? ui.sourceGoogle : ui.sourceInstagram;
   }
 
   .testimonial__source a {
+    display: inline-block;
+    /* Alvo de toque ≥ 24px de altura (WCAG 2.5.8) mesmo com texto de 13px — M5, pendência da Etapa 4. */
+    padding-block: var(--space-1);
     color: var(--accent);
   }
 </style>

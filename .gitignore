@@ -30,3 +30,6 @@ docs/qa/lighthouse/
 
 # workspace local do orquestrador (ledgers, briefs) — fora das ferramentas
 .superpowers/
+
+.vercel
+.env*

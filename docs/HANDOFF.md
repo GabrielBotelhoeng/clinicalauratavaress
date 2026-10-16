@@ -10,7 +10,7 @@
 - **Etapa 4 — do Sobre ao rodapé (`feat/sobre-ao-rodape`): concluída e mergeada na `main`.** Página completa com as 11 seções da spec + política de privacidade; depoimentos lidos de `src/content/depoimentos.json` (6 reais, do Google). Lighthouse mobile: home 94/100/100/100 (LCP 2,80 s — a página dobrou de tamanho; a Etapa 5/7 reavalia), política 100/100/100/100.
 - **Etapa 5 — movimento (`feat/movimento`): concluída e mergeada na `main`.** Lenis + GSAP (títulos por linhas, reveals, arco, parallax, assinatura, marquee que acelera, carrossel em GSAP, dica do antes/depois, contadores) num único `gsap.matchMedia()` com ramo de movimento reduzido; módulo carregado depois do `load`. Lighthouse mobile: home 90/100/100/100 (LCP 3,30 s — margem estreita, revisitar na Etapa 7), política 99/100/100/100.
 - **Etapa 6 — integração das mídias reais (`feat/integracao-midia`): concluída e mergeada na `main`.** Fotos/vídeos reais auditados (sem arquivo ignorado/duplicado; só `clinica/sala` dispensada); texturas de apoio no Hero, Na mídia, Resultados e Depoimentos; `public/og.jpg` final (fontes reais + foto da Dra.); `docs/CHECKLIST-CLINICA.md` gerado por `npm run checklist`. Lighthouse mobile: home 90/100/100/100 (LCP 3,27 s), política 99/100/100/100.
-- Etapa 7 (QA e deploy): pendente.
+- **Etapa 7 — QA e deploy (`feat/qa-deploy`): concluída e mergeada na `main`.** Suíte e2e (`npm run e2e`) com agent-browser + axe-core; CSP gerado do `dist/` + HSTS/X-Content-Type-Options/Referrer-Policy/Permissions-Policy e cache imutável de `/_astro` em `vercel.json` (`csp:check` no gate); Lighthouse final aprovado; projeto Vercel ligado ao GitHub e publicado em https://clinicalauratavaress.vercel.app.
 
 ## Como rodar
 
@@ -18,8 +18,12 @@
 |---|---|
 | `npm install` | instala as dependências (Node 22.x) |
 | `npm run dev` | servidor de desenvolvimento em http://localhost:4321 |
-| `npm run check` | lint + typecheck + testes + build + testes do dist |
-| `npm run lighthouse` | Lighthouse mobile contra o `astro preview` (rode `npm run build` antes) |
+| `npm run check` | lint + typecheck + testes + build + testes do dist + `csp:check` |
+| `npm run lighthouse` | Lighthouse mobile contra o `astro preview` (rode `npm run build` antes; `BASE_URL=<url> node scripts/lighthouse.mjs` mede outra URL) |
+| `npm run e2e` | suíte e2e com agent-browser + axe-core (rode `npm run build` antes); relatório em `docs/qa/e2e.md` |
+| `npm run csp` | regenera o `vercel.json` (CSP com o hash do script inline + cabeçalhos) a partir do `dist/` |
+| `npm run checklist` | regenera `docs/CHECKLIST-CLINICA.md` |
+| `npm run og` | regenera `public/og.jpg` |
 | `npm run placeholders` | regenera placeholders e ícones |
 
 ## Decisões
@@ -47,22 +51,30 @@
 - Padrões de disparo único usam `ScrollTrigger.create({ once, onEnter })` separado da timeline: preso à timeline, recarregar no meio da página ou girar um tablet deixava conteúdo invisível para sempre. Cada padrão roda em `try/catch` para `motion-ready` sempre chegar; failsafe de 4 s tira a classe `js` se o módulo não vier.
 - Pausa da marquee/carrossel só considera hover de mouse (toque não "prende" a faixa parada) e pausar zera a aceleração do scroll.
 - Parallax do badge do hero num invólucro (`.hero__badge-wrap`) para o `:hover` do cartão continuar funcionando.
-- Texturas de apoio em 4 seções, opacidade baixa e `mix-blend-mode: lighten` (só clareiam o fundo: o texto mantém ≥ 4,5:1); `gotas-serum` foi descartada pela mídia e `orquideas-marmore` fica sem uso (ainda é copiada para o `dist` pelo glob da mídia — 303 KB não referenciados; avaliar na Etapa 7).
+- Texturas de apoio em 4 seções, opacidade baixa e `mix-blend-mode: lighten` (só clareiam o fundo: o texto mantém ≥ 4,5:1); `gotas-serum` foi descartada pela mídia e `orquideas-marmore` fica sem uso (ainda é copiada para o `dist` pelo glob da mídia — 303 KB não referenciados, mas não linkados de lugar nenhum; pedir à frente de mídia para tirar o arquivo quando for conveniente).
 - Fotos dos 4 tratamentos são ilustrações (geradas, sem pessoas): `alt=""` + `aria-hidden` — o título do card já as nomeia.
 - Uma folha de CSS só (`vite.build.cssCodeSplit: false`): duas folhas bloqueantes custavam ~0,5 s de LCP no mobile.
 - Imagem Open Graph renderizada por agent-browser a partir de `scripts/og/template.html` (`npm run og`), fora do gate e do build da Vercel. O circunflexo alto de "você" é o desenho do glifo da Cormorant Garamond itálica (o título do site é igual).
 - `docs/CHECKLIST-CLINICA.md` é gerado (`npm run checklist`), não escrito à mão.
 - Pares de antes/depois do olhar e da mandíbula realinhados só por recorte/escala (sem IA), para o rosto ficar contínuo na linha do slider; ficaram com 700×875 e 409×511.
 
+## Entrega
+
+- **Produção (pública):** https://clinicalauratavaress.vercel.app — no ar desde 2026-10-15 (o primeiro `vercel deploy` do projeto entrou como produção; a integração Git publica de novo a cada merge na `main`). Conferido na URL pública: 200, os 5 cabeçalhos de segurança, `/politica-de-privacidade` sem `.html`, título e CTA do hero; Lighthouse mobile home 90/100/100/100 (LCP 2,75 s), política 100/100/100/100.
+  - ⚠️ A página mostra antes/depois e depoimentos cujos termos de autorização ainda não chegaram (`docs/CHECKLIST-CLINICA.md`). Se preferir tirar do ar até lá: `vercel alias rm clinicalauratavaress.vercel.app` (volta com `vercel alias set <deploy> clinicalauratavaress.vercel.app` ou `vercel promote`), ou ativar a proteção também para produção no painel (Settings → Deployment Protection).
+- **URL do deploy (com hash):** https://clinicalauratavaress-q6hxyvzxw-gabriel-botelhos-projects.vercel.app — protegida por login da Vercel; para conferir cabeçalhos nela use `vercel curl <url>`.
+- **Domínio próprio:** não configurado — só depois dos termos de autorização e dos dados `[pendente]` do checklist.
+- **Documentação:** `README.md` (raiz), `docs/HANDOFF.md` (este arquivo), `docs/CHECKLIST-CLINICA.md`, `docs/qa/README.md` (Lighthouse + e2e).
+
 ## Próximo passo
 
-- Etapa 7 — `feat/qa-deploy`: Task 35 do plano.
+- Plano concluído (Tasks 1–40). Próximos passos dependem da clínica (`docs/CHECKLIST-CLINICA.md`) e das duas decisões abaixo; cada mudança futura segue o mesmo fluxo (branch → PR → `npm run check` + `npm run e2e` → merge, que republica a produção).
 
 ## Para o usuário decidir (sem bloquear o trabalho)
 
 - **Pendências da clínica:** a lista completa (registro profissional, autorização de imagens — bloqueante para o domínio final —, WhatsApp oficial, horário, logo em vetor, links de imprensa, foto da sala, revisão da política de privacidade) está em `docs/CHECKLIST-CLINICA.md`.
-- **Primeira tela no celular:** como o plano manda, no mobile a foto da Dra. (arco, 70% da altura da tela) vem antes do título; numa tela de 375×667 o título "Rejuvenescer sem deixar de ser você." começa abaixo da dobra e o CTA principal mais abaixo ainda — só o botão flutuante do WhatsApp aparece de cara. Alternativas: arco mais baixo no mobile ou texto antes da foto abaixo de 1024 px. Fica como está até você escolher — combinado em 2026-10-07: decidir ao ver o resultado final (Etapa 7).
-- **Autorização das imagens:** a legenda dos resultados diz "Imagens publicadas com autorização", mas os termos das pacientes ainda estão pendentes (`docs/media-pendencias.md`). Recomendação: só publicar no domínio final depois de receber os termos; até lá, só a URL de prévia da Vercel.
+- **Primeira tela no celular:** como o plano manda, no mobile a foto da Dra. (arco, 70% da altura da tela) vem antes do título; numa tela de 375×667 o título "Rejuvenescer sem deixar de ser você." começa abaixo da dobra e o CTA principal mais abaixo ainda — só o botão flutuante do WhatsApp aparece de cara. Alternativas: arco mais baixo no mobile ou texto antes da foto abaixo de 1024 px. Fica como está até você escolher — combinado em 2026-10-07: decidir ao ver o resultado final (Etapa 7), agora disponível com a foto real em https://clinicalauratavaress.vercel.app (abra no celular).
+- **Autorização das imagens:** a legenda dos resultados diz "Imagens publicadas com autorização", mas os termos das pacientes ainda estão pendentes (`docs/media-pendencias.md`). Recomendação: só configurar o domínio final depois de receber os termos. Hoje o site já está público em `clinicalauratavaress.vercel.app` — se quiser tirá-lo do ar até os termos chegarem, ver "## Entrega".
 
 ## Frente de mídia (concluída — PR #5 mergeado na `main`)
 
